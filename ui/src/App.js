@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-// import $ from 'jquery'; 
 
 import request from 'request';
 
 import GitHubLogin from './components/containers/GitHub/';
+import UserInfoSideBar from './components/presentational/User/UserInfoSideBar';
+
 import GitHub from "github-api";
 
 class App extends Component {
+	/*
 	onFailure(response) {
 		console.error(response);
 	}
@@ -66,6 +68,20 @@ class App extends Component {
 				<input type="text" name="ghusername" id="ghusername" placeholder="Github username..."/>
 				<a href="#" id="ghsubmitbtn">Pull User Data</a>
 				<div id="ghapidata" className="clearfix"></div>
+			</div>
+		);
+	}
+	*/
+
+
+	render() {
+		console.log("Hello, this is my console");
+
+		return (
+			<div id="w">
+				<div id="example">
+					<UserInfoSideBar/>
+				</div>
 			</div>
 		);
 	}

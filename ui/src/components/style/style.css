@@ -1,0 +1,76 @@
+:root {
+    --primary-color:#40798C;
+    --secondary-color:#0B2027;
+    --accent-color:#70A9A1;
+    --accent-color2:#FCFCFC;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic');
+
+body{
+	line-height: 1.6;
+	letter-spacing: .05em;
+	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+.IconButton{
+	color: var(--accent-color2) !important; 
+	display: inline-block;
+}
+
+.avatar{
+}
+
+.avatar-image{
+	border-radius: 50%;
+	width: 50%;
+	margin: 0 25%;
+}
+
+.bigAvatar{
+}
+
+.divClass{
+	background-color: blue;
+}
+
+.sidebar{
+	height:100%;
+	width:25%;
+	background-color:#fff;
+	position:fixed;
+	z-index:1;
+	overflow:auto;
+	background-color: var(--primary-color); 
+}
+
+.user-name, .user-points, .user-handle{
+	color: var(--accent-color2);
+	display: block;
+	text-align: center;
+}
+
+.user-name{
+	text-transform: uppercase;
+	font-size: 2em;
+	font-weight: 500;
+}
+
+.user-points{
+	display: inline-block;
+	font-size: 1.2em;
+}
+
+.user-rating, .user-contact{
+	display: block;
+    text-align: center;
+}
+
+.star{
+	width: 5%;
+	margin-left: 2%;
+}
+
+.user-handle{
+	display: inline-block;
+}

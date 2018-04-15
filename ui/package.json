@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "classnames": "^2.2.5",
     "github-api": "^3.0.0",
     "material-ui": "^1.0.0-beta.41",
+    "prop-types": "^15.6.1",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
+    "react-material-icons": "^1.0.3",
     "react-scripts": "1.1.4",
     "request": "^2.85.0",
     "webpack": "^3.11.0"

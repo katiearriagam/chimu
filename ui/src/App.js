@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import * as firebase from 'firebase';
 // import $ from 'jquery'; 
 
 import request from 'request';
@@ -35,6 +36,23 @@ class App extends Component {
 			console.log(body);
 			console.log("-------");
 			console.log(JSON.parse(body)['access_token']);
+			
+			// Exchange access token for Firebase credential
+			let credential = firebase.auth.GithubAuthProvider.credential(JSON.parse(body)['access_token']);
+			
+			// Sign in with Firebase
+			firebase.auth().signInWithCredential(credential).catch(function(error) {
+				// Handle Errors here.
+				let errorCode = error.code;
+				console.log(errorCode);
+				let errorMessage = error.message;
+				console.log(errorMessage);
+				// The email of the user's account used.
+				let email = error.email;
+				console.log(email);	
+			});
+			
+			
 			var gh = new GitHub({
 				token: JSON.parse(body)['access_token']
 			});

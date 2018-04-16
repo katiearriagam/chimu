@@ -37,14 +37,14 @@ body{
 .sidebar{
 	height:100%;
 	width:25%;
-	background-color:#fff;
 	position:fixed;
 	z-index:1;
 	overflow:auto;
-	background-color: var(--primary-color); 
+	background-color: var(--primary-color);
+	padding: 2% 0%;
 }
 
-.user-name, .user-points, .user-handle{
+.user-name, .user-points, .user-handle, .user-roles, .user-skills{
 	color: var(--accent-color2);
 	display: block;
 	text-align: center;
@@ -73,4 +73,24 @@ body{
 
 .user-handle{
 	display: inline-block;
+}
+
+.Chip{
+	display: 'inline-block';
+    justifyContent: 'center';
+    flexWrap: 'wrap';
+    padding: 5%;
+    margin: 2%;
+}
+
+.chip-div{
+	margin: 3%;
+}
+
+.user-roles, .user-skills{
+	text-align: left;
+	margin: 5%;
+	text-transform: uppercase;
+	margin-top: 7%;
+	margin-bottom: 3%;
 }

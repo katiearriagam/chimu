@@ -16,6 +16,21 @@ import CommunicationEmail from 'react-material-icons/icons/communication/email';
 
 
 class UserInfoSideBar extends Component {
+  state = {
+    skills: [
+      { key: 0, label: 'Angular' },
+      { key: 1, label: 'jQuery' },
+      { key: 3, label: 'Polymer' },
+      { key: 3, label: 'React' },
+      { key: 4, label: 'Vue.js' },
+    ],
+    roles: [
+      { key: 0, label: 'Designer' },
+      { key: 1, label: 'Front-end developer' },
+      { key: 3, label: 'PM' }
+    ]
+  };
+
   render(){
     return(
       <div className="sidebar">
@@ -31,10 +46,30 @@ class UserInfoSideBar extends Component {
             <CommunicationEmail/>
           </IconButton>
         </span>
-        <label>Roles</label>
-        <Chip label="Basic Chip"/>
-        <label>Skills</label>
-        <Chip label="Basic Chip"/>
+        <label className="user-roles">Roles</label>
+        <div className="chip-div">
+        {
+          this.state.roles.map(data => {
+          return(
+            <Chip className="Chip"
+               key={data.key}
+               label={data.label}
+            />
+          );
+        })}
+        </div>
+        <label className="user-skills">Skills</label>
+        <div className="chip-div">
+        {
+          this.state.skills.map(data => {
+          return(
+            <Chip className="Chip"
+               key={data.key}
+               label={data.label}
+            />
+          );
+        })}
+        </div>
       </div>
     );
 

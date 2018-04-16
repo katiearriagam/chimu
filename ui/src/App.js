@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-// import $ from 'jquery'; 
 
 import request from 'request';
 
 import GitHubLogin from './components/containers/GitHub/';
+import UserInfoSideBar from './components/presentational/User/UserInfoSideBar';
+
 import GitHub from "github-api";
 
 class App extends Component {
+	/*
 	onFailure(response) {
 		console.error(response);
 	}
@@ -66,6 +68,43 @@ class App extends Component {
 				<input type="text" name="ghusername" id="ghusername" placeholder="Github username..."/>
 				<a href="#" id="ghsubmitbtn">Pull User Data</a>
 				<div id="ghapidata" className="clearfix"></div>
+			</div>
+		);
+	}
+	*/
+
+	state = {
+	    skills: [
+	    { key: 0, label: 'React' },
+	    { key: 1, label: 'React' },
+	    { key: 3, label: 'React' },
+	    { key: 5, label: 'React' },
+	    { key: 4, label: 'React' },
+	],
+		roles: [
+	    { key: 0, label: 'Designer' },
+	    { key: 1, label: 'Front-end developer' },
+	    { key: 3, label: 'PM' }
+	]
+	};
+
+	render() {
+		console.log("Hello, this is my console");
+
+		return (
+			<div id="w">
+				<div id="example">
+					<UserInfoSideBar 
+						avatar="https://avatars0.githubusercontent.com/u/8510219?s=400&v=4"
+						name="Oscar Gonzalez"
+						rating="4.9"
+						githubUrl="https://github.com/osdagoso"
+						handle="osdagoso"
+						email="osdagoso@mail.com"
+						roles={this.state.roles}
+						skills={this.state.skills}
+					/>
+				</div>
 			</div>
 		);
 	}

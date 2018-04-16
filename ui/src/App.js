@@ -73,6 +73,20 @@ class App extends Component {
 	}
 	*/
 
+	state = {
+	    skills: [
+	    { key: 0, label: 'React' },
+	    { key: 1, label: 'React' },
+	    { key: 3, label: 'React' },
+	    { key: 5, label: 'React' },
+	    { key: 4, label: 'React' },
+	],
+		roles: [
+	    { key: 0, label: 'Designer' },
+	    { key: 1, label: 'Front-end developer' },
+	    { key: 3, label: 'PM' }
+	]
+	};
 
 	render() {
 		console.log("Hello, this is my console");
@@ -80,7 +94,16 @@ class App extends Component {
 		return (
 			<div id="w">
 				<div id="example">
-					<UserInfoSideBar/>
+					<UserInfoSideBar 
+						avatar="https://avatars0.githubusercontent.com/u/8510219?s=400&v=4"
+						name="Oscar Gonzalez"
+						rating="4.9"
+						githubUrl="https://github.com/osdagoso"
+						handle="osdagoso"
+						email="osdagoso@mail.com"
+						roles={this.state.roles}
+						skills={this.state.skills}
+					/>
 				</div>
 			</div>
 		);

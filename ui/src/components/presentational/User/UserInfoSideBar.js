@@ -15,41 +15,38 @@ import star from '../../images/star.png';
 import CommunicationEmail from 'react-material-icons/icons/communication/email';
 
 
-class UserInfoSideBar extends Component {
-  state = {
-    skills: [
-      { key: 0, label: 'Angular' },
-      { key: 1, label: 'jQuery' },
-      { key: 3, label: 'Polymer' },
-      { key: 3, label: 'React' },
-      { key: 4, label: 'Vue.js' },
-    ],
-    roles: [
-      { key: 0, label: 'Designer' },
-      { key: 1, label: 'Front-end developer' },
-      { key: 3, label: 'PM' }
-    ]
-  };
+class UserInfoSideBar extends Component {   
+  constructor(props) {
+    // Required to call original constructor
+    super(props);
+    this.sendEmail = this.sendEmail.bind(this);
+  } 
+
+  sendEmail(){
+    window.location.href = "mailto:" + this.props.email;
+  }
 
   render(){
     return(
       <div className="sidebar">
-        <UserAvatar/>
-        <label className="user-name">Katie Arriaga M.</label>
+        <UserAvatar image={this.props.avatar}/>
+        <label className="user-name">{this.props.name}</label>
         <span className="user-rating">
-          <label className="user-points">4.8/5.0</label>
+          <label className="user-points">{this.props.rating}/5.0</label>
           <img className="star" alt="" src={star}/>
         </span>
         <span className="user-contact">
-          <a className="user-handle" href="https://github.com/katiearriagam">@katiearriagam</a>
-          <IconButton className="IconButton">
-            <CommunicationEmail/>
-          </IconButton>
+          <a className="user-handle" href={this.props.githubUrl}>@{this.props.handle}</a>
+          <span onClick={this.sendEmail}>
+            <IconButton className="IconButton">
+              <CommunicationEmail/>
+            </IconButton>
+          </span>
         </span>
         <label className="user-roles">Roles</label>
         <div className="chip-div">
         {
-          this.state.roles.map(data => {
+          this.props.roles.map(data => {
           return(
             <Chip className="Chip"
                key={data.key}
@@ -61,7 +58,7 @@ class UserInfoSideBar extends Component {
         <label className="user-skills">Skills</label>
         <div className="chip-div">
         {
-          this.state.skills.map(data => {
+          this.props.skills.map(data => {
           return(
             <Chip className="Chip"
                key={data.key}

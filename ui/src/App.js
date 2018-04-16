@@ -7,8 +7,13 @@ import request from 'request';
 
 import GitHubLogin from './components/containers/GitHub/';
 import GitHub from "github-api";
+import {init as firebaseInit} from './helpers/FirebaseInit';
 
 class App extends Component {
+	constructor(props) {
+		super(props)
+		firebaseInit()
+	}
 	onFailure(response) {
 		console.error(response);
 	}
@@ -17,7 +22,7 @@ class App extends Component {
 		console.log("code -> " + response['code']);
 		let jsonObject = {'code': response['code']};
 		request.post({
-			url: 'http://localhost/chimu/',
+			url: 'http://localhost:8080/chimu/',
 			form: jsonObject,
 		}, (err, response, body) => {
 			if(err){
@@ -36,9 +41,10 @@ class App extends Component {
 
 			var me = gh.getUser(); // no user specified defaults to the user for whom credentials were provided
 
-			me.listStarredRepos()
+			me.listRepos()
 			   .then(function({data: reposJson}) {
 			     console.log(`me has ${reposJson.length} repos!`);
+				 console.log(reposJson);
 			   });
 
 			me.getProfile()
@@ -55,7 +61,7 @@ class App extends Component {
 			<div id="w">
 				<div id="example">
 					<GitHubLogin 
-						clientId="6e245fffc482d35bca47"
+						clientId="9b6d887428aaab26ce5b"
 						redirectUri="http://localhost:3000/oauthcb"
 						onSuccess={this.onSuccess}
 						onFailure={this.onFailure}

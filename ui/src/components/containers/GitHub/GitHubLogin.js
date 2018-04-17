@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import Button from 'material-ui/Button';
+
 import PopupWindow from '../../../helpers/PopupWindow';
 import { toQuery } from '../../../helpers/utils';
 
@@ -65,13 +67,13 @@ class GitHubLogin extends Component {
 
   render() {
     let { className, buttonText, children } = this.props;
-    const attrs = { onClick: this.onBtnClick };
+    const attrs = { onClick: this.onBtnClick, color: "inherit"};
 	
     if (className) {
       attrs.className = className;
     }
 
-    return <button {...attrs}>{ children || buttonText }</button>;
+    return <Button {...attrs}>{ children || buttonText }</Button>;
   }
 }
 

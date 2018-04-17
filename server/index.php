@@ -15,7 +15,7 @@ if($_SERVER['REQUEST_METHOD'] !== "POST") {
 $code = $_POST['code'];
 $access_token = "";
 
-$params = ['client_id'=>'6e245fffc482d35bca47', 'client_secret'=>'38af9345b096129b756c3a54ad7384a9cd8dadc8', 'code' => $code];
+$params = ['client_id'=>'9b6d887428aaab26ce5b', 'client_secret'=>'86572a379a828ed0451c26f4f41a56fc6a0b0d34', 'code' => $code];
 $defaults = [
 	CURLOPT_URL => 'https://github.com/login/oauth/access_token',
 	CURLOPT_POST => true,

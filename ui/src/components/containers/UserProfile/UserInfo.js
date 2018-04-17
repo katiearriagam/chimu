@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import UserInfoSideBar from '../../presentational/User/UserInfoSideBar';
 
 class UserInfo extends Component {
-	constructor(props) {
-	    // Required to call original constructor
-	    super(props);
-  	} 
-
 	state = {
 	    skills: [
 		    { key: 0, label: 'React' },

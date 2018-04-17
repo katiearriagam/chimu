@@ -18,6 +18,10 @@ body{
 	display: inline-block;
 }
 
+.IconButtonDisabled{
+	display: none;
+}
+
 .avatar{
 }
 

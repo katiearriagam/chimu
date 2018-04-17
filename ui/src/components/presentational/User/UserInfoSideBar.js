@@ -27,6 +27,14 @@ class UserInfoSideBar extends Component {
   }
 
   render(){
+    const email = this.props.email != null ? (
+      <span onClick={this.sendEmail}>
+        <IconButton className="IconButton">
+          <CommunicationEmail/>
+        </IconButton>
+      </span>
+      ) : (<span></span>);
+
     return(
       <div className="sidebar">
         <UserAvatar image={this.props.avatar}/>
@@ -37,11 +45,7 @@ class UserInfoSideBar extends Component {
         </span>
         <span className="user-contact">
           <a className="user-handle" href={this.props.githubUrl}>@{this.props.handle}</a>
-          <span onClick={this.sendEmail}>
-            <IconButton className="IconButton">
-              <CommunicationEmail/>
-            </IconButton>
-          </span>
+          {email}
         </span>
         <label className="user-roles">Roles</label>
         <div className="chip-div">

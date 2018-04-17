@@ -154,7 +154,6 @@ class App extends Component {
 
 	render() {
 		console.log("Hello, this is my console");
-
 		return(
 			<div>
 				<UserInfo/>
@@ -163,12 +162,11 @@ class App extends Component {
 	}
 }
 
-				/*	<h1>Simple Github API Webapp</h1>
-					<p>Enter a single Github username below and click the button to display profile info via JSON.</p>
-					<input type="text" name="ghusername" id="ghusername" placeholder="Github username..."/>
-					<a href="#" id="ghsubmitbtn">Pull User Data</a>
-					<div id="ghapidata" className="clearfix"></div>*/
-
+/*	<h1>Simple Github API Webapp</h1>
+	<p>Enter a single Github username below and click the button to display profile info via JSON.</p>
+	<input type="text" name="ghusername" id="ghusername" placeholder="Github username..."/>
+	<a href="#" id="ghsubmitbtn">Pull User Data</a>
+	<div id="ghapidata" className="clearfix"></div>*/
 /*
 $(document).ready(function () {
   console.log("hello load");
@@ -211,6 +209,6 @@ $(document).ready(function () {
 		  var reposnum     = json.public_repos;
 		  
 		  if(fullname == undefined) { fullname = username; }
-
+*/
 export default App;
 

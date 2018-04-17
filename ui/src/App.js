@@ -7,18 +7,46 @@ import * as firebase from 'firebase';
 import request from 'request';
 
 import GitHubLogin from './components/containers/GitHub/';
+import Logout from './components/containers/Logout/';
 import GitHub from "github-api";
 import {init as firebaseInit} from './helpers/FirebaseInit';
 
 class App extends Component {
 	constructor(props) {
-		super(props)
-		firebaseInit()
+		super(props);
+		this.state = {
+			isLogged: false,
+		}
+		firebaseInit();
 	}
+	
+	componentDidMount() {
+		// Activate auth state listener
+		this.removeFirebaseListener = firebase.auth().onAuthStateChanged((user) => {
+			if (user) {
+				this.setState({
+					isLogged: true,
+				});
+				console.log("It's aliiiiive");
+			} else {
+				this.setState({
+					isLogged: false,
+				});
+				console.log("Quite dead");
+			}
+		});
+	}
+	
+	componentWillUnmount() {
+		// Remove auth state listener
+		this.removeFirebaseListener();
+	}
+	
 	onFailure(response) {
 		console.error(response);
 	}
 	onSuccess(response) {
+		console.log(firebase.auth().currentUser);
 		// Get the access token here
 		console.log("code -> " + response['code']);
 		let jsonObject = {'code': response['code']};
@@ -41,7 +69,23 @@ class App extends Component {
 			let credential = firebase.auth.GithubAuthProvider.credential(JSON.parse(body)['access_token']);
 			
 			// Sign in with Firebase
-			firebase.auth().signInWithCredential(credential).catch(function(error) {
+			firebase.auth().signInWithCredential(credential).then((result) => {
+				console.log(result);
+				var gh = new GitHub({
+					token: JSON.parse(body)['access_token']
+				});
+
+				var me = gh.getUser(); // no user specified defaults to the user for whom credentials were provided
+				/*
+				me.listRepos().then(function({data: reposJson}) {
+					 console.log(`me has ${reposJson.length} repos!`);
+					 console.log(reposJson);
+				});*/
+
+				me.getProfile().then(({data:userProfile}) => {
+						console.log(userProfile.login);
+				});
+			}).catch((error) => {
 				// Handle Errors here.
 				let errorCode = error.code;
 				console.log(errorCode);
@@ -51,49 +95,44 @@ class App extends Component {
 				let email = error.email;
 				console.log(email);	
 			});
-			
-			
-			var gh = new GitHub({
-				token: JSON.parse(body)['access_token']
-			});
-
-			var me = gh.getUser(); // no user specified defaults to the user for whom credentials were provided
-
-			me.listRepos()
-			   .then(function({data: reposJson}) {
-			     console.log(`me has ${reposJson.length} repos!`);
-				 console.log(reposJson);
-			   });
-
-			me.getProfile()
-				.then(function({data:userProfile}){
-					console.log(userProfile.login);
-				});
-
 		});
 	}
 	render() {
 		console.log("Hello, this is my console");
-
+		if (!this.state.isLogged) {
+			return (
+				<div id="w">
+					<div id="example">
+						<GitHubLogin 
+							clientId="9b6d887428aaab26ce5b"
+							redirectUri="http://localhost:3000/oauthcb"
+							onSuccess={this.onSuccess}
+							onFailure={this.onFailure}
+						/>
+					</div>
+				</div>
+			);
+		}
+		let name = firebase.auth().currentUser.displayName;
 		return (
 			<div id="w">
 				<div id="example">
-					<GitHubLogin 
-						clientId="9b6d887428aaab26ce5b"
-						redirectUri="http://localhost:3000/oauthcb"
-						onSuccess={this.onSuccess}
+					<Logout
 						onFailure={this.onFailure}
 					/>
 				</div>
-				<h1>Simple Github API Webapp</h1>
-				<p>Enter a single Github username below and click the button to display profile info via JSON.</p>
-				<input type="text" name="ghusername" id="ghusername" placeholder="Github username..."/>
-				<a href="#" id="ghsubmitbtn">Pull User Data</a>
-				<div id="ghapidata" className="clearfix"></div>
+				<h2>{ name }</h2>
 			</div>
 		);
 	}
 }
+
+				/*	<h1>Simple Github API Webapp</h1>
+					<p>Enter a single Github username below and click the button to display profile info via JSON.</p>
+					<input type="text" name="ghusername" id="ghusername" placeholder="Github username..."/>
+					<a href="#" id="ghsubmitbtn">Pull User Data</a>
+					<div id="ghapidata" className="clearfix"></div>*/
+
 /*
 $(document).ready(function () {
   console.log("hello load");

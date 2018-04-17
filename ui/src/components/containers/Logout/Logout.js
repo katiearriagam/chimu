@@ -5,9 +5,9 @@ class Logout extends Component {
 	onBtnClick = () => {
 		console.log("Attempting to log out...");
 		firebase.auth().signOut().then(() => {
-			console.log("Log out bitches!");
+			console.log("Succesfully logged out!");
 		}).catch((error) => {
-			console.log("No logout?");
+			console.log("Error on log out");
 			this.props.onFailure(error);
 		});
 	}

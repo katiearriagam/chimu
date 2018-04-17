@@ -16,6 +16,7 @@ class App extends Component {
 		super(props);
 		this.state = {
 			isLogged: false,
+			username: null,
 		}
 		firebaseInit();
 	}
@@ -24,13 +25,11 @@ class App extends Component {
 		// Activate auth state listener
 		this.removeFirebaseListener = firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
-				this.setState({
-					isLogged: true,
-				});
 				console.log("It's aliiiiive");
 			} else {
 				this.setState({
 					isLogged: false,
+					username: null,
 				});
 				console.log("Quite dead");
 			}
@@ -40,6 +39,28 @@ class App extends Component {
 	componentWillUnmount() {
 		// Remove auth state listener
 		this.removeFirebaseListener();
+	}
+	
+	loadUserInfo() {
+		var db = firebase.firestore();
+		if (firebase.auth().currentUser) {
+			// Get user information from Firebase
+			var docRef = db.collection("Users").doc(firebase.auth().currentUser.email);
+			docRef.get().then((doc) => {
+				if (doc.exists) {
+					this.setState({
+						isLogged: true,
+						username: doc.data().username,
+					});
+					console.log("Info loaded!");
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+			}).catch((error) => {
+				console.log("Error getting document:", error);
+			});
+		}
 	}
 	
 	onFailure(response) {
@@ -58,33 +79,32 @@ class App extends Component {
 				console.error("ERROR");
 				console.error(err);
 			}
-			console.log("-------");
-			console.log(response);
-			console.log("-------");
-			console.log(body);
-			console.log("-------");
 			console.log(JSON.parse(body)['access_token']);
 			
 			// Exchange access token for Firebase credential
 			let credential = firebase.auth.GithubAuthProvider.credential(JSON.parse(body)['access_token']);
+			console.log(credential);
 			
-			// Sign in with Firebase
-			firebase.auth().signInWithCredential(credential).then((result) => {
-				console.log(result);
-				var gh = new GitHub({
-					token: JSON.parse(body)['access_token']
-				});
-
-				var me = gh.getUser(); // no user specified defaults to the user for whom credentials were provided
-				/*
-				me.listRepos().then(function({data: reposJson}) {
-					 console.log(`me has ${reposJson.length} repos!`);
-					 console.log(reposJson);
-				});*/
-
-				me.getProfile().then(({data:userProfile}) => {
-						console.log(userProfile.login);
-				});
+			// Sign in with Firebase and retrieve additional info
+			firebase.auth().signInAndRetrieveDataWithCredential(credential).then((result) => {
+				var db = firebase.firestore();
+				// Store new user info
+				if (result.additionalUserInfo.isNewUser) {
+					db.collection("Users").doc(result.user.email).set({
+						username: result.additionalUserInfo.username
+					})
+					.then(() => {
+						console.log("Document successfully written!");
+						// Load logged user info
+						this.loadUserInfo();
+					})
+					.catch((error) => {
+						console.error("Error writing document: ", error);
+					});
+				} else {
+					// Load logged user info
+					this.loadUserInfo();
+				}
 			}).catch((error) => {
 				// Handle Errors here.
 				let errorCode = error.code;
@@ -97,6 +117,7 @@ class App extends Component {
 			});
 		});
 	}
+	
 	render() {
 		console.log("Hello, this is my console");
 		if (!this.state.isLogged) {
@@ -106,14 +127,13 @@ class App extends Component {
 						<GitHubLogin 
 							clientId="9b6d887428aaab26ce5b"
 							redirectUri="http://localhost:3000/oauthcb"
-							onSuccess={this.onSuccess}
+							onSuccess={this.onSuccess.bind(this)}
 							onFailure={this.onFailure}
 						/>
 					</div>
 				</div>
 			);
 		}
-		let name = firebase.auth().currentUser.displayName;
 		return (
 			<div id="w">
 				<div id="example">
@@ -121,7 +141,7 @@ class App extends Component {
 						onFailure={this.onFailure}
 					/>
 				</div>
-				<h2>{ name }</h2>
+				<h2>{ this.state.username }</h2>
 			</div>
 		);
 	}

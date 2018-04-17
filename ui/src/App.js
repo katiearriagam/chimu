@@ -5,9 +5,12 @@ import * as firebase from 'firebase';
 
 import request from 'request';
 
+import UserInfo from './components/containers/UserProfile/UserInfo';
+/*
 import GitHubLogin from './components/containers/GitHub/';
 import Logout from './components/containers/Logout/';
 import UserInfoSideBar from './components/presentational/User/UserInfoSideBar';
+*/
 
 import GitHub from "github-api";
 import {init as firebaseInit} from './helpers/FirebaseInit';
@@ -149,38 +152,12 @@ class App extends Component {
 	}
 	*/
 
-	state = {
-	    skills: [
-	    { key: 0, label: 'React' },
-	    { key: 1, label: 'React' },
-	    { key: 3, label: 'React' },
-	    { key: 5, label: 'React' },
-	    { key: 4, label: 'React' },
-	],
-		roles: [
-	    { key: 0, label: 'Designer' },
-	    { key: 1, label: 'Front-end developer' },
-	    { key: 3, label: 'PM' }
-	]
-	};
-
 	render() {
 		console.log("Hello, this is my console");
 
-		return (
-			<div id="w">
-				<div id="example">
-					<UserInfoSideBar 
-						avatar="https://avatars0.githubusercontent.com/u/8510219?s=400&v=4"
-						name="Oscar Gonzalez"
-						rating="4.9"
-						githubUrl="https://github.com/osdagoso"
-						handle="osdagoso"
-						email="osdagoso@mail.com"
-						roles={this.state.roles}
-						skills={this.state.skills}
-					/>
-				</div>
+		return(
+			<div>
+				<UserInfo/>
 			</div>
 		);
 	}
@@ -235,31 +212,5 @@ $(document).ready(function () {
 		  
 		  if(fullname == undefined) { fullname = username; }
 
-		  var outhtml = '<h2>'+fullname+' <span class="smallname">(@<a href="'+profileurl+'" target="_blank">'+username+'</a>)</span></h2>';
-		  outhtml = outhtml + '<div class="ghcontent"><div class="avi"><a href="'+profileurl+'" target="_blank"><img src="'+aviurl+'" width="80" height="80" alt="'+username+'"></a></div>';
-		  outhtml = outhtml + '<p>Followers: '+followersnum+' - Following: '+followingnum+'<br>Repos: '+reposnum+'</p></div>';
-		  outhtml = outhtml + '<div class="repolist clearfix">';
-				  var repositories;
-		  $.getJSON(repouri, function(json){
-			repositories = json;   
-			outputPageContent();	
-		  });          
-		  
-		  function outputPageContent() {
-			if(repositories.length == 0) { outhtml = outhtml + '<p>No repos!</p></div>'; }
-			else {
-			  outhtml = outhtml + '<p><strong>Repos List:</strong></p> <ul>';
-			  $.each(repositories, function(index) {
-				outhtml = outhtml + '<li><a href="'+repositories[index].html_url+'" target="_blank">'+repositories[index].name + '</a></li>';
-			  });
-			  outhtml = outhtml + '</ul></div>'; 
-			}
-			$('#ghapidata').html(outhtml);
-		  } // end outputPageContent()
-		} // end else statement
-	  }); // end requestJSON Ajax call
-	}); // end click event handler
-});
-*/
 export default App;
 

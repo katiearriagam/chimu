@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import request from 'request';
 import UserInfoSideBar from '../../presentational/User/UserInfoSideBar';
-import GitHub from "github-api";
 
 class UserInfo extends Component {
 	constructor(props) {
@@ -20,9 +18,9 @@ class UserInfo extends Component {
 		roles: [
 		    { key: 0, label: 'Designer' },
 		    { key: 1, label: 'Front-end developer' },
-		    { key: 3, label: 'Back-end develoepr' }
+		    { key: 3, label: 'Back-end developer' }
 		],
-		username: 'pando65',
+		username: 'CharlieBradbury',
 		followers_url: ''
 	};
 
@@ -41,7 +39,7 @@ class UserInfo extends Component {
 	    	rating: '4.9',
 	    	html_url: json.html_url,
 	    	login: json.login,
-	    	email: json.email
+	    	email: 'katiarriaga@gmail.com'
 	    });
 
 		console.log(component.state);

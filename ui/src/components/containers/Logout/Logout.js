@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 
+import Button from 'material-ui/Button';
+
 class Logout extends Component {
 	onBtnClick = () => {
 		console.log("Attempting to log out...");
@@ -14,14 +16,14 @@ class Logout extends Component {
 	
 	render() {
 		let { className, children } = this.props;
-		let buttonText = 'Log out';
-		const attrs = { onClick: this.onBtnClick };
+		let buttonText = 'Log Out';
+		const attrs = { onClick: this.onBtnClick, color: "inherit" };
 		
 		if (className) {
 		  attrs.className = className;
 		}
 
-		return <button {...attrs}>{ children || buttonText }</button>;
+		return <Button {...attrs}>{ children || buttonText }</Button>;
 	}
 }
 

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import request from 'request';
 import UserInfoSideBar from '../../presentational/User/UserInfoSideBar';
+import UserProjectCard from '../../presentational/User/UserProjectCard';
 import GitHub from "github-api";
+import '../../style/style.css';
 
 class UserInfo extends Component {
 	constructor(props) {
@@ -61,6 +63,14 @@ class UserInfo extends Component {
 					roles={this.state.roles}
 					skills={this.state.skills}
 				/>
+				<div className="UserProjects">
+					<UserProjectCard/>
+					<UserProjectCard/>
+					<UserProjectCard/>
+					<UserProjectCard/>
+					<UserProjectCard/>
+					<UserProjectCard/>
+				</div>
 			</div>
 		);
 	}

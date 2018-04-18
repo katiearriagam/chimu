@@ -6,6 +6,7 @@ import * as firebase from 'firebase';
 import request from 'request';
 
 import UserInfo from './components/containers/UserProfile/UserInfo';
+
 /*
 import GitHubLogin from './components/containers/GitHub/';
 import Logout from './components/containers/Logout/';

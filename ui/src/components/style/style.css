@@ -42,10 +42,14 @@ body{
 	height:100%;
 	width:25%;
 	position:fixed;
-	z-index:1;
 	overflow:auto;
 	background-color: var(--primary-color);
 	padding: 2% 0%;
+}
+
+.UserProjects{
+	width: 75%;
+	float: right;
 }
 
 .user-name, .user-points, .user-handle, .user-roles, .user-skills{
@@ -97,4 +101,38 @@ body{
 	text-transform: uppercase;
 	margin-top: 7%;
 	margin-bottom: 3%;
+}
+
+.cardMedia{
+	width: 25%;
+	display: table-cell;
+  	background-color: var(--secondary-color);
+}
+
+.cardMediaImage{
+	max-width:100%;
+	max-height:100%;
+	object-fit: contain; 
+	display: block;
+  	vertical-align: middle;
+}
+
+.cardContent{
+	width: 75%;
+	height: 100%;
+	vertical-align: top;
+	display: table-cell;
+	padding: 2%;
+}
+
+.card{
+/*	border: 0.2px solid var(--secondary-color);
+	border-radius: 3px;
+*/
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	margin: 2% 3%;
+	display: inline-block;
+}
+
+.short-project-description{
 }

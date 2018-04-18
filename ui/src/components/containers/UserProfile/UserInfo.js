@@ -15,7 +15,7 @@ class UserInfo extends Component {
 		    { key: 1, label: 'Front-end developer' },
 		    { key: 3, label: 'Back-end developer' }
 		],
-		username: 'CharlieBradbury',
+		username: 'katiearriagam',
 		followers_url: ''
 	};
 

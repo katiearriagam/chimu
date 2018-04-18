@@ -7,6 +7,7 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Badge from 'material-ui/Badge';
+import Avatar from 'material-ui/Avatar';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
@@ -20,6 +21,9 @@ import Logout from '../Logout/';
 const styles = {
 	flex: {
 		flex: 1,
+	},
+	avatar: {
+		margin: 10,
 	},
 };
 
@@ -81,7 +85,10 @@ class Header extends Component {
 				<IconButton color="inherit" aria-label="Search">
 					<SearchIcon />
 				</IconButton>
-				<Button color="inherit">{this.props.username}</Button>
+				<Button color="inherit">
+					<Avatar alt={this.props.username} src={this.props.photo} className={classes.avatar} />
+					{this.props.username}
+				</Button>
 				<IconButton color="inherit" aria-label="Notification Center">
 					<Badge badgeContent={1} color="secondary">
 						<MailIcon />

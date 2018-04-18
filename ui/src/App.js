@@ -20,6 +20,7 @@ class App extends Component {
 				this.setState({
 					isLogged: false,
 					username: null,
+					photo: null,
 				});
 				console.log("Quite dead");
 			}
@@ -41,6 +42,7 @@ class App extends Component {
 					this.setState({
 						isLogged: true,
 						username: doc.id,
+						photo: firebase.auth().currentUser.photoURL,
 					});
 					console.log("Info loaded!");
 				});
@@ -60,6 +62,7 @@ class App extends Component {
 					<Header
 						isLogged = {this.state.isLogged}
 						username = {this.state.username}
+						photo = {this.state.photo}
 					/>
 					<UserInfo/>
 				</div>

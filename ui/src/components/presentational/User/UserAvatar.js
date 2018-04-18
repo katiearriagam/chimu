@@ -5,7 +5,7 @@ class UserAvatar extends Component {
   	render(){
     	return(
     		<div className="avatar bigAvatar">
-    			<img className="avatar-image" src={this.props.image}/>
+    			<img className="avatar-image" src={this.props.image} alt="avatar"/>
     		</div>
     	);
   	}

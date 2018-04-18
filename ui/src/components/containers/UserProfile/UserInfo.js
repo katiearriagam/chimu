@@ -16,17 +16,13 @@ class UserInfo extends Component {
 		    { key: 3, label: 'Back-end developer' }
 		],
 		username: 'katiearriagam',
-		followers_url: ''
 	};
 
   	async componentWillMount(){
   		const component = this; 
-	    let followers_url = "";
 
 	    const response = await fetch('https://api.github.com/users/' + component.state.username);
 	    const json = await response.json();
-	    // just log ‘json’
-	    followers_url = json.followers_url;
 
 	    this.setState({
 	    	name: json.name,

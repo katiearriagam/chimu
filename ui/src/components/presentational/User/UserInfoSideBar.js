@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
-import mui from 'material-ui';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from 'material-ui/styles';
 import UserAvatar from './UserAvatar';
-import Button from 'material-ui/Button';
 import Chip from 'material-ui/Chip';
-import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import '../../style/style.css';
 import star from '../../images/star.png';

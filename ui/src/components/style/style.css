@@ -1,6 +1,9 @@
 :root {
-    --primary-color:#40798C;
-    --secondary-color:#0B2027;
+	--primary-color:#4c6973;
+	--secondary-color:#514c73;
+	--tertiary-color:#4c7356;
+	--primary-color-not:#40798C;
+    --secondary-color-not:#0B2027;
     --accent-color:#70A9A1;
     --accent-color2:#FCFCFC;
 }
@@ -11,6 +14,11 @@ body{
 	line-height: 1.6;
 	letter-spacing: .05em;
 	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+.header-content {
+	background-color: var(--secondary-color) !important;
+	color: var(--accent-color2) !important;
 }
 
 .IconButton{

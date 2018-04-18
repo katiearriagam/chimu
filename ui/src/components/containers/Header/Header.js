@@ -7,23 +7,19 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Badge from 'material-ui/Badge';
-import Avatar from 'material-ui/Avatar';
-import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import MailIcon from '@material-ui/icons/Mail';
 
 import '../../style/style.css';
 
-import GitHubLogin from '../GitHub/';
-import Logout from '../Logout/';
+import GitHubLogin from '../../presentational/Header/GitHubLogin';
+import Logout from '../../presentational/Header/Logout';
+import UserButton from '../../presentational/Header/UserButton';
 
 const styles = {
 	flex: {
 		flex: 1,
-	},
-	avatar: {
-		margin: 10,
 	},
 };
 
@@ -85,10 +81,10 @@ class Header extends Component {
 				<IconButton color="inherit" aria-label="Search">
 					<SearchIcon />
 				</IconButton>
-				<Button color="inherit">
-					<Avatar alt={this.props.username} src={this.props.photo} className={classes.avatar} />
-					{this.props.username}
-				</Button>
+				<UserButton
+					username = {this.props.username}
+					photo = {this.props.photo}
+				/>
 				<IconButton color="inherit" aria-label="Notification Center">
 					<Badge badgeContent={1} color="secondary">
 						<MailIcon />

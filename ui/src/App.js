@@ -4,6 +4,7 @@ import './App.css';
 import * as firebase from 'firebase';
 
 import UserInfo from './components/containers/UserProfile/UserInfo';
+import ProjectInfo from './components/containers/ProjectProfile/ProjectInfo';
 import Header from './components/containers/Header/Header';
 
 import {init as firebaseInit} from './helpers/FirebaseInit';
@@ -64,7 +65,9 @@ class App extends Component {
 						username = {this.state.username}
 						photo = {this.state.photo}
 					/>
-					<UserInfo/>
+					<ProjectInfo
+						propKey = '7gNWmTP802UIlfkc5H2V'
+					/>
 				</div>
 			);
 		} else {

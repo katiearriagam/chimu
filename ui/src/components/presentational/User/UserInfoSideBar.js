@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { withStyles } from 'material-ui/styles';
-import UserAvatar from './UserAvatar';
 import Chip from 'material-ui/Chip';
 import IconButton from 'material-ui/IconButton';
+import CommunicationEmail from 'react-material-icons/icons/communication/email';
+
 import '../../style/style.css';
 import star from '../../images/star.png';
 
-import CommunicationEmail from 'react-material-icons/icons/communication/email';
+import UserAvatar from './UserAvatar';
 
 
 class UserInfoSideBar extends Component {   

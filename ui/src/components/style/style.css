@@ -56,16 +56,30 @@ body{
 	padding: 2% 0%;
 }
 
-.user-name, .user-points, .user-handle, .user-roles, .user-skills{
+.projectSidebar{
+	height:100%;
+	width:25%;
+	position:fixed;
+	z-index:1;
+	overflow:auto;
+	background-color: var(--tertiary-color);
+	padding: 2% 0%;
+}
+
+.user-name, .user-points, .user-handle, .user-roles, .user-skills, .project-name, .project-status, .project-owner, .project-sdesc-label, .project-sdesc, .project-key{
 	color: var(--accent-color2);
 	display: block;
 	text-align: center;
 }
 
-.user-name{
+.user-name, .project-name{
 	text-transform: uppercase;
 	font-size: 2em;
 	font-weight: 500;
+}
+
+.project-status{
+	font-size: 1.2em;
 }
 
 .user-points{
@@ -73,7 +87,7 @@ body{
 	font-size: 1.2em;
 }
 
-.user-rating, .user-contact{
+.user-rating, .user-contact, .project-links{
 	display: block;
     text-align: center;
 }
@@ -83,7 +97,7 @@ body{
 	margin-left: 2%;
 }
 
-.user-handle{
+.user-handle, .project-owner{
 	display: inline-block;
 }
 
@@ -99,10 +113,18 @@ body{
 	margin: 3%;
 }
 
-.user-roles, .user-skills{
+.user-roles, .user-skills, .project-sdesc-label, .project-key{
 	text-align: left;
 	margin: 5%;
 	text-transform: uppercase;
 	margin-top: 7%;
+	margin-bottom: 3%;
+}
+
+.project-sdesc {
+	text-align: left;
+	font-size: 0.9em;
+	margin: 5%;
+	margin-top: 0;
 	margin-bottom: 3%;
 }

@@ -30,7 +30,7 @@ class UserInfoSideBar extends Component {
       ) : (<span></span>);
 
     return(
-      <div className="sidebar">
+      <div>
         <UserAvatar image={this.props.avatar}/>
         <label className="user-name">{this.props.name}</label>
         <span className="user-rating">

@@ -23,6 +23,9 @@ class UserInfo extends Component {
 					docRef.get().then((doc) => {
 						if (doc.exists) {
 							var info = doc.data();
+
+							/* TO-DO: retrieve skills, roles and projects from DB here */
+
 							this.setState({
 								previousProjects: [],
 								currentProjects: [],
@@ -99,9 +102,9 @@ class UserInfo extends Component {
 				const headerPrevious = this.state.previousProjects.length > 0 ? ("PREVIOUS PROJECTS") : ("");
 				const headerCurrent = this.state.currentProjects.length > 0 ? ("CURRENT PROJECTS") : ("");
 				return (
-					<div>
-						<div className="UserInfo">
-							<UserInfoSideBar 
+					<div className="page-content">
+						<div className="sidebar">
+							<UserInfoSideBar
 								avatar={this.state.avatar_url}
 								name={this.state.name}
 								rating={this.state.rating}
@@ -112,33 +115,35 @@ class UserInfo extends Component {
 								skills={this.state.skills}
 							/>
 						</div>
-						<div className="UserProjects currentProjects">
-							<h4 className="user-projects-subheader">{headerCurrent}</h4>
-							{
-				        	this.state.currentProjects.map(data => {
-					        	return(
-					        		<UserProjectCard 
-					        			title={data.title}
-					        			shortDescription={data.shortDescription}
-					        			image={data.image}
-										key={this.state.currentProjects.indexOf(data)}
-					            	/>
-					          	);
-					        })}
-						</div>
-						<div className="UserProjects previousProjects">
-							<h4 className="user-projects-subheader">{headerPrevious}</h4>
-							{
-					        	this.state.previousProjects.map(data => {
-					        	return(
-					        		<UserProjectCard 
-					        			title={data.title}
-					        			shortDescription={data.shortDescription}
-					        			image={data.image}
-										key={this.state.previousProjects.indexOf(data)}
-					            	/>
-					          	);
-					        })}
+						<div className="UserProjects">
+							<div className="currentProjects">
+								<h4 className="user-projects-subheader">{headerCurrent}</h4>
+								{
+					        	this.state.currentProjects.map(data => {
+						        	return(
+						        		<UserProjectCard 
+						        			title={data.title}
+						        			shortDescription={data.shortDescription}
+						        			image={data.image}
+											key={this.state.currentProjects.indexOf(data)}
+						            	/>
+						          	);
+						        })}
+							</div>
+							<div className="previousProjects">
+								<h4 className="user-projects-subheader">{headerPrevious}</h4>
+								{
+						        	this.state.previousProjects.map(data => {
+						        	return(
+						        		<UserProjectCard 
+						        			title={data.title}
+						        			shortDescription={data.shortDescription}
+						        			image={data.image}
+											key={this.state.previousProjects.indexOf(data)}
+						            	/>
+						          	);
+						        })}
+							</div>
 						</div>
 					</div>
 				);

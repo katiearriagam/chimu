@@ -78,7 +78,7 @@ class Header extends Component {
 	render() {
 		const { classes } = this.props;
 		const headerButtons = this.props.isLogged ? (
-			<div>
+			<div className="header">
 				<IconButton color="inherit" aria-label="Search">
 					<SearchIcon />
 				</IconButton>

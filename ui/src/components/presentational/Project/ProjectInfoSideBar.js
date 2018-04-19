@@ -29,7 +29,7 @@ class ProjectInfoSideBar extends Component {
 		const textStatus = this.props.status ? 'COMPLETED' : 'ACTIVE';
 		
 		return(
-			<div className="projectSidebar">
+			<div>
 				<ProjectAvatar image={this.props.avatar}/>
 				<label className="project-name">{this.props.name}</label>
 				<label className="project-status">{textStatus}</label>

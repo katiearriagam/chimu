@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import request from 'request';
 import * as firebase from 'firebase';
 
@@ -81,10 +82,12 @@ class Header extends Component {
 				<IconButton color="inherit" aria-label="Search">
 					<SearchIcon />
 				</IconButton>
-				<UserButton
-					username = {this.props.username}
-					photo = {this.props.photo}
-				/>
+				<Link to={{ pathname: '/user/' + this.props.username }} style={{ textDecoration: 'none', color: 'inherit' }}>
+					<UserButton
+						username = {this.props.username}
+						photo = {this.props.photo}
+					/>
+				</Link>
 				<IconButton color="inherit" aria-label="Notification Center">
 					<Badge badgeContent={1} color="secondary">
 						<MailIcon />
@@ -108,7 +111,9 @@ class Header extends Component {
 				<AppBar className="header-content" position="static">
 					<Toolbar>
 						<Typography variant="title" color="inherit" className={classes.flex}>
-							chimu
+							<Link to='/' style={{ textDecoration: 'none', color: 'inherit' }}>
+								chimu
+							</Link>
 						</Typography>
 						{ headerButtons }
 					</Toolbar>

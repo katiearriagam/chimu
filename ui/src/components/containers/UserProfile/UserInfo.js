@@ -24,60 +24,8 @@ class UserInfo extends Component {
 						if (doc.exists) {
 							var info = doc.data();
 							this.setState({
-								previousProjects: [
-									{
-										title: 'flutter', 
-										shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
-										image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
-									},
-									{
-										title: 'flutter', 
-										shortDescription: 'Lorem ipsum dolor sit amet, audire probatus ius cu. Est libris putant urbanitas et. Homero tempor cu nam, pro dissentias conclusionemque no. Odio quas elaboraret per cu. Sea ut platonem efficiantur, et liber fierent oportere pro. Nec eu modo dolores voluptaria.',
-										image: 'https://avatars2.githubusercontent.com/u/33663932?s=200&v=4'
-									},
-									{
-										title: 'flutter', 
-										shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
-										image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
-									},
-									{
-										title: 'flutter', 
-										shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
-										image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
-									},
-									{
-										title: 'flutter', 
-										shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
-										image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
-									},
-									{
-										title: 'flutter', 
-										shortDescription: 'Lorem ipsum dolor sit amet, audire probatus ius cu. Est libris putant urbanitas et. Homero tempor cu nam, pro dissentias conclusionemque no. Odio quas elaboraret per cu. Sea ut platonem efficiantur, et liber fierent oportere pro. Nec eu modo dolores voluptaria.',
-										image: 'https://avatars2.githubusercontent.com/u/33663932?s=200&v=4'
-									},
-									{
-										title: 'flutter', 
-										shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
-										image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
-									},
-									{
-										title: 'flutter', 
-										shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
-										image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
-									}
-
-								],
-								currentProjects: [{
-										title: 'flutter', 
-										shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
-										image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
-									},
-									{
-										title: 'flutter', 
-										shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
-										image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
-									}],
-								username: 'hecerinc',
+								previousProjects: [],
+								currentProjects: [],
 								skills: [
 									{ key: 0, label: 'React' },
 									{ key: 1, label: 'JavaScript' },
@@ -97,6 +45,36 @@ class UserInfo extends Component {
 								login: json.login,
 								email: info.email,
 								valid: true,
+							});
+							
+							// Get user's projects information
+							var projectCol = db.collection("Projects").doc(this.props.match.params.username).collection("projects");
+							projectCol.where("status", "==", true).get().then((docs) => {
+								docs.forEach((project) => {
+									this.setState(prevState => ({
+										currentProjects: [...prevState.currentProjects, {
+															title: project.id,
+															shortDescription: project.data().sdesc,
+															image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
+														 }]
+									}));
+								});
+							}).catch(function(error) {
+								console.log("Error getting documents: ", error);
+							});
+							
+							projectCol.where("status", "==", false).get().then((docs) => {
+								docs.forEach((project) => {
+									this.setState(prevState => ({
+										previousProjects: [...prevState.previousProjects, {
+															title: project.id,
+															shortDescription: project.data().sdesc,
+															image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
+														 }]
+									}));
+								});
+							}).catch(function(error) {
+								console.log("Error getting documents: ", error);
 							});
 						} else {
 							this.setState({

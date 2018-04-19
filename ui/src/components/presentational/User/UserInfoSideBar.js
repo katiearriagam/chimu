@@ -28,14 +28,18 @@ class UserInfoSideBar extends Component {
         </IconButton>
       </span>
       ) : (<span></span>);
+	  
+	const rating = this.props.rating != null ? (
+		<label className="user-points">{parseFloat(this.props.rating).toFixed(1)}/5.0</label>
+	) : (<label className="user-points"></label>);
 
     return(
       <div className="sidebar">
         <UserAvatar image={this.props.avatar}/>
         <label className="user-name">{this.props.name}</label>
         <span className="user-rating">
-          <label className="user-points">{this.props.rating}/5.0</label>
-          <img className="star" alt="" src={star}/>
+			{rating}
+			<img className="star" alt="" src={star}/>
         </span>
         <span className="user-contact">
           <a className="user-handle" href={this.props.githubUrl}>@{this.props.handle}</a>

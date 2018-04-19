@@ -30,7 +30,6 @@ class UserInfo extends Component {
 								roles: [],
 								name: json.name,
 								avatar_url: json.avatar_url,
-								rating: '4.9',
 								html_url: json.html_url,
 								login: json.login,
 								email: info.public_email,
@@ -61,31 +60,49 @@ class UserInfo extends Component {
 								});
 							});
 							
+							var ratingCant = 0;
+							var ratingSum = 0;
 							// Get user's projects information
-							var projectCol = db.collection("Projects").doc(this.props.match.params.username).collection("projects");
-							projectCol.where("status", "==", true).get().then((docs) => {
-								docs.forEach((project) => {
-									this.setState(prevState => ({
-										currentProjects: [...prevState.currentProjects, {
-															title: project.id,
-															shortDescription: project.data().sdesc,
-															image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
-														 }]
-									}));
-								});
-							}).catch(function(error) {
-								console.log("Error getting documents: ", error);
-							});
-							
-							projectCol.where("status", "==", false).get().then((docs) => {
-								docs.forEach((project) => {
-									this.setState(prevState => ({
-										previousProjects: [...prevState.previousProjects, {
-															title: project.id,
-															shortDescription: project.data().sdesc,
-															image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
-														 }]
-									}));
+							var projectCol = db.collection("Users_Projects").where("user", "==", docRef).get().then((projectInfos) => {
+								projectInfos.forEach((projectInfo) => {
+									projectInfo.data().project.get().then((project) => {
+										// Get completed projects
+										if (project.data().status) {
+											if (projectInfo.data().rating) {
+												ratingSum = ratingSum + projectInfo.data().rating;
+												ratingCant = ratingCant + 1;
+											}
+											this.setState(prevState => ({
+												previousProjects: [...prevState.previousProjects, {
+																	title: project.id,
+																	shortDescription: project.data().sdesc,
+																	image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
+																 }]
+											}));
+										// Get ongoing projects
+										} else {
+											this.setState(prevState => ({
+												currentProjects: [...prevState.currentProjects, {
+																	title: project.id,
+																	shortDescription: project.data().sdesc,
+																	image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
+																 }]
+											}));
+										}
+										if (projectInfos.size === this.state.previousProjects.length + this.state.currentProjects.length) {
+											if (ratingCant === 0) {
+												this.setState({
+													rating: 5,
+												});
+											} else {
+												this.setState({
+													rating: ratingSum/ratingCant,
+												});
+											}
+										}
+									}).catch(function(error) {
+										console.log("Error getting documents: ", error);
+									});
 								});
 							}).catch(function(error) {
 								console.log("Error getting documents: ", error);

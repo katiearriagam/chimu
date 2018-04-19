@@ -28,14 +28,18 @@ class UserInfoSideBar extends Component {
         </IconButton>
       </span>
       ) : (<span></span>);
+	  
+	const rating = this.props.rating != null ? (
+		<label className="user-points">{parseFloat(this.props.rating).toFixed(1)}/5.0</label>
+	) : (<label className="user-points"></label>);
 
     return(
       <div>
         <UserAvatar image={this.props.avatar}/>
         <label className="user-name">{this.props.name}</label>
         <span className="user-rating">
-          <label className="user-points">{this.props.rating}/5.0</label>
-          <img className="star" alt="" src={star}/>
+			{rating}
+			<img className="star" alt="" src={star}/>
         </span>
         <span className="user-contact">
           <a className="user-handle" href={this.props.githubUrl}>@{this.props.handle}</a>
@@ -47,7 +51,7 @@ class UserInfoSideBar extends Component {
           this.props.roles.map(data => {
           return(
             <Chip className="Chip"
-               key={data.key}
+               key={this.props.roles.indexOf(data)}
                label={data.label}
             />
           );
@@ -59,7 +63,7 @@ class UserInfoSideBar extends Component {
           this.props.skills.map(data => {
           return(
             <Chip className="Chip"
-               key={data.key}
+               key={this.props.skills.indexOf(data)}
                label={data.label}
             />
           );

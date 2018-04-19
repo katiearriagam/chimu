@@ -29,39 +29,42 @@ class Header extends Component {
 		console.error(response);
 	}
 	onSuccess(response) {
-		console.log(firebase.auth().currentUser);
 		// Get the access token here
-		console.log("code -> " + response['code']);
 		let jsonObject = {'code': response['code']};
 		request.post({
-			url: 'http://localhost:80/chimu/',
+			url: 'http://localhost:8080/chimu/',
 			form: jsonObject,
 		}, (err, response, body) => {
 			if(err){
 				console.error("ERROR");
 				console.error(err);
 			}
-			console.log(JSON.parse(body)['access_token']);
 			
 			// Exchange access token for Firebase credential
 			let credential = firebase.auth.GithubAuthProvider.credential(JSON.parse(body)['access_token']);
-			console.log(credential);
 			
 			// Sign in with Firebase and retrieve additional info
 			firebase.auth().signInAndRetrieveDataWithCredential(credential).then((result) => {
-				var db = firebase.firestore();
 				// Store new user info
 				if (result.additionalUserInfo.isNewUser) {
-					db.collection("Users").doc(result.additionalUserInfo.username).set({
-						email: result.user.email
-					})
-					.then(() => {
-						console.log("Document successfully written!");
-					})
-					.catch((error) => {
-						console.error("Error writing document: ", error);
+					var db = firebase.firestore();
+					const response = fetch('https://api.github.com/user?access_token='+JSON.parse(body)['access_token']).then((response) => {
+						response.json().then((json) => {
+							db.collection("Users").doc(result.additionalUserInfo.username).set({
+								email: result.user.email,
+								public_email: json.email
+							})
+							.then(() => {
+								console.log("Document successfully written!");
+							})
+							.catch((error) => {
+								console.error("Error writing document: ", error);
+							});
+						});
+					}).catch((error) => {
+						console.log("Github Fetch Error:", error);
 					});
-				} 
+				}
 			}).catch((error) => {
 				// Handle Errors here.
 				let errorCode = error.code;

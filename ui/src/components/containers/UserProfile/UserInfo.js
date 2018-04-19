@@ -24,8 +24,60 @@ class UserInfo extends Component {
 		    { key: 1, label: 'Front-end developer' },
 		    { key: 3, label: 'Back-end develoepr' }
 		],
-		username: 'pando65',
-		followers_url: ''
+		previousProjects: [
+			{
+				title: 'flutter', 
+				shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
+				image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
+			},
+			{
+				title: 'flutter', 
+				shortDescription: 'Lorem ipsum dolor sit amet, audire probatus ius cu. Est libris putant urbanitas et. Homero tempor cu nam, pro dissentias conclusionemque no. Odio quas elaboraret per cu. Sea ut platonem efficiantur, et liber fierent oportere pro. Nec eu modo dolores voluptaria.',
+				image: 'https://avatars2.githubusercontent.com/u/33663932?s=200&v=4'
+			},
+			{
+				title: 'flutter', 
+				shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
+				image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
+			},
+			{
+				title: 'flutter', 
+				shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
+				image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
+			},
+			{
+				title: 'flutter', 
+				shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
+				image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
+			},
+			{
+				title: 'flutter', 
+				shortDescription: 'Lorem ipsum dolor sit amet, audire probatus ius cu. Est libris putant urbanitas et. Homero tempor cu nam, pro dissentias conclusionemque no. Odio quas elaboraret per cu. Sea ut platonem efficiantur, et liber fierent oportere pro. Nec eu modo dolores voluptaria.',
+				image: 'https://avatars2.githubusercontent.com/u/33663932?s=200&v=4'
+			},
+			{
+				title: 'flutter', 
+				shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
+				image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
+			},
+			{
+				title: 'flutter', 
+				shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
+				image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
+			}
+
+		],
+		currentProjects: [{
+				title: 'flutter', 
+				shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
+				image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
+			},
+			{
+				title: 'flutter', 
+				shortDescription: 'Flutter makes it easy and fast to build beautiful mobile apps.',
+				image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
+			}],
+		username: 'hecerinc',
 	};
 
   	async componentWillMount(){
@@ -34,8 +86,6 @@ class UserInfo extends Component {
 
 	    const response = await fetch('https://api.github.com/users/' + component.state.username);
 	    const json = await response.json();
-	    // just log ‘json’
-	    followers_url = json.followers_url;
 
 	    this.setState({
 	    	name: json.name,
@@ -51,9 +101,13 @@ class UserInfo extends Component {
 
 
 	render() {
+		const headerPrevious = this.state.previousProjects.length > 0 ? ("PREVIOUS PROJECTS") : ("");
+		const headerCurrent = this.state.currentProjects.length > 0 ? ("CURRENT PROJECTS") : ("");
+
 		return (
 			<div className="UserInfo">
 				<UserInfoSideBar 
+					className="userInfoSideBar"
 					avatar={this.state.avatar_url}
 					name={this.state.name}
 					rating={this.state.rating}
@@ -63,13 +117,31 @@ class UserInfo extends Component {
 					roles={this.state.roles}
 					skills={this.state.skills}
 				/>
-				<div className="UserProjects">
-					<UserProjectCard/>
-					<UserProjectCard/>
-					<UserProjectCard/>
-					<UserProjectCard/>
-					<UserProjectCard/>
-					<UserProjectCard/>
+				<div className="UserProjects currentProjects">
+					<h4 className="user-projects-subheader">{headerCurrent}</h4>
+					{
+			        	this.state.currentProjects.map(data => {
+			        	return(
+			        		<UserProjectCard 
+			        			title={data.title}
+			        			shortDescription={data.shortDescription}
+			        			image={data.image}
+			            	/>
+			          	);
+			        })}
+				</div>
+				<div className="UserProjects previousProjects">
+					<h4 className="user-projects-subheader">{headerPrevious}</h4>
+					{
+			        	this.state.previousProjects.map(data => {
+			        	return(
+			        		<UserProjectCard 
+			        			title={data.title}
+			        			shortDescription={data.shortDescription}
+			        			image={data.image}
+			            	/>
+			          	);
+			        })}
 				</div>
 			</div>
 		);

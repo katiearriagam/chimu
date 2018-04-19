@@ -29,6 +29,23 @@ class ProjectDetails extends Component {
 						</Typography>
 					</div>
 				</div>
+				<div className="card">
+					<div className="cardContent">
+						<Typography variant="headline">Members</Typography>
+						<div>
+							{
+					        	this.props.members.map(data => {
+					          		return(
+					          			<Link to={{ pathname: '/user/' + data.username }} style={{ textDecoration: 'none', color: 'inherit' }}>
+							           		<div className="avatar bigAvatar teamMembers">
+								    			<img className="avatar-image" src={data.avatar} alt={data.username}/>
+								    		</div>
+										</Link>
+					          	);
+					       	})}
+						</div>
+					</div>
+				</div>
 				<div className="card project-roles">
 					<div className="cardContent">
 						<Typography variant="headline">Roles</Typography>
@@ -38,7 +55,7 @@ class ProjectDetails extends Component {
 				        	this.props.roles.map(data => {
 				          		return(
 				           		<Chip className="Chip"
-				            	   	key={data.key}
+				            	   	key={this.props.roles.indexOf(data)}
 				               		label={data.label}
 				           	 	/>
 				          	);
@@ -56,30 +73,13 @@ class ProjectDetails extends Component {
 					        	this.props.skills.map(data => {
 					          		return(
 					           		<Chip className="Chip"
-					            	   	key={data.key}
+					            	   	key={this.props.skills.indexOf(data)}
 					               		label={data.label}
 					           	 	/>
 					          	);
 					        	})}
 							</div>
 							}
-					</div>
-				</div>
-				<div className="card">
-					<div className="cardContent">
-						<Typography variant="headline">Members</Typography>
-						<div>
-							{
-					        	this.props.members.map(data => {
-					          		return(
-					          			<Link to={{ pathname: '/user/' + data.username }} style={{ textDecoration: 'none', color: 'inherit' }}>
-							           		<div className="avatar bigAvatar teamMembers">
-								    			<img className="avatar-image" src={data.avatar} alt={data.username}/>
-								    		</div>
-										</Link>
-					          	);
-					       	})}
-						</div>
 					</div>
 				</div>
 			</div>

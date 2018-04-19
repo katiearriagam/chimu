@@ -25,25 +25,39 @@ class ProjectInfo extends Component {
 					avatar_url: 'https://images.fineartamerica.com/images-medium-large/puppy-portrait-snake-jagger.jpg',
 					sdesc: info.sdesc,
 					valid: true,
-					skills: [
-						{ key: 0, label: 'React' },
-						{ key: 1, label: 'JavaScript' },
-						{ key: 3, label: 'Vue.js' },
-						{ key: 5, label: 'PHP' },
-						{ key: 4, label: 'Firebase' },
-					],
-					roles: [
-						{ key: 0, label: 'Designer' },
-						{ key: 1, label: 'Front-end developer' },
-						{ key: 3, label: 'Back-end developer' }
-					],
-					longDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+					skills: [],
+					roles: [],
+					longDescription: info.ldesc,
 					members: [
 						{username: 'katiearriagam', avatar: 'https://avatars0.githubusercontent.com/u/14140121?s=400&u=ee4802ab6dbcc76aa049b0c6e42ba84b5a017c28&v=4'},
 						{username: 'katiearriagam', avatar: 'https://avatars0.githubusercontent.com/u/14140121?s=400&u=ee4802ab6dbcc76aa049b0c6e42ba84b5a017c28&v=4'},
 						{username: 'katiearriagam', avatar: 'https://avatars0.githubusercontent.com/u/14140121?s=400&u=ee4802ab6dbcc76aa049b0c6e42ba84b5a017c28&v=4'},
 						{username: 'katiearriagam', avatar: 'https://avatars0.githubusercontent.com/u/14140121?s=400&u=ee4802ab6dbcc76aa049b0c6e42ba84b5a017c28&v=4'},
 					]
+				});
+				info.skills.forEach((skill) => {
+					skill.get().then((skill) => {
+						this.setState(prevState => ({
+							skills: [...prevState.skills, {
+										label: skill.id,
+										hex: skill.data().hex,
+									}]
+						}));
+					}).catch((error) => {
+						console.log("Error getting document:", error);
+					});
+				});
+				info.roles.forEach((role) => {
+					role.get().then((role) => {
+						this.setState(prevState => ({
+							roles: [...prevState.roles, {
+										label: role.id,
+										hex: role.data().hex,
+									}]
+						}));
+					}).catch((error) => {
+						console.log("Error getting document:", error);
+					});
 				});
 			} else {
 				this.setState({

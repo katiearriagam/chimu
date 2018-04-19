@@ -1,5 +1,3 @@
-import * as firebase from 'firebase';
-
 export const init = () => {
 	console.log("Attempting to connect to Firebase");
 	// Select Firebase services

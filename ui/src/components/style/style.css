@@ -43,11 +43,21 @@ body{
 
 .avatar-image{
 	border-radius: 50%;
-	width: 50%;
+	width: 170.5px;
+	height: 170.5px;
+	max-width: 170.5px;
+	max-height: 170.5px;
 	margin: 0 25%;
 }
 
 .bigAvatar{
+}
+
+.teamMembers{
+	display: inline-block;
+	margin: 1%;
+	width: 20%;
+	height: 20%;
 }
 
 .divClass{

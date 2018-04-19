@@ -37,7 +37,13 @@ class ProjectInfo extends Component {
 						{ key: 1, label: 'Front-end developer' },
 						{ key: 3, label: 'Back-end developer' }
 					],
-					longDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+					longDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+					members: [
+						{username: 'katiearriagam', avatar: 'https://avatars0.githubusercontent.com/u/14140121?s=400&u=ee4802ab6dbcc76aa049b0c6e42ba84b5a017c28&v=4'},
+						{username: 'katiearriagam', avatar: 'https://avatars0.githubusercontent.com/u/14140121?s=400&u=ee4802ab6dbcc76aa049b0c6e42ba84b5a017c28&v=4'},
+						{username: 'katiearriagam', avatar: 'https://avatars0.githubusercontent.com/u/14140121?s=400&u=ee4802ab6dbcc76aa049b0c6e42ba84b5a017c28&v=4'},
+						{username: 'katiearriagam', avatar: 'https://avatars0.githubusercontent.com/u/14140121?s=400&u=ee4802ab6dbcc76aa049b0c6e42ba84b5a017c28&v=4'},
+					]
 				});
 			} else {
 				this.setState({
@@ -72,6 +78,7 @@ class ProjectInfo extends Component {
 								longDescription={this.state.longDescription}
 								skills={this.state.skills}
 								roles={this.state.roles}
+								members={this.state.members}
 							/>
 						</div>
 					</div>

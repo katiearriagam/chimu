@@ -6,15 +6,6 @@ import * as firebase from 'firebase';
 import Main from './Main';
 import Header from './components/containers/Header/Header';
 
-import UserInfo from './components/containers/UserProfile/UserInfo';
-
-/*
-import GitHubLogin from './components/containers/GitHub/';
-import Logout from './components/containers/Logout/';
-import UserInfoSideBar from './components/presentational/User/UserInfoSideBar';
-*/
-
-import GitHub from "github-api";
 import {init as firebaseInit} from './helpers/FirebaseInit';
 
 class App extends Component {

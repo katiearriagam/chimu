@@ -15,7 +15,6 @@ class ProjectInfo extends Component {
 		docRef.get().then((doc) => {
 			if (doc.exists) {
 				var info = doc.data();
-				console.log(info);
 				this.setState({
 					keys: info.keywords,
 					name: doc.id,
@@ -28,12 +27,31 @@ class ProjectInfo extends Component {
 					skills: [],
 					roles: [],
 					longDescription: info.ldesc,
-					members: [
-						{username: 'katiearriagam', avatar: 'https://avatars0.githubusercontent.com/u/14140121?s=400&u=ee4802ab6dbcc76aa049b0c6e42ba84b5a017c28&v=4'},
-						{username: 'katiearriagam', avatar: 'https://avatars0.githubusercontent.com/u/14140121?s=400&u=ee4802ab6dbcc76aa049b0c6e42ba84b5a017c28&v=4'},
-						{username: 'katiearriagam', avatar: 'https://avatars0.githubusercontent.com/u/14140121?s=400&u=ee4802ab6dbcc76aa049b0c6e42ba84b5a017c28&v=4'},
-						{username: 'katiearriagam', avatar: 'https://avatars0.githubusercontent.com/u/14140121?s=400&u=ee4802ab6dbcc76aa049b0c6e42ba84b5a017c28&v=4'},
-					]
+					members: []
+				});
+				db.collection("Users_Projects").where("project", "==", docRef).where("isApproved", "==", true).get().then((projectInfos) => {
+					projectInfos.forEach((projectInfo) => {
+						projectInfo.data().user.get().then((user) => {
+							const response = fetch('https://api.github.com/users/' + user.id).then((response) => {
+								if (response.status === 200) {
+									response.json().then((json) => {
+										this.setState(prevState => ({
+											members: [...prevState.members, {
+														username: user.id,
+														avatar: json.avatar_url,
+													}]
+										}));
+									});
+								}
+							}).catch((error) => {
+								console.log("Github Fetch Error:", error);
+							});
+						}).catch(function(error) {
+							console.log("Error getting documents: ", error);
+						});
+					});
+				}).catch(function(error) {
+					console.log("Error getting documents: ", error);
 				});
 				info.skills.forEach((skill) => {
 					skill.get().then((skill) => {

@@ -43,7 +43,7 @@ class UserInfo extends Component {
 								rating: '4.9',
 								html_url: json.html_url,
 								login: json.login,
-								email: info.email,
+								email: info.public_email,
 								valid: true,
 							});
 							

@@ -47,7 +47,7 @@ class UserInfoSideBar extends Component {
           this.props.roles.map(data => {
           return(
             <Chip className="Chip"
-               key={data.key}
+               key={this.props.roles.indexOf(data)}
                label={data.label}
             />
           );
@@ -59,7 +59,7 @@ class UserInfoSideBar extends Component {
           this.props.skills.map(data => {
           return(
             <Chip className="Chip"
-               key={data.key}
+               key={this.props.skills.indexOf(data)}
                label={data.label}
             />
           );

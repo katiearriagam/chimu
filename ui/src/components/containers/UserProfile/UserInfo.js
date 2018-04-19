@@ -26,18 +26,8 @@ class UserInfo extends Component {
 							this.setState({
 								previousProjects: [],
 								currentProjects: [],
-								skills: [
-									{ key: 0, label: 'React' },
-									{ key: 1, label: 'JavaScript' },
-									{ key: 3, label: 'Vue.js' },
-									{ key: 5, label: 'PHP' },
-									{ key: 4, label: 'Firebase' },
-								],
-								roles: [
-									{ key: 0, label: 'Designer' },
-									{ key: 1, label: 'Front-end developer' },
-									{ key: 3, label: 'Back-end developer' }
-								],
+								skills: [],
+								roles: [],
 								name: json.name,
 								avatar_url: json.avatar_url,
 								rating: '4.9',
@@ -45,6 +35,30 @@ class UserInfo extends Component {
 								login: json.login,
 								email: info.public_email,
 								valid: true,
+							});
+							info.skills.forEach((skill) => {
+								skill.get().then((skill) => {
+									this.setState(prevState => ({
+										skills: [...prevState.skills, {
+													label: skill.id,
+													hex: skill.data().hex,
+												}]
+									}));
+								}).catch((error) => {
+									console.log("Error getting document:", error);
+								});
+							});
+							info.roles.forEach((role) => {
+								role.get().then((role) => {
+									this.setState(prevState => ({
+										roles: [...prevState.roles, {
+													label: role.id,
+													hex: role.data().hex,
+												}]
+									}));
+								}).catch((error) => {
+									console.log("Error getting document:", error);
+								});
 							});
 							
 							// Get user's projects information

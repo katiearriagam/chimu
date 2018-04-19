@@ -33,7 +33,7 @@ class Header extends Component {
 		console.log("code -> " + response['code']);
 		let jsonObject = {'code': response['code']};
 		request.post({
-			url: 'http://localhost:8080/chimu/',
+			url: 'http://localhost:80/chimu/',
 			form: jsonObject,
 		}, (err, response, body) => {
 			if(err){

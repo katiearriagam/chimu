@@ -158,11 +158,10 @@ class UserInfo extends Component {
 		const headerPrevious = this.state.previousProjects.length > 0 ? ("PREVIOUS PROJECTS") : ("");
 		const headerCurrent = this.state.currentProjects.length > 0 ? ("CURRENT PROJECTS") : ("");
 
-		return (
-			<div>
-				if (this.state) {
-				if (this.state.valid) {
-					return (
+		if (this.state) {
+			if (this.state.valid) {
+				return (
+					<div>
 						<div className="UserInfo">
 							<UserInfoSideBar 
 								avatar={this.state.avatar_url}
@@ -175,30 +174,41 @@ class UserInfo extends Component {
 								skills={this.state.skills}
 							/>
 						</div>
-					);
-				} else {
-					return <h1>Error 404</h1>;
-				}
-				} else {
-					return null;
-				}
-				<div className="UserProjects previousProjects">
-					<h4 className="user-projects-subheader">{headerPrevious}</h4>
-					{
-			        	this.state.previousProjects.map(data => {
-			        	return(
-			        		<UserProjectCard 
-			        			title={data.title}
-			        			shortDescription={data.shortDescription}
-			        			image={data.image}
-			            	/>
-			          	);
-			        })}
-				</div>
-			</div>
-		);
+						<div className="UserProjects currentProjects">
+							<h4 className="user-projects-subheader">{headerPrevious}</h4>
+							{
+				        	this.state.currentProjects.map(data => {
+					        	return(
+					        		<UserProjectCard 
+					        			title={data.title}
+					        			shortDescription={data.shortDescription}
+					        			image={data.image}
+					            	/>
+					          	);
+					        })}
+						</div>
+						<div className="UserProjects previousProjects">
+							<h4 className="user-projects-subheader">{headerPrevious}</h4>
+							{
+					        	this.state.previousProjects.map(data => {
+					        	return(
+					        		<UserProjectCard 
+					        			title={data.title}
+					        			shortDescription={data.shortDescription}
+					        			image={data.image}
+					            	/>
+					          	);
+					        })}
+						</div>
+					</div>
+				);
+			} else {
+				return <h1>Error 404</h1>;
+			}
+		} else {
+			return null;
+		}
 	}
-	
 }
 
 export default UserInfo;

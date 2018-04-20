@@ -27,7 +27,7 @@ function ProjectDetails(props){
 										key={props.members.indexOf(data)}
 									>
 										<div className="avatar bigAvatar teamMembers">
-											<img className="avatar-image" src={data.avatar} alt={data.username}/>
+											<img className="avatar-image team-member-image" src={data.avatar} alt={data.username}/>
 										</div>
 									</Link>
 							);

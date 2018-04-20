@@ -7,9 +7,10 @@ import UserProjectCard from '../../presentational/User/UserProjectCard';
 import '../../style/style.css';
 
 class UserInfo extends Component {
-  	componentDidMount(){
+	loadData(props) {
+		console.log(props.match.params.username);
 		var db = firebase.firestore();
-	    const response = fetch('https://api.github.com/users/' + this.props.match.params.username).then((response) => {
+	    const response = fetch('https://api.github.com/users/' + props.match.params.username).then((response) => {
 			if (response.status !== 200) {
 				this.setState({
 					valid: false,
@@ -19,7 +20,7 @@ class UserInfo extends Component {
 				// Examine the text in the response
 				response.json().then((json) => {
 					// Get user information from Firebase
-					var docRef = db.collection("Users").doc(this.props.match.params.username);
+					var docRef = db.collection("Users").doc(props.match.params.username);
 					docRef.get().then((doc) => {
 						if (doc.exists) {
 							var info = doc.data();
@@ -134,6 +135,18 @@ class UserInfo extends Component {
 		}).catch((error) => {
 			console.log("Github Fetch Error:", error);
 		});
+	}
+	
+	componentWillReceiveProps (nextProps) {
+		if (nextProps.match.params.username !== this.props.match.params.username) {
+			this.state = null;
+			console.log(nextProps.match.params.username);
+			this.loadData(nextProps);
+		}
+	}
+	
+  	componentWillMount(){
+		this.loadData(this.props);
 	}
 
 

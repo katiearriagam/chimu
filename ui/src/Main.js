@@ -23,9 +23,5 @@ class Main extends Component {
 	}
 }
 
-/*<ProjectInfo
-	propKey = '7gNWmTP802UIlfkc5H2V'
-/>*/
-
 export default Main;
 

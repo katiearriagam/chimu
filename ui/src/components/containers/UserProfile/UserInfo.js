@@ -24,9 +24,6 @@ class UserInfo extends Component {
 					docRef.get().then((doc) => {
 						if (doc.exists) {
 							var info = doc.data();
-
-							/* TO-DO: retrieve skills, roles and projects from DB here */
-
 							this.setState({
 								previousProjects: [],
 								currentProjects: [],
@@ -99,20 +96,20 @@ class UserInfo extends Component {
 																		link: '/project/' + user.id + '/' + project.id,
 																	 }]
 												}));
+												console.log(this.state.currentProjects);
 											}).catch(function(error) {
 												console.log("Error getting documents: ", error);
 											});
 										}
-										if (projectInfos.size === this.state.previousProjects.length + this.state.currentProjects.length) {
-											if (ratingCant === 0) {
-												this.setState({
-													rating: 5,
-												});
-											} else {
-												this.setState({
-													rating: ratingSum/ratingCant,
-												});
-											}
+									}).then(() => {
+										if (ratingCant === 0) {
+											this.setState({
+												rating: 5,
+											});
+										} else {
+											this.setState({
+												rating: ratingSum/ratingCant,
+											});
 										}
 									}).catch(function(error) {
 										console.log("Error getting documents: ", error);
@@ -148,7 +145,6 @@ class UserInfo extends Component {
   	componentWillMount(){
 		this.loadData(this.props);
 	}
-
 
 	render() {
 		if (this.state) {

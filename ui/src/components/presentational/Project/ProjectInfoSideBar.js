@@ -34,7 +34,7 @@ class ProjectInfoSideBar extends Component {
 				<label className="project-name">{this.props.name}</label>
 				<label className="project-status">{textStatus}</label>
 				<span className="project-links">
-					<a className="project-owner" href={this.props.repo}>@{this.props.owner}</a>
+					<a className="project-owner" href={'/user/' + this.props.owner}>@{this.props.owner}</a>
 					{ repository }
 				</span>
 				<label className="project-sdesc-label">Abstract</label>

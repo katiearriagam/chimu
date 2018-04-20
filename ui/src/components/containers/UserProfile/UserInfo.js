@@ -7,9 +7,10 @@ import UserProjectCard from '../../presentational/User/UserProjectCard';
 import '../../style/style.css';
 
 class UserInfo extends Component {
-  	componentDidMount(){
+	loadData(props) {
+		console.log(props.match.params.username);
 		var db = firebase.firestore();
-	    const response = fetch('https://api.github.com/users/' + this.props.match.params.username).then((response) => {
+	    const response = fetch('https://api.github.com/users/' + props.match.params.username).then((response) => {
 			if (response.status !== 200) {
 				this.setState({
 					valid: false,
@@ -19,7 +20,7 @@ class UserInfo extends Component {
 				// Examine the text in the response
 				response.json().then((json) => {
 					// Get user information from Firebase
-					var docRef = db.collection("Users").doc(this.props.match.params.username);
+					var docRef = db.collection("Users").doc(props.match.params.username);
 					docRef.get().then((doc) => {
 						if (doc.exists) {
 							var info = doc.data();
@@ -75,22 +76,32 @@ class UserInfo extends Component {
 												ratingSum = ratingSum + projectInfo.data().rating;
 												ratingCant = ratingCant + 1;
 											}
-											this.setState(prevState => ({
-												previousProjects: [...prevState.previousProjects, {
-																	title: project.id,
-																	shortDescription: project.data().sdesc,
-																	image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
-																 }]
-											}));
+											project.data().owner.get().then((user) => {
+												this.setState(prevState => ({
+													previousProjects: [...prevState.previousProjects, {
+																		title: project.id,
+																		shortDescription: project.data().sdesc,
+																		image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+																		link: '/project/' + user.id + '/' + project.id,
+																	 }]
+												}));
+											}).catch(function(error) {
+												console.log("Error getting documents: ", error);
+											});
 										// Get ongoing projects
 										} else {
-											this.setState(prevState => ({
-												currentProjects: [...prevState.currentProjects, {
-																	title: project.id,
-																	shortDescription: project.data().sdesc,
-																	image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4'
-																 }]
-											}));
+											project.data().owner.get().then((user) => {
+												this.setState(prevState => ({
+													currentProjects: [...prevState.currentProjects, {
+																		title: project.id,
+																		shortDescription: project.data().sdesc,
+																		image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+																		link: '/project/' + user.id + '/' + project.id,
+																	 }]
+												}));
+											}).catch(function(error) {
+												console.log("Error getting documents: ", error);
+											});
 										}
 										if (projectInfos.size === this.state.previousProjects.length + this.state.currentProjects.length) {
 											if (ratingCant === 0) {
@@ -125,6 +136,18 @@ class UserInfo extends Component {
 			console.log("Github Fetch Error:", error);
 		});
 	}
+	
+	componentWillReceiveProps (nextProps) {
+		if (nextProps.match.params.username !== this.props.match.params.username) {
+			this.state = null;
+			console.log(nextProps.match.params.username);
+			this.loadData(nextProps);
+		}
+	}
+	
+  	componentWillMount(){
+		this.loadData(this.props);
+	}
 
 
 	render() {
@@ -157,6 +180,7 @@ class UserInfo extends Component {
 						        			shortDescription={data.shortDescription}
 						        			image={data.image}
 											key={this.state.currentProjects.indexOf(data)}
+											link={data.link}
 						            	/>
 						          	);
 						        })}
@@ -171,6 +195,7 @@ class UserInfo extends Component {
 						        			shortDescription={data.shortDescription}
 						        			image={data.image}
 											key={this.state.previousProjects.indexOf(data)}
+											link={data.link}
 						            	/>
 						          	);
 						        })}

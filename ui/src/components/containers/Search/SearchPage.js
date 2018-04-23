@@ -7,8 +7,22 @@ import IconButton from 'material-ui/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from 'material-ui/Button';
 
+import AppBar from 'material-ui/AppBar';
+import Tabs, { Tab } from 'material-ui/Tabs';
+import Typography from 'material-ui/Typography';
+
 import CheckboxList from '../../presentational/Shared/CheckboxList';
 import '../../style/style.css';
+
+function TabContainer(props) {
+	return (
+		<div>
+	    	<Typography component="div" style={{ padding: 8 * 3 }}>
+		    	{props.children}
+		    </Typography>
+	    </div>
+	);
+}
 
 class SearchPage extends Component {
 
@@ -106,9 +120,15 @@ class SearchPage extends Component {
 	constructor(){
     	super()
     	this.state = {
-      		isHiddenSkills: true
+      		isHiddenSkills: true,
+      		value: 0
     	}
 	}
+
+
+	handleChange = (event, value) => {
+		this.setState({ value });
+	};
 	
 	toggleHiddenSkills () {
 		this.setState({
@@ -118,8 +138,11 @@ class SearchPage extends Component {
 
 
 	render() {
+		const { value } = this.state;
+
 		return (
 			<div>
+				<h4 className="pageHeader">Search</h4>
 				{!this.state.isHiddenSkills && 
 					<div id="skills-modal" className="modal">
 					  	<div className="skills-modal-content">
@@ -141,6 +164,18 @@ class SearchPage extends Component {
 				   	</div>
 					<button variant="raised" id="skills-button" className="filter-button" onClick={this.toggleHiddenSkills.bind(this)}>Filter by Skills</button>
 				</div>
+
+				<div className="searchResults">
+			        <AppBar position="static">
+			        	<Tabs className="tab" value={value} onChange={this.handleChange}>
+			    	    	<Tab className="tabLabel" label="Users" />
+			            	<Tab className="tabLabel" label="Project" />
+			          	</Tabs>
+			        </AppBar>
+			        {value === 0 && <TabContainer>Item One</TabContainer>}
+			        {value === 1 && <TabContainer>Item Two</TabContainer>}
+			        {value === 2 && <TabContainer>Item Three</TabContainer>}
+			    </div>
 			</div>
 		);
 	}

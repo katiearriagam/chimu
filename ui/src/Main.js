@@ -5,6 +5,7 @@ import Home from './components/containers/Home/Home';
 import UserInfo from './components/containers/UserProfile/UserInfo';
 import ProjectInfo from './components/containers/ProjectProfile/ProjectInfo';
 import SearchPage from './components/containers/Search/SearchPage';
+import NotificationCenter from './components/containers/NotificationCenter/NotificationCenter';
 
 
 class Main extends Component {
@@ -20,6 +21,9 @@ class Main extends Component {
 				<Route path='/user/:username' component= {UserInfo} />
 				<Route path='/project/:username/:project' component= {ProjectInfo} />
 				<Route path='/search/' component= {SearchPage} />
+				{ this.props.isLogged &&
+				<Route path='/notifications/' component= {NotificationCenter} />
+				}
 				<Route component= {Error404} />
 			</Switch>
 		);

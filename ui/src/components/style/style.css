@@ -173,6 +173,27 @@ body{
 	padding: 2%;
 }
 
+.notification-card-content{
+	vertical-align: top;
+	display: inline-block;
+	padding: 1% 1%;
+	flex: 1;
+}
+
+.notification-buttons{
+	vertical-align: middle;
+	color: inherit;
+	padding: 0.5% 0.5%;
+}
+
+.notification-accept{
+	color: #5d4c99 !important;
+}
+
+.notification-reject{
+	color: #E10050 !important;
+}
+
 .card{
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 	margin: 1% 2%;
@@ -181,10 +202,24 @@ body{
 	height: 80%;
 }
 
+.notification-card{
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	margin: 0.5% 2%;
+	display: inline-flex;
+	width: 96%;
+	height: 80%;
+}
+
 .user-projects-subheader{
 	margin: 1% 2%;
 	font-size: 1.5rem;
 	font-weight: 400;
+}
+
+.notification-center-header{
+	margin: 1% 2%;
+	font-size: 2rem;
+	font-weight: 500;
 }
 
 .project-sdesc {

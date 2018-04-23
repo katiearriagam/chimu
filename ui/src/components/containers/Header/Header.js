@@ -91,11 +91,11 @@ class Header extends Component {
 						photo = {this.props.photo}
 					/>
 				</Link>
-				<IconButton color="inherit" aria-label="Notification Center">
-					<Badge badgeContent={1} color="secondary">
+				<Link to={{ pathname: '/notifications'}} style={{ textDecoration: 'none', color: 'inherit' }}>
+					<IconButton color="inherit" aria-label="Notification Center">
 						<MailIcon />
-					</Badge>
-				</IconButton>
+					</IconButton>
+				</Link>
 				<Logout
 					onFailure={this.onFailure}
 				/>

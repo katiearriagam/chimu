@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 
 import '../../style/style.css';
 
-class checkboxList extends Component {
+class CheckboxList extends Component {
 	constructor(props){
 		super(props);
 	}
 
 	render() {
 		return (
-			<div><h3>Hello world</h3></div> 
-			/*
 			<div>
 				<h3>{this.props.listName}</h3>
 				<ul className="grid list-items">
@@ -23,10 +21,9 @@ class checkboxList extends Component {
 		          ))}
 		        </ul>
 			</div>
-			*/
 		);
 	}
 }
 
-export default checkboxList;
+export default CheckboxList;
 

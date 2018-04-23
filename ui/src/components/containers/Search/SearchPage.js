@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 
-import ProjectInfoSideBar from '../../presentational/Project/ProjectInfoSideBar';
-import ProjectDetails from '../../presentational/Project/ProjectDetails';
-import checkboxList from '../../presentational/Shared/checkboxList'
 
 import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 
+import CheckboxList from '../../presentational/Shared/CheckboxList';
 import '../../style/style.css';
 
 class SearchPage extends Component {
@@ -98,6 +96,10 @@ class SearchPage extends Component {
 	render() {
 		return (
 			<div>
+				<h3>Hello world</h3>
+				<CheckboxList 
+					listName="this is a list"
+					items={this.skills}/>
 				<div className="wrap">
 					<div className="search">
 				    	<input type="text" id="search-bar" className="searchTerm" placeholder="Search for users and projects." onKeyDown={this.onKeyPressed}/>
@@ -106,8 +108,6 @@ class SearchPage extends Component {
 					    </button>
 				   	</div>
 				</div>
-				<h3>Hello world</h3>
-				<checkboxListt/>
 			</div>
 		);
 	}

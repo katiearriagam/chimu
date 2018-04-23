@@ -196,23 +196,22 @@ body{
 }
 
 .search {
-  width: 100%;
-  position: relative
+  width: 80%;
+  display: inline-block;
 }
 
 .searchTerm {
-  float: left;
-  width: 80%;
+  width: 70%;
   border: 3px solid var(--primary-color-not);
   padding: 5px;
   height: 20px;
   border-radius: 5px;
   outline: none;
+  vertical-align: top;
 }
 
 .searchButton {
 	width: 14%;
-	float: right;
 	width: 40px;
 	height: 36px;
 	border: 1px solid var(--primary-color-not);
@@ -222,13 +221,13 @@ body{
 	border-radius: 5px;
 	cursor: pointer;
 	font-size: 20px;
+	vertical-align: top;
 }
 
 /*Resize the wrap to see the search bar change!*/
 .wrap{
-  width: 20%;
-  margin: 10px;
-  display: block;
+  	width: 50%;
+	margin: 10px;
 }
 
 .grid li {
@@ -271,4 +270,25 @@ body{
     max-width: 50%;
     height: 100%;
     border-radius: 1em;
+}
+
+.filter-button{
+	background-color: var(--primary-color-not);
+	color: #fff;
+	font-weight: 200;
+	border: 0px;
+	border-radius: 5px;
+	text-transform: uppercase;
+	height: 36px;
+	width: 20%;
+	/*text-align: left;*/
+	display: inline-block;
+	vertical-align: top;
+}
+
+.filter-group{
+	border: 1.5px solid #888;
+	border-radius: 1em;
+	padding: 10px;
+	position: relative;
 }

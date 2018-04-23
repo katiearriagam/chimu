@@ -5,11 +5,21 @@ import * as firebase from 'firebase';
 import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
+import Button from 'material-ui/Button';
 
 import CheckboxList from '../../presentational/Shared/CheckboxList';
 import '../../style/style.css';
 
 class SearchPage extends Component {
+
+	performSearch(){
+		console.log("this is what I would search:");
+		let searchBarValue = document.getElementById("search-bar").value;
+		if(searchBarValue != ""){
+			// do query
+		}
+	}
+
 	onKeyPressed(e){
 		const ENTER_KEY_CODE = 13;
 		if(e.keyCode == ENTER_KEY_CODE){
@@ -101,7 +111,6 @@ class SearchPage extends Component {
 	}
 	
 	toggleHiddenSkills () {
-		console.log('toggle hidden skills');
 		this.setState({
 	    	isHiddenSkills: !this.state.isHiddenSkills
 	    })
@@ -130,27 +139,12 @@ class SearchPage extends Component {
 							<SearchIcon />
 					    </button>
 				   	</div>
+					<button variant="raised" id="skills-button" className="filter-button" onClick={this.toggleHiddenSkills.bind(this)}>Filter by Skills</button>
 				</div>
-				<button id="skills-btn" onClick={this.toggleHiddenSkills.bind(this)}>Skills</button>
-
 			</div>
 		);
 	}
 }
-
-// const SkillsModal = () => (
-// 	<div id="skills-modal" className="modal">
-// 	  	<div className="skills-modal-content">
-// 		    <span className="close" onClick={this.toggleHiddenSkills.bind(this)}>&times;</span>
-// 			    <h1>SKILLS</h1>
-// 			    <span>
-// 					<CheckboxList 
-// 						listName="this is a list"
-// 						items={this.skills}/>
-// 				</span>
-// 		</div>
-// 	</div>
-// )
 
 export default SearchPage;
 

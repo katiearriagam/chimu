@@ -314,3 +314,15 @@ body{
 .MuiPaper-elevation4-16{
 	box-shadow: 0px 0px 0px 0px #fff,0px 0px 0px 0px #fff,0px 0px 0px 0px #fff !important;
 }
+
+.star-in-card{
+	display: inline-block;
+	width: 30px;
+}
+
+.user-rating-in-card{
+	display: inline-block !important;
+	height: 100%;
+	margin: 10px !important;
+	font-size: 1.5em !important;
+}

@@ -93,13 +93,36 @@ class SearchPage extends Component {
 		{label: 'JSP' }
 	];
 
+	constructor(){
+    	super()
+    	this.state = {
+      		isHiddenSkills: true
+    	}
+	}
+	
+	toggleHiddenSkills () {
+		console.log('toggle hidden skills');
+		this.setState({
+	    	isHiddenSkills: !this.state.isHiddenSkills
+	    })
+	}
+
+
 	render() {
 		return (
 			<div>
-				<h3>Hello world</h3>
-				<CheckboxList 
-					listName="this is a list"
-					items={this.skills}/>
+				{!this.state.isHiddenSkills && 
+					<div id="skills-modal" className="modal">
+					  	<div className="skills-modal-content">
+						    <span className="close" onClick={this.toggleHiddenSkills.bind(this)}>&times;</span>
+							    <span>
+									<CheckboxList 
+										listName="SKILLS"
+										items={this.skills}/>
+								</span>
+						</div>
+					</div>
+				}
 				<div className="wrap">
 					<div className="search">
 				    	<input type="text" id="search-bar" className="searchTerm" placeholder="Search for users and projects." onKeyDown={this.onKeyPressed}/>
@@ -108,10 +131,26 @@ class SearchPage extends Component {
 					    </button>
 				   	</div>
 				</div>
+				<button id="skills-btn" onClick={this.toggleHiddenSkills.bind(this)}>Skills</button>
+
 			</div>
 		);
 	}
 }
+
+// const SkillsModal = () => (
+// 	<div id="skills-modal" className="modal">
+// 	  	<div className="skills-modal-content">
+// 		    <span className="close" onClick={this.toggleHiddenSkills.bind(this)}>&times;</span>
+// 			    <h1>SKILLS</h1>
+// 			    <span>
+// 					<CheckboxList 
+// 						listName="this is a list"
+// 						items={this.skills}/>
+// 				</span>
+// 		</div>
+// 	</div>
+// )
 
 export default SearchPage;
 

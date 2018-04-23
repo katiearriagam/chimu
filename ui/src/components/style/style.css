@@ -22,6 +22,12 @@ body{
 	color: var(--accent-color2) !important;
 }
 
+.pageHeader{
+	margin: 10px;
+	font-weight: 100;
+	font-size: 1.5em;
+}
+
 .page-content{
 	display:table-row;
 	position: absolute;
@@ -196,39 +202,38 @@ body{
 }
 
 .search {
-  width: 100%;
-  position: relative
+	width: 80%;
+	display: inline-block;
 }
 
 .searchTerm {
-  float: left;
-  width: 80%;
+  width: 70%;
   border: 3px solid var(--primary-color-not);
   padding: 5px;
   height: 20px;
-  border-radius: 5px;
+  border-radius: 5px 0px 0px 5px;
   outline: none;
+  vertical-align: top;
 }
 
 .searchButton {
 	width: 14%;
-	float: right;
 	width: 40px;
 	height: 36px;
 	border: 1px solid var(--primary-color-not);
 	background: var(--primary-color-not);
 	text-align: center;
 	color: #fff;
-	border-radius: 5px;
+  	border-radius: 0px 5px 5px 0px;
 	cursor: pointer;
 	font-size: 20px;
+	vertical-align: top;
 }
 
 /*Resize the wrap to see the search bar change!*/
 .wrap{
-  width: 20%;
-  margin: 10px;
-  display: block;
+  	width: 50%;
+	margin: 10px;
 }
 
 .grid li {
@@ -271,4 +276,41 @@ body{
     max-width: 50%;
     height: 100%;
     border-radius: 1em;
+}
+
+.filter-button{
+	background-color: var(--primary-color-not);
+	color: #fff;
+	font-weight: 200;
+	border: 0px;
+	border-radius: 5px;
+	text-transform: uppercase;
+	height: 36px;
+	width: 20%;
+	/*text-align: left;*/
+	display: inline-block;
+	vertical-align: top;
+}
+
+.filter-group{
+	border: 1.5px solid #888;
+	border-radius: 1em;
+	padding: 10px;
+	position: relative;
+}
+
+.tab{
+	background-color: white;
+	box-shadow: 0;
+	color: #000;
+}
+
+.searchResults{
+	margin: 10px;
+	height: 100%;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.MuiPaper-elevation4-16{
+	box-shadow: 0px 0px 0px 0px #fff,0px 0px 0px 0px #fff,0px 0px 0px 0px #fff !important;
 }

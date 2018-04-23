@@ -7,7 +7,7 @@ class CheckboxList extends Component {
 		super(props);
 	}
 
-	render() {
+	render() {		
 		return (
 			<div>
 				<h3>{this.props.listName}</h3>

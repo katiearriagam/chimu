@@ -57,26 +57,50 @@ class SearchPage extends Component {
 		});
 
 		var db = firebase.firestore();
-
-		var projectCol = db.collection("Users_Projects").get().then((projectInfos) => {
-			projectInfos.forEach((projectInfo) => {
-				projectInfo.data().project.get().then((project) => {
-					project.data().owner.get().then((user) => {
-						this.setState(prevState => ({
-							currentProjects: [...prevState.currentProjects, {
-									title: project.id,
-									shortDescription: project.data().sdesc,
-									image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
-									link: '/project/' + user.id + '/' + project.id,
-							}]
-						}));
-						console.log(project.id);
-						console.log(project.data().sdesc);
-						console.log('/project/' + user.id + '/' + project.id);
+		
+		if (this.getSearchTerm() != "") {
+			db.collection("Projects").get().then((userFolders) => {
+				userFolders.forEach((userFolder) => {
+					userFolder.ref.collection("projects").where(firebase.firestore.FieldPath.documentId(), "==", this.getSearchTerm()).get().then((projects) => {
+						projects.forEach((project) => {
+							this.setState(prevState => ({
+								currentProjects: [...prevState.currentProjects, {
+										title: project.id,
+										shortDescription: project.data().sdesc,
+										image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+										link: '/project/' + userFolder.id + '/' + project.id,
+								}]
+							}));
+						});
+					}).catch((error) => {
+						console.log("Error getting documents: ", error);
 					});
-				}).catch(function(error){
-					console.log("Error getting documents: ", error);
-				})})});
+				});
+			}).catch((error) =>{
+				console.log("Error getting documents: ", error);
+			});
+		} else {
+			db.collection("Projects").get().then((userFolders) => {
+				userFolders.forEach((userFolder) => {
+					userFolder.ref.collection("projects").get().then((projects) => {
+						projects.forEach((project) => {
+							this.setState(prevState => ({
+								currentProjects: [...prevState.currentProjects, {
+										title: project.id,
+										shortDescription: project.data().sdesc,
+										image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+										link: '/project/' + userFolder.id + '/' + project.id,
+								}]
+							}));
+						});
+					}).catch((error) => {
+						console.log("Error getting documents: ", error);
+					});
+				});
+			}).catch((error) =>{
+				console.log("Error getting documents: ", error);
+			});
+		}
 	}
 
 	loadUsers(){

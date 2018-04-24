@@ -82,9 +82,11 @@ class Header extends Component {
 		const { classes } = this.props;
 		const headerButtons = this.props.isLogged ? (
 			<div className="header">
-				<IconButton color="inherit" aria-label="Search">
-					<SearchIcon />
-				</IconButton>
+				<Link to={{ pathname: '/search' }} style={{ textDecoration: 'none', color: 'inherit' }}>
+					<IconButton color="inherit" aria-label="Search">
+						<SearchIcon />
+					</IconButton>
+				</Link>
 				<Link to={{ pathname: '/user/' + this.props.username }} style={{ textDecoration: 'none', color: 'inherit' }}>
 					<UserButton
 						username = {this.props.username}

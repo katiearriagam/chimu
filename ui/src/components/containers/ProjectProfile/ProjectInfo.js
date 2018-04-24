@@ -8,11 +8,32 @@ import '../../style/style.css';
 
 
 class ProjectInfo extends Component {
+
 	constructor(props) {
         super(props)
         this.handlerUpdateProjectInfo = this.handlerUpdateProjectInfo.bind(this);
     }
 
+	updateRatings(newRatings, closeFunc) {
+		var db = firebase.firestore();
+		var userRef = null;
+		
+		newRatings.forEach((newRating) => {
+			userRef = db.collection("Users").doc(newRating.username);
+			db.collection("Users_Projects").doc(userRef.id + '-' + this.props.match.params.project).update({
+				rating: newRating.rating
+			})
+			.then(() => {
+				console.log("Document successfully updated!");
+				closeFunc();
+			})
+			.catch(function(error) {
+				// The document probably doesn't exist.
+				console.error("Error updating document: ", error);
+			});
+		});
+	}
+	
   	componentDidMount(){
 		var db = firebase.firestore();
 		// Get project information from Firebase
@@ -120,6 +141,8 @@ class ProjectInfo extends Component {
 								sdesc={this.state.sdesc}
 								keys={this.state.keys}
 								updateInfo={this.handlerUpdateProjectInfo}
+								members={this.state.members}
+								updateRatings={this.updateRatings.bind(this)}
 							/>
 						</div>
 						<div className="ProjectDetails">

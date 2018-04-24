@@ -32,22 +32,102 @@ class SearchPage extends Component {
 		this.setState({
       		currentProjects: []
 		});
-
+		var skillRefs = [];
+		var roleRefs = [];
+		
 		var db = firebase.firestore();
+		
+		if(this.state.skills) {
+			this.state.skills.forEach((skill) => {
+				if (skill.isChecked) {
+					skillRefs.push(db.collection("Skills").doc(skill.label));
+				}
+			});
+		}
+		
+		if(this.state.roles) {
+			this.state.roles.forEach((role) => {
+				if (role.isChecked) {
+					roleRefs.push(db.collection("Roles").doc(role.label));
+				}
+			});
+		}
 		
 		if (this.getSearchTerm() != "") {
 			db.collection("Projects").get().then((userFolders) => {
 				userFolders.forEach((userFolder) => {
-					userFolder.ref.collection("projects").where(firebase.firestore.FieldPath.documentId(), "==", this.getSearchTerm()).get().then((projects) => {
+					userFolder.ref.collection("projects").get().then((projects) => {
 						projects.forEach((project) => {
-							this.setState(prevState => ({
-								currentProjects: [...prevState.currentProjects, {
-										title: project.id,
-										shortDescription: project.data().sdesc,
-										image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
-										link: '/project/' + userFolder.id + '/' + project.id,
-								}]
-							}));
+							// Validate roles
+							var projectRoles = project.data().roles;
+							var isValid = roleRefs.every((ref) => {
+								console.log(ref.path);
+								console.log("---");
+								var hasRole = projectRoles.some((role) => {
+									console.log(role.path);
+									console.log(ref.path);
+									console.log(role.path == ref.path);
+									return (role.path == ref.path);
+								});
+								if (!hasRole) {
+									console.log("Project without role");
+									return false;
+								}
+								return true;
+							});
+							
+							if (isValid) {
+								// Validate skills
+								var projectSkills = project.data().skills;
+								isValid = skillRefs.every((ref) => {
+									console.log(ref.path);
+									console.log("---");
+									var hasSkill = projectSkills.some((skill) => {
+										console.log(skill.path);
+										console.log(ref.path);
+										console.log(skill.path == ref.path);
+										return (skill.path == ref.path);
+									});
+									if (!hasSkill) {
+										console.log("Project without skill");
+										return false;
+									}
+									return true;
+								});
+								
+								if (isValid) {
+									if (project.id == this.getSearchTerm()) {
+										this.setState(prevState => ({
+											currentProjects: [...prevState.currentProjects, {
+													title: project.id,
+													shortDescription: project.data().sdesc,
+													image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+													link: '/project/' + userFolder.id + '/' + project.id,
+											}]
+										}));
+									} else {
+										// Check keywords
+										var keywords = project.data().keywords;
+										keywords.every((key) => {
+											console.log(key);
+											console.log(this.getSearchTerm());
+											if (key.toLowerCase() == this.getSearchTerm().toLowerCase()) {
+												this.setState(prevState => ({
+													currentProjects: [...prevState.currentProjects, {
+															title: project.id,
+															shortDescription: project.data().sdesc,
+															image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+															link: '/project/' + userFolder.id + '/' + project.id,
+													}]
+												}));
+												console.log(key);
+												return false;
+											}
+											return true;
+										});
+									}
+								}
+							}
 						});
 					}).catch((error) => {
 						console.log("Error getting documents: ", error);
@@ -61,14 +141,54 @@ class SearchPage extends Component {
 				userFolders.forEach((userFolder) => {
 					userFolder.ref.collection("projects").get().then((projects) => {
 						projects.forEach((project) => {
-							this.setState(prevState => ({
-								currentProjects: [...prevState.currentProjects, {
-										title: project.id,
-										shortDescription: project.data().sdesc,
-										image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
-										link: '/project/' + userFolder.id + '/' + project.id,
-								}]
-							}));
+							// Validate roles
+							var projectRoles = project.data().roles;
+							var isValid = roleRefs.every((ref) => {
+								console.log(ref.path);
+								console.log("---");
+								var hasRole = projectRoles.some((role) => {
+									console.log(role.path);
+									console.log(ref.path);
+									console.log(role.path == ref.path);
+									return (role.path == ref.path);
+								});
+								if (!hasRole) {
+									console.log("Project without role");
+									return false;
+								}
+								return true;
+							});
+							
+							if (isValid) {
+								// Validate skills
+								var projectSkills = project.data().skills;
+								isValid = skillRefs.every((ref) => {
+									console.log(ref.path);
+									console.log("---");
+									var hasSkill = projectSkills.some((skill) => {
+										console.log(skill.path);
+										console.log(ref.path);
+										console.log(skill.path == ref.path);
+										return (skill.path == ref.path);
+									});
+									if (!hasSkill) {
+										console.log("Project without skill");
+										return false;
+									}
+									return true;
+								});
+								
+								if (isValid) {
+									this.setState(prevState => ({
+										currentProjects: [...prevState.currentProjects, {
+												title: project.id,
+												shortDescription: project.data().sdesc,
+												image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+												link: '/project/' + userFolder.id + '/' + project.id,
+										}]
+									}));
+								}
+							}
 						});
 					}).catch((error) => {
 						console.log("Error getting documents: ", error);
@@ -84,68 +204,120 @@ class SearchPage extends Component {
 		this.setState({
       		currentUsers: []
 		});
-
+		var skillRefs = [];
+		var roleRefs = [];
+		
 		var db = firebase.firestore();
+		
+		if(this.state.skills) {
+			this.state.skills.forEach((skill) => {
+				if (skill.isChecked) {
+					skillRefs.push(db.collection("Skills").doc(skill.label));
+				}
+			});
+		}
+		
+		if(this.state.roles) {
+			this.state.roles.forEach((role) => {
+				if (role.isChecked) {
+					roleRefs.push(db.collection("Roles").doc(role.label));
+				}
+			});
+		}
 
 		console.log('searching for -> ' + this.getSearchTerm());
 
 		if(this.getSearchTerm() != ""){
 			var userCol = db.collection("Users").where(firebase.firestore.FieldPath.documentId(), "==", this.getSearchTerm()).get().then((users)=>{
-
 				users.forEach((user) => {
-					const response = fetch('https://api.github.com/users/' + user.id).then((response) => {
+					// Validate roles
+					var userRoles = user.data().roles;
+					var isValid = roleRefs.every((ref) => {
+						console.log(ref.path);
+						console.log("---");
+						var hasRole = userRoles.some((role) => {
+							console.log(role.path);
+							console.log(ref.path);
+							console.log(role.path == ref.path);
+							return (role.path == ref.path);
+						});
+						if (!hasRole) {
+							console.log("User without role");
+							return false;
+						}
+						return true;
+					});
 					
-						// Examine the text in the response
-						response.json().then((json) => {
+					if (isValid) {
+						// Validate skills
+						var userSkills = user.data().skills;
+						isValid = skillRefs.every((ref) => {
+							console.log(ref.path);
+							console.log("---");
+							var hasSkill = userSkills.some((skill) => {
+								console.log(skill.path);
+								console.log(ref.path);
+								console.log(skill.path == ref.path);
+								return (skill.path == ref.path);
+							});
+							if (!hasSkill) {
+								console.log("User without skill");
+								return false;
+							}
+							return true;
+						});
+						if (isValid) {	
+							const response = fetch('https://api.github.com/users/' + user.id).then((response) => {
 							
-							// Get user's projects information
-							var projectCol = db.collection("Users_Projects").where("user", "==", user.ref).where("isApproved", "==", true).where("hasAccepted", "==", true).get().then((projectInfos) => {
-								var projectCant = projectInfos.size;
-								var ratingCant = 0;
-								var ratingSum = 0;
-								var rating = 0;
-								projectInfos.forEach((projectInfo) => {
-									projectInfo.data().project.get().then((project) => {
-										// Get completed projects
-										if (project.data().status) {
-											if (projectInfo.data().rating) {
-												ratingSum = ratingSum + projectInfo.data().rating;
-												ratingCant = ratingCant + 1;
-											}
-										}
-										console.log("one");
-									}).then(() => {
-										if (ratingCant === 0) {
-											rating = 5;	
-										} else {
-											rating = ratingSum/ratingCant;	
-										}
-										projectCant = projectCant - 1;
-										console.log("two");
-										console.log("attempting three");
-										if (projectCant == 0) {
-											console.log("three");
-											this.setState(prevState => ({
-												currentUsers: [...prevState.currentUsers, { 
-													username: user.id,
-													image: json.avatar_url,
-													rating: rating,
-													link: '/user/' + user.id
-												}]
-											}));
-										}
+								// Examine the text in the response
+								response.json().then((json) => {
+									
+									// Get user's projects information
+									var projectCol = db.collection("Users_Projects").where("user", "==", user.ref).where("isApproved", "==", true).where("hasAccepted", "==", true).get().then((projectInfos) => {
+										var projectCant = projectInfos.size;
+										var ratingCant = 0;
+										var ratingSum = 0;
+										var rating = 0;
+										projectInfos.forEach((projectInfo) => {
+											projectInfo.data().project.get().then((project) => {
+												// Get completed projects
+												if (project.data().status) {
+													if (projectInfo.data().rating) {
+														ratingSum = ratingSum + projectInfo.data().rating;
+														ratingCant = ratingCant + 1;
+													}
+												}
+											}).then(() => {
+												if (ratingCant === 0) {
+													rating = 5;	
+												} else {
+													rating = ratingSum/ratingCant;	
+												}
+												projectCant = projectCant - 1;
+												if (projectCant == 0) {
+													this.setState(prevState => ({
+														currentUsers: [...prevState.currentUsers, { 
+															username: user.id,
+															image: json.avatar_url,
+															rating: rating,
+															link: '/user/' + user.id
+														}]
+													}));
+												}
+											}).catch(function(error) {
+												console.log("Error getting documents: ", error);
+											});
+										});
 									}).catch(function(error) {
 										console.log("Error getting documents: ", error);
-									});
+									});				
 								});
-							}).catch(function(error) {
-								console.log("Error getting documents: ", error);
-							});				
-						});
-					
-					}).catch((error) => {
-						console.log("Github Fetch Error:", error);
-					});
+							
+							}).catch((error) => {
+								console.log("Github Fetch Error:", error);
+							});
+						}
+					}
 				});
 
 			}).catch(function(error){
@@ -154,58 +326,96 @@ class SearchPage extends Component {
 		}
 		else{
 			var userCol = db.collection("Users").get().then((users)=>{
-
 				users.forEach((user) => {
-					const response = fetch('https://api.github.com/users/' + user.id).then((response) => {
+					// Validate roles
+					var userRoles = user.data().roles;
+					var isValid = roleRefs.every((ref) => {
+						console.log(ref.path);
+						console.log("---");
+						var hasRole = userRoles.some((role) => {
+							console.log(role.path);
+							console.log(ref.path);
+							console.log(role.path == ref.path);
+							return (role.path == ref.path);
+						});
+						if (!hasRole) {
+							console.log("User without role");
+							return false;
+						}
+						return true;
+					});
 					
-						// Examine the text in the response
-						response.json().then((json) => {
+					if (isValid) {
+						// Validate skills
+						var userSkills = user.data().skills;
+						isValid = skillRefs.every((ref) => {
+							console.log(ref.path);
+							console.log("---");
+							var hasSkill = userSkills.some((skill) => {
+								console.log(skill.path);
+								console.log(ref.path);
+								console.log(skill.path == ref.path);
+								return (skill.path == ref.path);
+							});
+							if (!hasSkill) {
+								console.log("User without skill");
+								return false;
+							}
+							return true;
+						});
+						if (isValid) {		
+							const response = fetch('https://api.github.com/users/' + user.id).then((response) => {
 							
-							// Get user's projects information
-							var projectCol = db.collection("Users_Projects").where("user", "==", user.ref).where("isApproved", "==", true).where("hasAccepted", "==", true).get().then((projectInfos) => {
-								var projectCant = projectInfos.size;
-								var ratingCant = 0;
-								var ratingSum = 0;
-								var rating = 0;
-								projectInfos.forEach((projectInfo) => {
-									projectInfo.data().project.get().then((project) => {
-										// Get completed projects
-										if (project.data().status) {
-											if (projectInfo.data().rating) {
-												ratingSum = ratingSum + projectInfo.data().rating;
-												ratingCant = ratingCant + 1;
-											}
-										}
-									}).then(() => {
-										if (ratingCant === 0) {
-											rating = 5;	
-										} else {
-											rating = ratingSum/ratingCant;	
-										}
-										projectCant = projectCant - 1;
+								// Examine the text in the response
+								response.json().then((json) => {
+									
+									// Get user's projects information
+									var projectCol = db.collection("Users_Projects").where("user", "==", user.ref).where("isApproved", "==", true).where("hasAccepted", "==", true).get().then((projectInfos) => {
+										var projectCant = projectInfos.size;
+										var ratingCant = 0;
+										var ratingSum = 0;
+										var rating = 0;
+										projectInfos.forEach((projectInfo) => {
+											projectInfo.data().project.get().then((project) => {
+												// Get completed projects
+												if (project.data().status) {
+													if (projectInfo.data().rating) {
+														ratingSum = ratingSum + projectInfo.data().rating;
+														ratingCant = ratingCant + 1;
+													}
+												}
+											}).then(() => {
+												if (ratingCant === 0) {
+													rating = 5;	
+												} else {
+													rating = ratingSum/ratingCant;	
+												}
+												projectCant = projectCant - 1;
 
-										if (projectCant == 0) {
-											this.setState(prevState => ({
-												currentUsers: [...prevState.currentUsers, { 
-													username: user.id,
-													image: json.avatar_url,
-													rating: rating,
-													link: '/user/' + user.id
-												}]
-											}));
-										}
+												if (projectCant == 0) {
+													this.setState(prevState => ({
+														currentUsers: [...prevState.currentUsers, { 
+															username: user.id,
+															image: json.avatar_url,
+															rating: rating,
+															link: '/user/' + user.id
+														}]
+													}));
+												}
+											}).catch(function(error) {
+												console.log("Error getting documents: ", error);
+											});
+										});
 									}).catch(function(error) {
 										console.log("Error getting documents: ", error);
-									});
+									});				
 								});
-							}).catch(function(error) {
-								console.log("Error getting documents: ", error);
-							});				
-						});
-					
-					}).catch((error) => {
-						console.log("Github Fetch Error:", error);
-					});
+							
+							}).catch((error) => {
+								console.log("Github Fetch Error:", error);
+							});
+						}
+					}
 				});
 
 			}).catch(function(error){
@@ -222,6 +432,12 @@ class SearchPage extends Component {
 	handler(index) {
 		const skills = this.state.skills;
 	    skills[index].isChecked = !skills[index].isChecked;
+	    this.forceUpdate();
+    }
+	
+	handlerRoles(index) {
+		const roles = this.state.roles;
+	    roles[index].isChecked = !roles[index].isChecked;
 	    this.forceUpdate();
     }
 
@@ -306,9 +522,10 @@ class SearchPage extends Component {
 		{label: 'JSP' }
 	];*/
 	
-	loadSkills() {
+	loadSkillsRoles() {
 		this.setState({
       		skills: [],
+			roles: [],
 		});
 
 		var db = firebase.firestore();
@@ -323,12 +540,24 @@ class SearchPage extends Component {
 				}));
 			});
 		});
+		
+		db.collection("Roles").get().then((roles) => {
+			roles.forEach((role) => {
+				this.setState(prevState => ({
+					roles: [...prevState.roles, { 
+						label: role.id,
+						isChecked: false
+					}]
+				}));
+			});
+		});
 	}
 
 	constructor(){
     	super()
     	this.state = {
       		isHiddenSkills: true,
+			isHiddenRoles: true,
       		value: 0,
       		currentProjects: []
     	}
@@ -336,8 +565,9 @@ class SearchPage extends Component {
     	this.onKeyPressed = this.onKeyPressed.bind(this);
     	this.loadUsers = this.loadUsers.bind(this);
 	    this.loadProjects = this.loadProjects.bind(this);
-		this.loadSkills = this.loadSkills.bind(this);
+		this.loadSkillsRoles = this.loadSkillsRoles.bind(this);
         this.handler = this.handler.bind(this);
+		this.handlerRoles = this.handlerRoles.bind(this);
 	}
 
 
@@ -350,6 +580,12 @@ class SearchPage extends Component {
 	    	isHiddenSkills: !this.state.isHiddenSkills
 	    })
 	}
+	
+	toggleHiddenRoles () {
+		this.setState({
+	    	isHiddenRoles: !this.state.isHiddenRoles
+	    })
+	}
 
 	componentDidMount(){
 		this.setState({
@@ -357,11 +593,12 @@ class SearchPage extends Component {
       		value: 0,
       		currentProjects: [],
       		currentUsers: [],
-			skills: []
+			skills: [],
+			roles: [],
 		});
+		this.loadSkillsRoles();
 		this.loadProjects();
 		this.loadUsers();
-		this.loadSkills();
 	}
 
 
@@ -384,6 +621,19 @@ class SearchPage extends Component {
 						</div>
 					</div>
 				}
+				{!this.state.isHiddenRoles && 
+					<div id="roles-modal" className="modal">
+					  	<div className="roles-modal-content">
+						    <span className="close" onClick={this.toggleHiddenRoles.bind(this)}>&times;</span>
+							    <span>
+									<CheckboxList 
+										listName="ROLES"
+										items={this.state.roles}
+										action={this.handlerRoles}/>
+								</span>
+						</div>
+					</div>
+				}
 				<div className="wrap">
 					<div className="search">
 				    	<input type="text" id="search-bar" className="searchTerm" placeholder="Search for users and projects." onKeyDown={this.onKeyPressed}/>
@@ -392,6 +642,7 @@ class SearchPage extends Component {
 					    </button>
 				   	</div>
 					<button variant="raised" id="skills-button" className="filter-button" onClick={this.toggleHiddenSkills.bind(this)}>Filter by Skills</button>
+					<button variant="raised" id="roles-button" className="filter-button" onClick={this.toggleHiddenRoles.bind(this)}>Filter by Roles</button>
 				</div>
 
 				<div className="searchResults">

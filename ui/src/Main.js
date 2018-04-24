@@ -11,10 +11,19 @@ import Error404 from './components/presentational/Shared/Error404';
 
 class Main extends Component {
 	render() {
+		const UserInfoWProps = (props) => {
+			return (
+				<UserInfo 
+					loggedUser={this.props.username}
+					{...props}
+				/>
+			);
+		}
+		
 		return(
 			<Switch>
 				<Route exact path='/' component= {Home} />
-				<Route path='/user/:username' component= {UserInfo} />
+				<Route path='/user/:username' render= {UserInfoWProps} />
 				<Route path='/project/:username/:project' component= {ProjectInfo} />
 				<Route path='/search/' component= {SearchPage} />
 				{ this.props.isLogged &&

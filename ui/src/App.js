@@ -66,6 +66,7 @@ class App extends Component {
 					/>
 					<Main 
 						isLogged = {this.state.isLogged}
+						username = {this.state.username}
 					/>
 				</div>
 			);

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 
-
 import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
@@ -17,28 +16,6 @@ import UserCard from '../../presentational/User/UserCard';
 
 
 import '../../style/style.css';
-
-/*
-function TabContainer(props) {
-	return (
-		<div className="previousProjects">
-			<h4 className="user-projects-subheader">User Projects</h4>
-			{
-			   	this.props.projects.map(data => {
-			    	return(
-			       		<UserProjectCard 
-			       			title={data.title}
-			       			shortDescription={data.shortDescription}
-			    			image={data.image}
-							key={this.props.indexOf(data)}
-							link={data.link}
-		            	/>
-			       	);
-		    	})}
-		</div>
-	);
-}
-*/
 
 class SearchPage extends Component {
 
@@ -242,6 +219,12 @@ class SearchPage extends Component {
 		this.loadProjects();
 	}
 
+	handler(index) {
+		const skills = this.state.skills;
+	    skills[index].isChecked = !skills[index].isChecked;
+	    this.forceUpdate();
+    }
+
 	onKeyPressed(e){
 		const ENTER_KEY_CODE = 13;
 		if(e.keyCode == ENTER_KEY_CODE){
@@ -335,6 +318,7 @@ class SearchPage extends Component {
 				this.setState(prevState => ({
 					skills: [...prevState.skills, { 
 						label: skill.id,
+						isChecked: false
 					}]
 				}));
 			});
@@ -353,6 +337,7 @@ class SearchPage extends Component {
     	this.loadUsers = this.loadUsers.bind(this);
 	    this.loadProjects = this.loadProjects.bind(this);
 		this.loadSkills = this.loadSkills.bind(this);
+        this.handler = this.handler.bind(this);
 	}
 
 
@@ -393,7 +378,8 @@ class SearchPage extends Component {
 							    <span>
 									<CheckboxList 
 										listName="SKILLS"
-										items={this.state.skills}/>
+										items={this.state.skills}
+										action={this.handler}/>
 								</span>
 						</div>
 					</div>

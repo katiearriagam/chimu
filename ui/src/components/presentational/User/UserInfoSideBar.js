@@ -29,9 +29,9 @@ class UserInfoSideBar extends Component {
       </span>
       ) : (<span></span>);
 	  
-	const rating = this.props.rating != null ? (
-		<label className="user-points">{parseFloat(this.props.rating).toFixed(1)}/5.0</label>
-	) : (<label className="user-points"></label>);
+  	const rating = this.props.rating != null ? (
+  		<label className="user-points">{parseFloat(this.props.rating).toFixed(1)}/5.0</label>
+  	) : (<label className="user-points"></label>);
 
     return(
       <div>

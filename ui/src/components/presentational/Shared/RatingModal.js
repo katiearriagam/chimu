@@ -34,6 +34,7 @@ export default class RatingModal extends React.Component {
           open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
+          className="rating-dialog"
         >
           <DialogTitle id="form-dialog-title">Rate your team</DialogTitle>
             <DialogContent>

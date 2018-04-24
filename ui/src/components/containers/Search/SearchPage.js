@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 
-import TextField from 'material-ui/TextField';
-import IconButton from 'material-ui/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
-import Button from 'material-ui/Button';
 
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
-import Typography from 'material-ui/Typography';
 
 import CheckboxList from '../../presentational/Shared/CheckboxList';
 import UserProjectCard from '../../presentational/User/UserProjectCard';

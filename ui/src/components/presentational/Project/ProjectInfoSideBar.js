@@ -3,9 +3,11 @@ import Chip from 'material-ui/Chip';
 import IconButton from 'material-ui/IconButton';
 import Octicon from 'react-component-octicons';
 
-import '../../style/style.css';
 
 import ProjectAvatar from '../User/UserAvatar';
+import RatingModal from '../Shared/RatingModal';
+
+import '../../style/style.css';
 
 class ProjectInfoSideBar extends Component {  
 	constructor(props) {
@@ -13,6 +15,8 @@ class ProjectInfoSideBar extends Component {
 		super(props);
 		this.goToRepo = this.goToRepo.bind(this);
 	} 
+
+	members = ['katiearriagam', 'osdagoso'];
 
 	goToRepo(){
 		window.location.href = this.props.repo;
@@ -33,6 +37,9 @@ class ProjectInfoSideBar extends Component {
 				<ProjectAvatar image={this.props.avatar}/>
 				<label className="project-name">{this.props.name}</label>
 				<label className="project-status">{textStatus}</label>
+				<RatingModal
+					members={this.members}
+				/>
 				<span className="project-links">
 					<a className="project-owner" href={'/user/' + this.props.owner}>@{this.props.owner}</a>
 					{ repository }

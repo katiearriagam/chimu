@@ -69,10 +69,11 @@ body{
 }
 
 .teamMembers{
-	display: inline-block;
+	display: table;
 	margin: 0.2% 0.1%;
-	width: 20%;
+	width: 80%;
 	height: 20%;
+	align-content: center;
 }
 
 .divClass{
@@ -396,4 +397,23 @@ body{
 
 .edit-project{
 	display: table-row;
+}
+
+.member-in-project-container{
+	display: inline-block;
+	align-content: center;
+	justify-content: center;
+	width: 20%;
+}
+
+.member-in-project-container > div{
+	align-content: center;
+	justify-content: center;
+	vertical-align: top;
+}
+
+.delete-member-from-project{
+	font-weight: bold;
+	text-align: center;
+	margin-left: 10px !important;
 }

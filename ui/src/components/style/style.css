@@ -222,10 +222,14 @@ body{
 	font-weight: 400;
 }
 
-.notification-center-header{
+.notification-center-header, .error-header{
 	margin: 1% 2%;
 	font-size: 2rem;
 	font-weight: 500;
+}
+
+.error-text {
+	margin: 1% 2%;
 }
 
 .project-sdesc {

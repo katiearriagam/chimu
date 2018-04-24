@@ -6,15 +6,11 @@ import UserInfo from './components/containers/UserProfile/UserInfo';
 import ProjectInfo from './components/containers/ProjectProfile/ProjectInfo';
 import SearchPage from './components/containers/Search/SearchPage';
 import NotificationCenter from './components/containers/NotificationCenter/NotificationCenter';
+import Error404 from './components/presentational/Shared/Error404';
 
 
 class Main extends Component {
 	render() {
-		const Error404 = () => (
-			<h1>
-				Error 404
-			</h1>
-		);
 		return(
 			<Switch>
 				<Route exact path='/' component= {Home} />

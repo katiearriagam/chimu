@@ -42,12 +42,12 @@ export default class RatingModal extends React.Component {
               this.props.members.map(data => {
                 return(
                   <div className="user-rating">
-                    <label className="radio user-rating-name">{data}</label>
-                    <label for="1" className="radio"><input className="radioDetail" type="radio" name={data} id="1" value="1"/>1</label>
-                    <label for="2" className="radio"><input className="radioDetail" type="radio" name={data} id="2" value="2"/>2</label>
-                    <label for="3" className="radio"> <input className="radioDetail" type="radio" name={data} id="3" value="3"/>3</label>
-                    <label for="4" className="radio"><input className="radioDetail" type="radio" name={data} id="4" value="4"/>4</label>
-                    <label for="5" className="radio"><input className="radioDetail" type="radio" name={data} id="5" value="5"/>5</label>
+                    <label className="radio user-rating-name">{data.username}</label>
+                    <label for="1" className="radio"><input className="radioDetail" type="radio" name={data.username} id="1" value="1"/>1</label>
+                    <label for="2" className="radio"><input className="radioDetail" type="radio" name={data.username} id="2" value="2"/>2</label>
+                    <label for="3" className="radio"> <input className="radioDetail" type="radio" name={data.username} id="3" value="3"/>3</label>
+                    <label for="4" className="radio"><input className="radioDetail" type="radio" name={data.username} id="4" value="4"/>4</label>
+                    <label for="5" className="radio"><input className="radioDetail" type="radio" name={data.username} id="5" value="5"/>5</label>
                   </div>
                 );
             })

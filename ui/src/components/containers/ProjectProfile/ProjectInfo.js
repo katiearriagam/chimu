@@ -103,6 +103,7 @@ class ProjectInfo extends Component {
 								owner={this.state.owner}
 								sdesc={this.state.sdesc}
 								keys={this.state.keys}
+								members={this.state.members}
 							/>
 						</div>
 						<div className="ProjectDetails">

@@ -250,7 +250,7 @@ class SearchPage extends Component {
 		}
 	}
 
-	
+	/*
 	skills = [
 		{label: '.NET' },
 		{label: 'Adobe InDesign' },
@@ -321,7 +321,25 @@ class SearchPage extends Component {
 		{label: 'jQuery / Prototype' },
 		{label: 'JSON' },
 		{label: 'JSP' }
-	];
+	];*/
+	
+	loadSkills() {
+		this.setState({
+      		skills: [],
+		});
+
+		var db = firebase.firestore();
+		
+		db.collection("Skills").get().then((skills) => {
+			skills.forEach((skill) => {
+				this.setState(prevState => ({
+					skills: [...prevState.skills, { 
+						label: skill.id,
+					}]
+				}));
+			});
+		});
+	}
 
 	constructor(){
     	super()
@@ -334,6 +352,7 @@ class SearchPage extends Component {
     	this.onKeyPressed = this.onKeyPressed.bind(this);
     	this.loadUsers = this.loadUsers.bind(this);
 	    this.loadProjects = this.loadProjects.bind(this);
+		this.loadSkills = this.loadSkills.bind(this);
 	}
 
 
@@ -352,10 +371,12 @@ class SearchPage extends Component {
 			isHiddenSkills: true,
       		value: 0,
       		currentProjects: [],
-      		currentUsers: []
+      		currentUsers: [],
+			skills: []
 		});
 		this.loadProjects();
 		this.loadUsers();
+		this.loadSkills();
 	}
 
 
@@ -372,7 +393,7 @@ class SearchPage extends Component {
 							    <span>
 									<CheckboxList 
 										listName="SKILLS"
-										items={this.skills}/>
+										items={this.state.skills}/>
 								</span>
 						</div>
 					</div>

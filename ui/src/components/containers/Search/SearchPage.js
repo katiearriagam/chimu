@@ -96,15 +96,50 @@ class SearchPage extends Component {
 					
 						// Examine the text in the response
 						response.json().then((json) => {
-
-							this.setState(prevState => ({
-									currentUsers: [...prevState.currentUsers, { 
-										username: user.id,
-										image: json.avatar_url,
-										rating: '4.0',
-										link: '/user/' + user.id
-									}]
-								}));					
+							
+							// Get user's projects information
+							var projectCol = db.collection("Users_Projects").where("user", "==", user.ref).where("isApproved", "==", true).where("hasAccepted", "==", true).get().then((projectInfos) => {
+								var projectCant = projectInfos.size;
+								var ratingCant = 0;
+								var ratingSum = 0;
+								var rating = 0;
+								projectInfos.forEach((projectInfo) => {
+									projectInfo.data().project.get().then((project) => {
+										// Get completed projects
+										if (project.data().status) {
+											if (projectInfo.data().rating) {
+												ratingSum = ratingSum + projectInfo.data().rating;
+												ratingCant = ratingCant + 1;
+											}
+										}
+										console.log("one");
+									}).then(() => {
+										if (ratingCant === 0) {
+											rating = 5;	
+										} else {
+											rating = ratingSum/ratingCant;	
+										}
+										projectCant = projectCant - 1;
+										console.log("two");
+										console.log("attempting three");
+										if (projectCant == 0) {
+											console.log("three");
+											this.setState(prevState => ({
+												currentUsers: [...prevState.currentUsers, { 
+													username: user.id,
+													image: json.avatar_url,
+													rating: rating,
+													link: '/user/' + user.id
+												}]
+											}));
+										}
+									}).catch(function(error) {
+										console.log("Error getting documents: ", error);
+									});
+								});
+							}).catch(function(error) {
+								console.log("Error getting documents: ", error);
+							});				
 						});
 					
 					}).catch((error) => {
@@ -124,15 +159,47 @@ class SearchPage extends Component {
 					
 						// Examine the text in the response
 						response.json().then((json) => {
+							
+							// Get user's projects information
+							var projectCol = db.collection("Users_Projects").where("user", "==", user.ref).where("isApproved", "==", true).where("hasAccepted", "==", true).get().then((projectInfos) => {
+								var projectCant = projectInfos.size;
+								var ratingCant = 0;
+								var ratingSum = 0;
+								var rating = 0;
+								projectInfos.forEach((projectInfo) => {
+									projectInfo.data().project.get().then((project) => {
+										// Get completed projects
+										if (project.data().status) {
+											if (projectInfo.data().rating) {
+												ratingSum = ratingSum + projectInfo.data().rating;
+												ratingCant = ratingCant + 1;
+											}
+										}
+									}).then(() => {
+										if (ratingCant === 0) {
+											rating = 5;	
+										} else {
+											rating = ratingSum/ratingCant;	
+										}
+										projectCant = projectCant - 1;
 
-							this.setState(prevState => ({
-									currentUsers: [...prevState.currentUsers, { 
-										username: user.id,
-										image: json.avatar_url,
-										rating: '4.0',
-										link: '/user/' + user.id
-									}]
-								}));					
+										if (projectCant == 0) {
+											this.setState(prevState => ({
+												currentUsers: [...prevState.currentUsers, { 
+													username: user.id,
+													image: json.avatar_url,
+													rating: rating,
+													link: '/user/' + user.id
+												}]
+											}));
+										}
+									}).catch(function(error) {
+										console.log("Error getting documents: ", error);
+									});
+								});
+							}).catch(function(error) {
+								console.log("Error getting documents: ", error);
+							});				
 						});
 					
 					}).catch((error) => {

@@ -103,6 +103,7 @@ class UserInfo extends Component {
 										}
 									}).then(() => {
 										if (ratingCant === 0) {
+											console.log("No ratings");
 											this.setState({
 												rating: 5,
 											});

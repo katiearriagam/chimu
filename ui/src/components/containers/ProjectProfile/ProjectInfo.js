@@ -8,6 +8,11 @@ import '../../style/style.css';
 
 
 class ProjectInfo extends Component {
+	constructor(props) {
+        super(props)
+        this.handlerUpdateProjectInfo = this.handlerUpdateProjectInfo.bind(this);
+    }
+
   	componentDidMount(){
 		var db = firebase.firestore();
 		// Get project information from Firebase
@@ -88,6 +93,17 @@ class ProjectInfo extends Component {
 		});
 	}
 
+	handlerUpdateProjectInfo(newState){
+		const newKeywords = newState.keywords;
+		let oldKeywords = this.state.keys;
+
+		console.log("old keywords");
+		console.log(oldKeywords);
+		oldKeywords = newKeywords;
+		console.log("new keywords");
+		console.log(newKeywords);
+	    this.forceUpdate();
+	}
 
 	render() {
 		if (this.state) {
@@ -103,6 +119,7 @@ class ProjectInfo extends Component {
 								owner={this.state.owner}
 								sdesc={this.state.sdesc}
 								keys={this.state.keys}
+								updateInfo={this.handlerUpdateProjectInfo}
 							/>
 						</div>
 						<div className="ProjectDetails">

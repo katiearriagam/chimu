@@ -12,17 +12,33 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import Typography from 'material-ui/Typography';
 
 import CheckboxList from '../../presentational/Shared/CheckboxList';
+import UserProjectCard from '../../presentational/User/UserProjectCard';
+import UserCard from '../../presentational/User/UserCard';
+
+
 import '../../style/style.css';
 
+/*
 function TabContainer(props) {
 	return (
-		<div>
-	    	<Typography component="div" style={{ padding: 8 * 3 }}>
-		    	{props.children}
-		    </Typography>
-	    </div>
+		<div className="previousProjects">
+			<h4 className="user-projects-subheader">User Projects</h4>
+			{
+			   	this.props.projects.map(data => {
+			    	return(
+			       		<UserProjectCard 
+			       			title={data.title}
+			       			shortDescription={data.shortDescription}
+			    			image={data.image}
+							key={this.props.indexOf(data)}
+							link={data.link}
+		            	/>
+			       	);
+		    	})}
+		</div>
 	);
 }
+*/
 
 class SearchPage extends Component {
 
@@ -32,6 +48,73 @@ class SearchPage extends Component {
 		if(searchBarValue != ""){
 			// do query
 		}
+	}
+
+	loadProjects(){
+		this.setState({
+      		currentProjects: []
+		});
+
+		var db = firebase.firestore();
+
+		var projectCol = db.collection("Users_Projects").get().then((projectInfos) => {
+			projectInfos.forEach((projectInfo) => {
+				projectInfo.data().project.get().then((project) => {
+					project.data().owner.get().then((user) => {
+						this.setState(prevState => ({
+							currentProjects: [...prevState.currentProjects, {
+									title: project.id,
+									shortDescription: project.data().sdesc,
+									image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+									link: '/project/' + user.id + '/' + project.id,
+							}]
+						}));
+						console.log(project.id);
+						console.log(project.data().sdesc);
+						console.log('/project/' + user.id + '/' + project.id);
+					});
+				}).catch(function(error){
+					console.log("Error getting documents: ", error);
+				})})});
+	}
+
+	loadUsers(){
+		this.setState({
+      		currentUsers: []
+		});
+
+		var db = firebase.firestore();
+
+
+
+		var userCol = db.collection("Users").get().then((users)=>{
+
+			users.forEach((user) => {
+				const response = fetch('https://api.github.com/users/' + user.id).then((response) => {
+				
+					// Examine the text in the response
+					response.json().then((json) => {
+
+						this.setState(prevState => ({
+								currentUsers: [...prevState.currentUsers, { 
+									username: user.id,
+									image: json.avatar_url,
+									rating: '4.0',
+									link: '/user/' + user.id
+								}]
+							}));					
+					});
+				
+				}).catch((error) => {
+					console.log("Github Fetch Error:", error);
+				});
+			});
+
+		}).catch(function(error){
+			console.log("Error getting documents: ", error);
+		});
+
+
 	}
 
 	onKeyPressed(e){
@@ -121,7 +204,8 @@ class SearchPage extends Component {
     	super()
     	this.state = {
       		isHiddenSkills: true,
-      		value: 0
+      		value: 0,
+      		currentProjects: []
     	}
 	}
 
@@ -134,6 +218,17 @@ class SearchPage extends Component {
 		this.setState({
 	    	isHiddenSkills: !this.state.isHiddenSkills
 	    })
+	}
+
+	componentDidMount(){
+		this.setState({
+			isHiddenSkills: true,
+      		value: 0,
+      		currentProjects: [],
+      		currentUsers: []
+		});
+		this.loadProjects();
+		this.loadUsers();
 	}
 
 
@@ -157,7 +252,7 @@ class SearchPage extends Component {
 				}
 				<div className="wrap">
 					<div className="search">
-				    	<input type="text" id="search-bar" className="searchTerm" placeholder="Search for users and projects." onKeyDown={this.onKeyPressed}/>
+				    	<input type="text" id="search-bar" className="searchTerm" placeholder="Search for users and projects." value="" onKeyDown={this.onKeyPressed}/>
 						<button type="submit" className="searchButton">
 							<SearchIcon />
 					    </button>
@@ -168,13 +263,44 @@ class SearchPage extends Component {
 				<div className="searchResults">
 			        <AppBar position="static">
 			        	<Tabs className="tab" value={value} onChange={this.handleChange}>
-			    	    	<Tab className="tabLabel" label="Users" />
-			            	<Tab className="tabLabel" label="Project" />
+			    	    	<Tab className="tabLabel" label="Projects" />
+			            	<Tab className="tabLabel" label="Users" />
 			          	</Tabs>
 			        </AppBar>
-			        {value === 0 && <TabContainer>Item One</TabContainer>}
-			        {value === 1 && <TabContainer>Item Two</TabContainer>}
-			        {value === 2 && <TabContainer>Item Three</TabContainer>}
+			        {value === 0 && 
+			        	<div className="previousProjects">
+							<h4 className="user-projects-subheader">Projects</h4>
+							{
+							   	this.state.currentProjects.map(data => {
+							    	return(
+							       		<UserProjectCard 
+							       			title={data.title}
+							       			shortDescription={data.shortDescription}
+							    			image={data.image}
+											//key={this.props.indexOf(data)}
+											link={data.link}
+						            	/>
+							       	);
+						    	})}
+						</div>
+			    	}
+
+			    	{value === 1 && 
+			        	<div className="previousProjects">
+							<h4 className="user-projects-subheader">Users</h4>
+							{
+							   	this.state.currentUsers.map(data => {
+							    	return(
+							       		<UserCard 
+							       			username={data.username}
+							       			rating={data.rating}
+							    			image={data.image}
+											link={data.link}
+						            	/>
+							       	);
+						    	})}
+						</div>
+			    	}
 			    </div>
 			</div>
 		);

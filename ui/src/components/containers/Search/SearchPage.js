@@ -86,6 +86,8 @@ class SearchPage extends Component {
 
 		var db = firebase.firestore();
 
+		console.log('searching for -> ' + this.getSearchTerm());
+
 		if(this.getSearchTerm() != ""){
 			var userCol = db.collection("Users").where(firebase.firestore.FieldPath.documentId(), "==", this.getSearchTerm()).get().then((users)=>{
 
@@ -147,73 +149,6 @@ class SearchPage extends Component {
 	clickedSearch(){
 		this.loadUsers();
 		this.loadProjects();
-	}
-
-	loadProjects(){
-		this.setState({
-      		currentProjects: []
-		});
-
-		var db = firebase.firestore();
-
-		var projectCol = db.collection("Users_Projects").get().then((projectInfos) => {
-			projectInfos.forEach((projectInfo) => {
-				projectInfo.data().project.get().then((project) => {
-					project.data().owner.get().then((user) => {
-						this.setState(prevState => ({
-							currentProjects: [...prevState.currentProjects, {
-									title: project.id,
-									shortDescription: project.data().sdesc,
-									image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
-									link: '/project/' + user.id + '/' + project.id,
-							}]
-						}));
-						console.log(project.id);
-						console.log(project.data().sdesc);
-						console.log('/project/' + user.id + '/' + project.id);
-					});
-				}).catch(function(error){
-					console.log("Error getting documents: ", error);
-				})})});
-	}
-
-	loadUsers(){
-		this.setState({
-      		currentUsers: []
-		});
-
-		var db = firebase.firestore();
-
-
-
-		var userCol = db.collection("Users").get().then((users)=>{
-
-			users.forEach((user) => {
-				const response = fetch('https://api.github.com/users/' + user.id).then((response) => {
-				
-					// Examine the text in the response
-					response.json().then((json) => {
-
-						this.setState(prevState => ({
-								currentUsers: [...prevState.currentUsers, { 
-									username: user.id,
-									image: json.avatar_url,
-									rating: '4.0',
-									link: '/user/' + user.id
-								}]
-							}));					
-					});
-				
-				}).catch((error) => {
-					console.log("Github Fetch Error:", error);
-				});
-			});
-
-		}).catch(function(error){
-			console.log("Error getting documents: ", error);
-		});
-
-
 	}
 
 	onKeyPressed(e){

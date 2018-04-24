@@ -386,6 +386,10 @@ body{
 	float: left;
 }
 
-.MuiDialog-paperWidthSm-106{
-	width: 80% !important;
+.rating-dialog{
+	width: 100% !important;
+}
+
+.rating-dialog > div{
+	width: 100% !important;
 }

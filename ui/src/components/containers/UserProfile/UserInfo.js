@@ -64,7 +64,7 @@ class UserInfo extends Component {
 							var ratingCant = 0;
 							var ratingSum = 0;
 							// Get user's projects information
-							var projectCol = db.collection("Users_Projects").where("user", "==", docRef).where("isApproved", "==", true).get().then((projectInfos) => {
+							var projectCol = db.collection("Users_Projects").where("user", "==", docRef).where("isApproved", "==", true).where("hasAccepted", "==", true).get().then((projectInfos) => {
 								projectInfos.forEach((projectInfo) => {
 									projectInfo.data().project.get().then((project) => {
 										// Get completed projects

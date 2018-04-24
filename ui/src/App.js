@@ -64,7 +64,9 @@ class App extends Component {
 						username = {this.state.username}
 						photo = {this.state.photo}
 					/>
-					<Main />
+					<Main 
+						isLogged = {this.state.isLogged}
+					/>
 				</div>
 			);
 		} else {

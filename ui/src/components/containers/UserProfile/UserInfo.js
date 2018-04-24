@@ -228,7 +228,7 @@ class UserInfo extends Component {
 	render() {
 		if (this.state) {
 			if (this.state.valid) {
-				const inviteButton = this.props.loggedUser && this.state.loggedProjects ? (
+				const inviteButton = this.props.loggedUser && this.props.loggedUser != this.state.login && this.state.loggedProjects ? (
 					<div>
 						<Button variant="raised" size= "medium" onClick={this.handleClickOpen} className="invite-button">INVITE TO PROJECT</Button>
 						<InviteUserDialog

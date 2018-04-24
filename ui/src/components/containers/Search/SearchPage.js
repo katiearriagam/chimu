@@ -38,16 +38,36 @@ class SearchPage extends Component {
 		if (this.getSearchTerm() != "") {
 			db.collection("Projects").get().then((userFolders) => {
 				userFolders.forEach((userFolder) => {
-					userFolder.ref.collection("projects").where(firebase.firestore.FieldPath.documentId(), "==", this.getSearchTerm()).get().then((projects) => {
+					userFolder.ref.collection("projects").get().then((projects) => {
+					//userFolder.ref.collection("projects").where(firebase.firestore.FieldPath.documentId(), "==", this.getSearchTerm()).get().then((projects) => {
 						projects.forEach((project) => {
-							this.setState(prevState => ({
-								currentProjects: [...prevState.currentProjects, {
-										title: project.id,
-										shortDescription: project.data().sdesc,
-										image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
-										link: '/project/' + userFolder.id + '/' + project.id,
-								}]
-							}));
+							if (project.id == this.getSearchTerm()) {
+								this.setState(prevState => ({
+									currentProjects: [...prevState.currentProjects, {
+											title: project.id,
+											shortDescription: project.data().sdesc,
+											image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+											link: '/project/' + userFolder.id + '/' + project.id,
+									}]
+								}));
+							} else {
+								var keywords = project.data().keywords;
+								keywords.every((key) => {
+									console.log(key);
+									console.log(this.getSearchTerm());
+									if (key.toLowerCase() == this.getSearchTerm().toLowerCase()) {
+										this.setState(prevState => ({
+											currentProjects: [...prevState.currentProjects, {
+													title: project.id,
+													shortDescription: project.data().sdesc,
+													image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+													link: '/project/' + userFolder.id + '/' + project.id,
+											}]
+										}));
+										return "success";
+									}
+								});
+							}
 						});
 					}).catch((error) => {
 						console.log("Error getting documents: ", error);

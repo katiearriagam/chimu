@@ -361,3 +361,27 @@ body{
 	margin: 10px !important;
 	font-size: 1.5em !important;
 }
+
+.radioDetail{
+	display: block;
+	margin: 0;
+}
+
+.radio{
+	display: inline-block;
+	margin: 5%;
+	vertical-align: top;
+}
+
+.user-rating{
+	width: 100%;
+}
+
+.user-rating-name{
+	width: 20%;
+	float: left;
+}
+
+.MuiDialog-paperWidthSm-106{
+	width: 80% !important;
+}

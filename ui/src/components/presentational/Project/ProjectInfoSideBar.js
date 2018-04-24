@@ -39,6 +39,7 @@ class ProjectInfoSideBar extends Component {
 				<label className="project-status">{textStatus}</label>
 				<RatingModal
 					members={this.props.members}
+					updateRatings={this.props.updateRatings}
 				/>
 				<span className="project-links">
 					<a className="project-owner" href={'/user/' + this.props.owner}>@{this.props.owner}</a>

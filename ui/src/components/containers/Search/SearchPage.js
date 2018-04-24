@@ -42,12 +42,13 @@ function TabContainer(props) {
 
 class SearchPage extends Component {
 
-	performSearch(){
+	getSearchTerm(){
 		console.log("this is what I would search:");
 		let searchBarValue = document.getElementById("search-bar").value;
 		if(searchBarValue != ""){
-			// do query
+			return searchBarValue;
 		}
+		else return "";
 	}
 
 	loadProjects(){
@@ -85,48 +86,77 @@ class SearchPage extends Component {
 
 		var db = firebase.firestore();
 
+		if(this.getSearchTerm() != ""){
+			var userCol = db.collection("Users").where(firebase.firestore.FieldPath.documentId(), "==", this.getSearchTerm()).get().then((users)=>{
 
+				users.forEach((user) => {
+					const response = fetch('https://api.github.com/users/' + user.id).then((response) => {
+					
+						// Examine the text in the response
+						response.json().then((json) => {
 
-		var userCol = db.collection("Users").get().then((users)=>{
-
-			users.forEach((user) => {
-				const response = fetch('https://api.github.com/users/' + user.id).then((response) => {
-				
-					// Examine the text in the response
-					response.json().then((json) => {
-
-						this.setState(prevState => ({
-								currentUsers: [...prevState.currentUsers, { 
-									username: user.id,
-									image: json.avatar_url,
-									rating: '4.0',
-									link: '/user/' + user.id
-								}]
-							}));					
+							this.setState(prevState => ({
+									currentUsers: [...prevState.currentUsers, { 
+										username: user.id,
+										image: json.avatar_url,
+										rating: '4.0',
+										link: '/user/' + user.id
+									}]
+								}));					
+						});
+					
+					}).catch((error) => {
+						console.log("Github Fetch Error:", error);
 					});
-				
-				}).catch((error) => {
-					console.log("Github Fetch Error:", error);
 				});
-			});
 
-		}).catch(function(error){
-			console.log("Error getting documents: ", error);
-		});
+			}).catch(function(error){
+				console.log("Error getting documents: ", error);
+			});	
+		}
+		else{
+			var userCol = db.collection("Users").get().then((users)=>{
 
+				users.forEach((user) => {
+					const response = fetch('https://api.github.com/users/' + user.id).then((response) => {
+					
+						// Examine the text in the response
+						response.json().then((json) => {
 
+							this.setState(prevState => ({
+									currentUsers: [...prevState.currentUsers, { 
+										username: user.id,
+										image: json.avatar_url,
+										rating: '4.0',
+										link: '/user/' + user.id
+									}]
+								}));					
+						});
+					
+					}).catch((error) => {
+						console.log("Github Fetch Error:", error);
+					});
+				});
+
+			}).catch(function(error){
+				console.log("Error getting documents: ", error);
+			});	
+		}
+	}
+
+	clickedSearch(){
+		this.loadUsers();
+		this.loadProjects();
 	}
 
 	onKeyPressed(e){
 		const ENTER_KEY_CODE = 13;
 		if(e.keyCode == ENTER_KEY_CODE){
-			console.log("this is what I would search:");
-			let searchBarValue = document.getElementById("search-bar").value;
-			if(searchBarValue != ""){
-				// do query
-			}
+			console.log("pressed enter");
+			this.clickedSearch();
 		}
 	}
+
 	
 	skills = [
 		{label: '.NET' },
@@ -207,6 +237,10 @@ class SearchPage extends Component {
       		value: 0,
       		currentProjects: []
     	}
+    	this.clickedSearch = this.clickedSearch.bind(this);
+    	this.onKeyPressed = this.onKeyPressed.bind(this);
+    	this.loadUsers = this.loadUsers.bind(this);
+	    this.loadProjects = this.loadProjects.bind(this);
 	}
 
 
@@ -252,8 +286,8 @@ class SearchPage extends Component {
 				}
 				<div className="wrap">
 					<div className="search">
-				    	<input type="text" id="search-bar" className="searchTerm" placeholder="Search for users and projects." value="" onKeyDown={this.onKeyPressed}/>
-						<button type="submit" className="searchButton">
+				    	<input type="text" id="search-bar" className="searchTerm" placeholder="Search for users and projects." onKeyDown={this.onKeyPressed}/>
+						<button type="submit" className="searchButton" onClick={this.clickedSearch}>
 							<SearchIcon />
 					    </button>
 				   	</div>

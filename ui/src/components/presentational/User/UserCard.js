@@ -6,7 +6,16 @@ import '../../style/style.css';
 
 import star from '../../images/star.png';
 
+
 function UserCard(props) {   
+	const rating = props.rating != null ? (
+			<div>
+				<img className="star-in-card" alt="star" src={star}/>
+				<Typography className="user-rating-in-card" variant="subheading" color="textSecondary">
+					{parseFloat(props.rating).toFixed(1)}/5.0
+				</Typography>
+			</div>) : (<div></div>);
+	
 	return(
 		<div className="card">
 			<div className="cardMedia">
@@ -17,10 +26,7 @@ function UserCard(props) {
 			<div className="cardContent">
 				<Typography variant="headline">{props.username}</Typography>
 				<div>
-					<img className="star-in-card" alt="star" src={star}/>
-					<Typography className="user-rating-in-card" variant="subheading" color="textSecondary">
-						{props.rating}
-					</Typography>
+					{rating}
 		        </div>
 			</div>
 		</div>

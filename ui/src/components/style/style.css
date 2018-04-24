@@ -393,3 +393,7 @@ body{
 .rating-dialog > div{
 	width: 100% !important;
 }
+
+.edit-project{
+	display: table-row;
+}

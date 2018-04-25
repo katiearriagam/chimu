@@ -433,7 +433,7 @@ body{
 	margin: 10px 70px;
 }
 
-.edit-user-profile, .invite-button, .join-project{
+.edit-user-profile, .invite-button, .join-project, .leave-project{
 	float: right;
 	margin: 1% 2%;
 }

@@ -4,6 +4,7 @@ import * as firebase from 'firebase';
 import ProjectInfoSideBar from '../../presentational/Project/ProjectInfoSideBar';
 import ProjectDetails from '../../presentational/Project/ProjectDetails';
 import ProjectJoin from '../../presentational/Project/ProjectJoin';
+import ProjectLeave from '../../presentational/Project/ProjectLeave';
 
 import '../../style/style.css';
 
@@ -448,9 +449,15 @@ class ProjectInfo extends Component {
 							/>
 						</div>
 						<div className="ProjectDetails">
-							{ this.props.loggedUser && this.state.isMember &&
+							{ this.props.loggedUser && this.state.isMember === false &&
 								<ProjectJoin
 									handler={this.handlerJoinProject.bind(this)}
+								/>
+							}
+							{ this.props.loggedUser && this.props.loggedUser !== this.state.owner && this.state.isMember &&
+								<ProjectLeave
+									name={this.state.name}
+									handler={this.handlerLeaveProject.bind(this)}
 								/>
 							}
 							<ProjectDetails

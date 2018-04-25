@@ -57,12 +57,7 @@ class SearchPage extends Component {
 							// Validate roles
 							var projectRoles = project.data().roles;
 							var isValid = roleRefs.every((ref) => {
-								console.log(ref.path);
-								console.log("---");
 								var hasRole = projectRoles.some((role) => {
-									console.log(role.path);
-									console.log(ref.path);
-									console.log(role.path == ref.path);
 									return (role.path == ref.path);
 								});
 								if (!hasRole) {
@@ -76,12 +71,7 @@ class SearchPage extends Component {
 								// Validate skills
 								var projectSkills = project.data().skills;
 								isValid = skillRefs.every((ref) => {
-									console.log(ref.path);
-									console.log("---");
 									var hasSkill = projectSkills.some((skill) => {
-										console.log(skill.path);
-										console.log(ref.path);
-										console.log(skill.path == ref.path);
 										return (skill.path == ref.path);
 									});
 									if (!hasSkill) {
@@ -105,8 +95,6 @@ class SearchPage extends Component {
 										// Check keywords
 										var keywords = project.data().keywords;
 										keywords.every((key) => {
-											console.log(key);
-											console.log(this.getSearchTerm());
 											if (key.toLowerCase() == this.getSearchTerm().toLowerCase()) {
 												this.setState(prevState => ({
 													currentProjects: [...prevState.currentProjects, {
@@ -140,12 +128,7 @@ class SearchPage extends Component {
 							// Validate roles
 							var projectRoles = project.data().roles;
 							var isValid = roleRefs.every((ref) => {
-								console.log(ref.path);
-								console.log("---");
 								var hasRole = projectRoles.some((role) => {
-									console.log(role.path);
-									console.log(ref.path);
-									console.log(role.path == ref.path);
 									return (role.path == ref.path);
 								});
 								if (!hasRole) {
@@ -159,12 +142,7 @@ class SearchPage extends Component {
 								// Validate skills
 								var projectSkills = project.data().skills;
 								isValid = skillRefs.every((ref) => {
-									console.log(ref.path);
-									console.log("---");
 									var hasSkill = projectSkills.some((skill) => {
-										console.log(skill.path);
-										console.log(ref.path);
-										console.log(skill.path == ref.path);
 										return (skill.path == ref.path);
 									});
 									if (!hasSkill) {
@@ -229,12 +207,7 @@ class SearchPage extends Component {
 					// Validate roles
 					var userRoles = user.data().roles;
 					var isValid = roleRefs.every((ref) => {
-						console.log(ref.path);
-						console.log("---");
 						var hasRole = userRoles.some((role) => {
-							console.log(role.path);
-							console.log(ref.path);
-							console.log(role.path == ref.path);
 							return (role.path == ref.path);
 						});
 						if (!hasRole) {
@@ -248,12 +221,7 @@ class SearchPage extends Component {
 						// Validate skills
 						var userSkills = user.data().skills;
 						isValid = skillRefs.every((ref) => {
-							console.log(ref.path);
-							console.log("---");
 							var hasSkill = userSkills.some((skill) => {
-								console.log(skill.path);
-								console.log(ref.path);
-								console.log(skill.path == ref.path);
 								return (skill.path == ref.path);
 							});
 							if (!hasSkill) {
@@ -326,12 +294,7 @@ class SearchPage extends Component {
 					// Validate roles
 					var userRoles = user.data().roles;
 					var isValid = roleRefs.every((ref) => {
-						console.log(ref.path);
-						console.log("---");
 						var hasRole = userRoles.some((role) => {
-							console.log(role.path);
-							console.log(ref.path);
-							console.log(role.path == ref.path);
 							return (role.path == ref.path);
 						});
 						if (!hasRole) {
@@ -345,12 +308,7 @@ class SearchPage extends Component {
 						// Validate skills
 						var userSkills = user.data().skills;
 						isValid = skillRefs.every((ref) => {
-							console.log(ref.path);
-							console.log("---");
 							var hasSkill = userSkills.some((skill) => {
-								console.log(skill.path);
-								console.log(ref.path);
-								console.log(skill.path == ref.path);
 								return (skill.path == ref.path);
 							});
 							if (!hasSkill) {
@@ -658,7 +616,7 @@ class SearchPage extends Component {
 							       			title={data.title}
 							       			shortDescription={data.shortDescription}
 							    			image={data.image}
-											//key={this.props.indexOf(data)}
+											key={this.state.currentProjects.indexOf(data)}
 											link={data.link}
 						            	/>
 							       	);
@@ -676,6 +634,7 @@ class SearchPage extends Component {
 							       			username={data.username}
 							       			rating={data.rating}
 							    			image={data.image}
+											key={this.state.currentUsers.indexOf(data)}
 											link={data.link}
 						            	/>
 							       	);

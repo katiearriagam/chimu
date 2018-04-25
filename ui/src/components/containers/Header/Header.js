@@ -10,7 +10,6 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import MailIcon from '@material-ui/icons/Mail';
-import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 
 import '../../style/style.css';
 

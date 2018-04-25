@@ -205,7 +205,7 @@ class UserInfo extends Component {
 					isApproved: true,
 					project: projectRef,
 					rating: null,
-					user: this.state.login,
+					user: userRef,
 				}).then(() => {
 					console.log("Document successfully written!");
 					this.setState({
@@ -229,9 +229,12 @@ class UserInfo extends Component {
 	render() {
 		if (this.state) {
 			if (this.state.valid) {
-				const inviteButton = this.props.loggedUser && this.props.loggedUser != this.state.login && this.state.loggedProjects ? (
-					<div>
-						<Button variant="raised" size= "medium" onClick={this.handleClickOpen} className="invite-button">INVITE TO PROJECT</Button>
+				const editButton = this.props.loggedUser && this.props.loggedUser === this.state.login ? (
+					<UserProfileEditForm/>
+				) : ( null );
+				const inviteButton = this.props.loggedUser && this.props.loggedUser !== this.state.login && this.state.loggedProjects ? (
+					<div className="invite-button">
+						<Button variant="raised" onClick={this.handleClickOpen}>INVITE TO PROJECT</Button>
 						<InviteUserDialog
 							open={this.state.inviteOpen}
 							username={this.state.login}
@@ -259,7 +262,7 @@ class UserInfo extends Component {
 							/>
 						</div>
 						<div className="UserProjects">
-							<UserProfileEditForm/>
+							{editButton}
 							{inviteButton}
 							<div className="currentProjects">
 								<h4 className="user-projects-subheader">{headerCurrent}</h4>

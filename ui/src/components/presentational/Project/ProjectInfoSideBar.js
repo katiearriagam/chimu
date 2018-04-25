@@ -38,6 +38,7 @@ class ProjectInfoSideBar extends Component {
 				<ProjectAvatar image={this.props.avatar}/>
 				<label className="project-name">{this.props.name}</label>
 				<label className="project-status">{textStatus}</label>
+				{ this.props.owner === this.props.loggedUser &&
 				<div className="project-owner-controls">
 					<ProjectForm
 						keywords={this.props.keys}
@@ -54,9 +55,11 @@ class ProjectInfoSideBar extends Component {
 					<RatingModal
 						members={this.props.members}
 						updateRatings={this.props.updateRatings}
+						changeProjectStatus={this.props.changeProjectStatus}
 						isProjectComplete={this.props.status}
 					/>
 				</div>
+				}
 				<span className="project-links">
 					<a className="project-owner" href={'/user/' + this.props.owner}>@{this.props.owner}</a>
 					{ repository }

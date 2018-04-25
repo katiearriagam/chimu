@@ -1,19 +1,11 @@
 import React, { Component } from 'react';
 
 import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from 'material-ui/Dialog';
+import Dialog, { DialogActions, DialogContent, DialogTitle } from 'material-ui/Dialog';
 
-export default class RatingModal extends React.Component {
+export default class RatingModal extends Component {
   handleClickOpen = () => {
-    if(this.props.isProjectComplete == false){
       this.setState({ open: true });
-    }
   };
 
   handleClose = () => {
@@ -60,7 +52,7 @@ export default class RatingModal extends React.Component {
     const textStatus = this.props.isProjectComplete ? 'OPEN PROJECT' : 'CLOSE PROJECT';
     return (
       <span>
-        <Button variant="raised" onClick={this.handleClickOpen}>{textStatus}</Button>
+        <Button variant="raised" onClick={() => this.props.changeProjectStatus(this.handleClickOpen)}>{textStatus}</Button>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
@@ -72,7 +64,7 @@ export default class RatingModal extends React.Component {
             {
               this.props.members.map(data => {
                 return(
-                  <div className="user-rating">
+                  <div className="user-rating" key={data.username}>
                     <label className="radio user-rating-name">{data.username}</label>
                     <label for="1" className="radio"><input className="radioDetail" type="radio" name={data.username} onChange={() => this.onChange(this.props.members.indexOf(data), 1)} id="1" value="1"/>1</label>
                     <label for="2" className="radio"><input className="radioDetail" type="radio" name={data.username} onChange={() => this.onChange(this.props.members.indexOf(data), 2)} id="2" value="2"/>2</label>

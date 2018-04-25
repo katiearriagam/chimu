@@ -3,6 +3,8 @@ import * as firebase from 'firebase';
 
 import ProjectInfoSideBar from '../../presentational/Project/ProjectInfoSideBar';
 import ProjectDetails from '../../presentational/Project/ProjectDetails';
+import ProjectJoin from '../../presentational/Project/ProjectJoin';
+import ProjectLeave from '../../presentational/Project/ProjectLeave';
 
 import '../../style/style.css';
 
@@ -32,6 +34,23 @@ class ProjectInfo extends Component {
 			})
 		}).catch((error) => {
 		  console.error("Error removing document: ", error);
+		});
+	}
+	
+	changeProjectStatus(handleClickOpen) {
+		var db = firebase.firestore();
+		db.collection("Projects").doc(this.state.owner).collection("projects").doc(this.state.name).update({
+			status: !this.state.status,
+		}).then(() => {
+			console.log("Document successfully updated!");
+			if (!this.state.status)
+				handleClickOpen();
+			this.setState({
+				status: !this.state.status,
+			});
+		}).catch(function(error) {
+			// The document probably doesn't exist.
+			console.error("Error updating document: ", error);
 		});
 	}
 
@@ -75,6 +94,20 @@ class ProjectInfo extends Component {
 					roles: [],
 					longDescription: info.ldesc,
 					members: []
+				});
+				
+				db.collection("Users_Projects").doc(this.props.loggedUser + '-' + doc.id).get().then((loggedFile) => {
+					if(loggedFile.exists) {
+						this.setState({
+							isMember: true,
+						})
+					} else {
+						this.setState({
+							isMember: false,
+						})
+					}
+				}).catch(function(error) {
+					console.log("Error getting document: ", error);
 				});
 				
 				db.collection("Users_Projects").where("project", "==", docRef).where("isApproved", "==", true).where("hasAccepted", "==", true).get().then((projectInfos) => {
@@ -132,6 +165,54 @@ class ProjectInfo extends Component {
 			}
 		}).catch((error) => {
 			console.log("Error getting document:", error);
+		});
+	}
+	
+	handlerJoinProject() {
+		var db = firebase.firestore();
+		
+		var projectRef = db.collection("Projects").doc(this.state.owner).collection("projects").doc(this.state.name);
+		var userRef = db.collection("Users").doc(this.props.loggedUser);
+		
+		this.setState({
+			isMember: true,
+		})
+		
+		db.collection("Users_Projects").doc(this.props.loggedUser + '-' + this.state.name).set({
+			hasAccepted: true,
+			isApproved: false,
+			project: projectRef,
+			rating: null,
+			user: userRef,
+		}).then(() => {
+			console.log("Document successfully written!");
+		}).catch(function(error) {
+			console.error("Error writing document: ", error);
+		});
+	}
+	
+	handlerLeaveProject() {
+		var db = firebase.firestore();
+		
+		var updatedMembers = this.state.members;
+		
+		updatedMembers.some((member) => {
+			if (this.props.loggedUser === member.username) {
+				updatedMembers.splice(updatedMembers.indexOf(member), 1);
+				return true;
+			}
+			return false;
+		});
+		
+		this.setState({
+			members: updatedMembers,
+			isMember: false,
+		});
+		
+		db.collection("Users_Projects").doc(this.props.loggedUser + '-' + this.state.name).delete().then(() => {
+			console.log("Document successfully deleted!");
+		}).catch(function(error) {
+			console.error("Error deleting document: ", error);
 		});
 	}
 
@@ -362,10 +443,23 @@ class ProjectInfo extends Component {
 								roles={this.state.roles}
 								updateInfo={this.handlerUpdateProjectInfo.bind(this)}
 								members={this.state.members}
+								loggedUser={this.props.loggedUser}
 								updateRatings={this.updateRatings.bind(this)}
+								changeProjectStatus={this.changeProjectStatus.bind(this)}
 							/>
 						</div>
 						<div className="ProjectDetails">
+							{ this.props.loggedUser && this.state.isMember === false &&
+								<ProjectJoin
+									handler={this.handlerJoinProject.bind(this)}
+								/>
+							}
+							{ this.props.loggedUser && this.props.loggedUser !== this.state.owner && this.state.isMember &&
+								<ProjectLeave
+									name={this.state.name}
+									handler={this.handlerLeaveProject.bind(this)}
+								/>
+							}
 							<ProjectDetails
 								longDescription={this.state.longDescription}
 								skills={this.state.skills}

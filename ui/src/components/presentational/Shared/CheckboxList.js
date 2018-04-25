@@ -4,10 +4,6 @@ import '../../style/style.css';
 
 
 class CheckboxList extends Component {
-	constructor(props){
-		super(props);
-	}
-
 	toggleCheckbox(index) {
 		this.props.action(index);
 	}

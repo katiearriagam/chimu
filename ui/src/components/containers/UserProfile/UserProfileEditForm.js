@@ -3,16 +3,7 @@ import * as firebase from 'firebase';
 
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from 'material-ui/Dialog';
-import Typography from 'material-ui/Typography';
-import Chip from 'material-ui/Chip';
-import IconButton from 'material-ui/IconButton';
-import ModeEditIcon from '@material-ui/icons/ModeEdit';
+import Dialog, { DialogActions, DialogContent, DialogTitle } from 'material-ui/Dialog';
 
 import CheckboxList from '../../presentational/Shared/CheckboxList';
 
@@ -40,11 +31,6 @@ class UserProfileEditForm extends Component{
 		this.updateDetails();
 		this.setState({ open: false });
 	};
-
-	constructor(props){
-		super(props);
-	}
-
 
 	loadSkills() {
 		this.setState({

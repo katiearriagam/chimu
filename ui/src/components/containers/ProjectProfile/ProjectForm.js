@@ -3,13 +3,7 @@ import * as firebase from 'firebase';
 
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from 'material-ui/Dialog';
-import Typography from 'material-ui/Typography';
+import Dialog, { DialogActions, DialogContent, DialogTitle } from 'material-ui/Dialog';
 import Chip from 'material-ui/Chip';
 import IconButton from 'material-ui/IconButton';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
@@ -62,11 +56,6 @@ class ProjectForm extends Component{
 
     	document.getElementById('new-keyword').value = "";
     };
-
-	constructor(props){
-		super(props);
-	}
-
 
 	loadSkillsRoles(props) {
 		this.setState({

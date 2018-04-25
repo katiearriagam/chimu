@@ -11,12 +11,14 @@ import Badge from 'material-ui/Badge';
 import IconButton from 'material-ui/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import MailIcon from '@material-ui/icons/Mail';
+import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 
 import '../../style/style.css';
 
 import GitHubLogin from '../../presentational/Header/GitHubLogin';
 import Logout from '../../presentational/Header/Logout';
 import UserButton from '../../presentational/Header/UserButton';
+import ProjectForm from '../ProjectProfile/ProjectForm';
 
 const styles = {
 	flex: {
@@ -87,16 +89,19 @@ class Header extends Component {
 						<SearchIcon />
 					</IconButton>
 				</Link>
+				<ProjectForm
+					action="ADD"
+				/>
+				<Link to={{ pathname: '/notifications'}} style={{ textDecoration: 'none', color: 'inherit' }}>
+					<IconButton color="inherit" aria-label="Notification Center">
+						<MailIcon />
+					</IconButton>
+				</Link>
 				<Link to={{ pathname: '/user/' + this.props.username }} style={{ textDecoration: 'none', color: 'inherit' }}>
 					<UserButton
 						username = {this.props.username}
 						photo = {this.props.photo}
 					/>
-				</Link>
-				<Link to={{ pathname: '/notifications'}} style={{ textDecoration: 'none', color: 'inherit' }}>
-					<IconButton color="inherit" aria-label="Notification Center">
-						<MailIcon />
-					</IconButton>
 				</Link>
 				<Logout
 					onFailure={this.onFailure}

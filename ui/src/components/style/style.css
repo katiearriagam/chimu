@@ -417,3 +417,18 @@ body{
 	text-align: center;
 	margin-left: 10px !important;
 }
+
+
+.iconbutton{
+	color: #fff !important;
+	display: inline-block;
+}
+
+.projectform{
+	display: inline;
+}
+
+.project-owner-controls{
+	align-content: center;
+	margin: 10px 70px;
+}

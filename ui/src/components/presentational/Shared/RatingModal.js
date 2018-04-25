@@ -11,7 +11,9 @@ import Dialog, {
 
 export default class RatingModal extends React.Component {
   handleClickOpen = () => {
-    this.setState({ open: true });
+    if(this.props.isProjectComplete == false){
+      this.setState({ open: true });
+    }
   };
 
   handleClose = () => {
@@ -55,9 +57,10 @@ export default class RatingModal extends React.Component {
   }
 
   render() {
+    const textStatus = this.props.isProjectComplete ? 'OPEN PROJECT' : 'CLOSE PROJECT';
     return (
-      <div>
-        <Button onClick={this.handleClickOpen}>Open form dialog</Button>
+      <span>
+        <Button variant="raised" onClick={this.handleClickOpen}>{textStatus}</Button>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
@@ -87,7 +90,7 @@ export default class RatingModal extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </span>
     );
   }
 }                

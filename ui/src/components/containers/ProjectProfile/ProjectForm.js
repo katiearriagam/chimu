@@ -11,7 +11,10 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Typography from 'material-ui/Typography';
 import Chip from 'material-ui/Chip';
+import IconButton from 'material-ui/IconButton';
+import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import AddIcon from '@material-ui/icons/Add';
+import ModeEditIcon from '@material-ui/icons/ModeEdit';
 
 import CheckboxList from '../../presentational/Shared/CheckboxList';
 
@@ -103,9 +106,18 @@ class ProjectForm extends Component{
 	}
 
 	componentWillMount(){
-		this.loadSkills();
-		this.loadRoles();
-		this.loadKeywords();
+		if(this.props.action == 'EDIT'){
+			this.loadSkills();
+			this.loadRoles();
+			this.loadKeywords();
+		}
+		else{
+			this.setState({
+      		keywords: [],
+      		roles: [],
+      		skills: []
+		});
+		}
 	}
 
 	handleDeleteKeyword = data => () => {
@@ -115,11 +127,38 @@ class ProjectForm extends Component{
 	    this.setState({ keywords: keywords });
     };
 
+    renderButton(){
+    	if(this.props.action == "ADD"){
+			return(
+				<span>
+					<IconButton color="primary" className="iconbutton" aria-label="add-project" onClick={this.handleClickOpen}>
+						<LibraryAddIcon />
+					</IconButton>
+				</span>
+			);
+		}
+		else if(this.props.action == "EDIT"){
+			return(
+				<span>
+					<IconButton color="inherit" className="iconbutton" aria-label="edit-project" onClick={this.handleClickOpen}>
+						<ModeEditIcon />
+					</IconButton>
+				</span>
+			);
+		}
+		else{
+			return(
+				<span>
+				</span>
+			);
+		}
+    }
+
 	
 	render(){
 		return(
-			<div>
-				<Button onClick={this.handleClickOpen}>Edit project</Button>
+			<span>
+				{this.renderButton()}
 		        <Dialog
 		          open={this.state.open}
 		          onClose={this.handleClose}
@@ -153,6 +192,13 @@ class ProjectForm extends Component{
 				          id="long-desc"
 				          label="Long description"
 				          placeholder="Long description"
+				          margin="normal"
+				          fullWidth
+				        />
+				        <TextField
+				          id="repo-url"
+				          label="GitHub repo"
+				          placeholder="Repo URL"
 				          margin="normal"
 				          fullWidth
 				        />
@@ -205,7 +251,7 @@ class ProjectForm extends Component{
 		            </Button>
 		          </DialogActions>
 		        </Dialog>
-			</div>
+			</span>
 		);
 	}
 }

@@ -40,8 +40,10 @@ class ProjectForm extends Component{
 	}
 
 	handleCloseOK = () => {
-		this.updateDetails();
-		this.setState({ open: false });
+		if(this.formValidation()){
+			this.updateDetails();
+			this.setState({ open: false });
+		}
 	};
 
 	handleAddKeyword = () => {
@@ -135,8 +137,102 @@ class ProjectForm extends Component{
 		});
 	}
 
-	formValidation(){
+	isValidImageUrl(e){
+		let imageUrlRegex = /(http)?s?:?(\/\/[^"']*\.(?:png|jpg|jpeg|gif|png|svg))/;
+		return imageUrlRegex.test(e);
+	}
 
+	isGithubUrl(e){
+		let githubUrlRegex = /(https?:\/\/(.+?\.)?github\.com(\/[A-Za-z0-9\-\._~:\/\?#\[\]@!$&'\(\)\*\+,;\=]*)?)/;
+		return githubUrlRegex.test(e);
+	}
+
+	formValidation(){
+		let errorFlag = false;
+		// revert to hide error message (for now)
+		document.getElementById("error-project-name").classList.add("hide-error");
+		document.getElementById("error-project-name").classList.remove("display-error");
+		document.getElementById("error-image-url").classList.add("hide-error");
+		document.getElementById("error-image-url").classList.remove("display-error");
+		document.getElementById("error-short-desc").classList.add("hide-error");
+		document.getElementById("error-short-desc").classList.remove("display-error");		
+		document.getElementById("error-long-desc").classList.add("hide-error");
+		document.getElementById("error-long-desc").classList.remove("display-error");	
+		document.getElementById("error-repo-url").classList.add("hide-error");
+		document.getElementById("error-repo-url").classList.remove("display-error");
+
+
+		if(this.props.action === 'ADD'){
+			let project_name = document.getElementById("project-name").value;
+			// TODO: check for repeated project name
+		}
+		let project_image = document.getElementById("image-url").value;
+		let project_sDesc = document.getElementById("short-desc").value;
+		let project_lDesc = document.getElementById("long-desc").value;
+		let project_repo = document.getElementById("repo-url").value;
+
+		console.log(project_image);
+		console.log(project_sDesc);
+		console.log(project_lDesc);
+		console.log(project_repo);
+
+		// validate image url
+		if(project_image == null || !this.isValidImageUrl(project_image)){
+			document.getElementById("error-image-url").classList.remove("hide-error");
+			document.getElementById("error-image-url").classList.add("display-error");
+			errorFlag = true;
+			console.log("Error in image url");
+		}
+		else{
+			document.getElementById("error-image-url").classList.add("hide-error");
+			document.getElementById("error-image-url").classList.remove("display-error");
+		}
+
+		// validate short description
+		if(project_sDesc == null || project_sDesc.length <= 0 || project_sDesc.length > 140){
+			document.getElementById("error-short-desc").classList.remove("hide-error");
+			document.getElementById("error-short-desc").classList.add("display-error");
+			errorFlag = true;
+			console.log("Error in short description");
+
+		}
+		else{
+			document.getElementById("error-short-desc").classList.add("hide-error");
+			document.getElementById("error-short-desc").classList.remove("display-error");
+		}
+
+		// validate long description
+		if(project_sDesc == null || project_sDesc.length <= 0){
+			document.getElementById("error-long-desc").classList.remove("hide-error");
+			document.getElementById("error-long-desc").classList.add("display-error");
+			errorFlag = true;
+			console.log("Error in long description");
+
+		}
+		else{
+			document.getElementById("error-long-desc").classList.add("hide-error");
+			document.getElementById("error-long-desc").classList.remove("display-error");
+		}
+
+		// validate repourl
+		if(project_repo != null && project_repo.length > 0){
+			if(!this.isGithubUrl(project_repo)){
+				document.getElementById("error-repo-url").classList.remove("hide-error");
+				document.getElementById("error-repo-url").classList.add("display-error");
+				errorFlag = true;
+				console.log("Error in image url");
+			}
+			else{
+				document.getElementById("error-repo-url").classList.add("hide-error");
+				document.getElementById("error-repo-url").classList.remove("display-error");
+			}
+		}
+		else{
+			document.getElementById("error-repo-url").classList.add("hide-error");
+			document.getElementById("error-repo-url").classList.remove("display-error");
+		}
+
+		return !errorFlag;
 	}
 
 	componentWillMount(){
@@ -155,6 +251,20 @@ class ProjectForm extends Component{
 				keywords: [],
 			});
 		}
+	}
+
+	componentDidMount(){
+		// clean error messages
+		// document.getElementById("error-project-name").classList.add("hide-error");
+		// document.getElementById("error-project-name").classList.remove("display-error");
+		// document.getElementById("error-image-url").classList.add("hide-error");
+		// document.getElementById("error-image-url").classList.remove("display-error");
+		// document.getElementById("error-short-desc").classList.add("hide-error");
+		// document.getElementById("error-short-desc").classList.remove("display-error");		
+		// document.getElementById("error-long-desc").classList.add("hide-error");
+		// document.getElementById("error-long-desc").classList.remove("display-error");	
+		// document.getElementById("error-repo-url").classList.add("hide-error");
+		// document.getElementById("error-repo-url").classList.remove("display-error");
 	}
 	
 	componentWillReceiveProps(nextProps){
@@ -238,7 +348,7 @@ class ProjectForm extends Component{
 						  onChange={this.handleChange}
 				          fullWidth
 				        />
-   		            	<span>Make sure this is a correct .jpg or .png url</span>
+				        <span id="error-project-name" className="error-message hide-error">What's the name of this project?</span>
 				        <TextField
 				          id="image-url"
 						  name="avatar"
@@ -249,7 +359,7 @@ class ProjectForm extends Component{
 				          margin="normal"
 				          fullWidth
 				        />
-    		            <span>In 140 characters, what is your project about?</span>
+   		            	<span id="error-image-url" className="error-message hide-error">Make sure this is a correct image url</span>
 				        <TextField
 				          id="short-desc"
 						  name="sdesc"
@@ -260,7 +370,7 @@ class ProjectForm extends Component{
 				          margin="normal"
 				          fullWidth
 				        />
-       		            <span>What is your project about?</span>
+    		            <span id="error-short-desc" className="error-message hide-error">In 140 characters, what is your project about?</span>
 				        <TextField
 				          id="long-desc"
 						  name="ldesc"
@@ -271,7 +381,7 @@ class ProjectForm extends Component{
 				          margin="normal"
 				          fullWidth
 				        />
-				        <span>The project's repo must be on GitHub</span>
+       		            <span id="error-long-desc" className="error-message hide-error">What is your project about?</span>
 				        <TextField
 				          id="repo-url"
 						  name="repo"
@@ -282,6 +392,7 @@ class ProjectForm extends Component{
 				          margin="normal"
 				          fullWidth
 				        />
+				        <span id="error-repo-url" className="error-message hide-error">The project's repo must be on GitHub</span>
 				        <div className="edit-project">
 					        <CheckboxList 
 								listName="SKILLS"

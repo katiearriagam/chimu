@@ -437,3 +437,17 @@ body{
 	float: right;
 	margin: 1% 2%;
 }
+
+.display-error{
+	display: inherit;
+}
+
+.hide-error{
+	display: none;
+}
+
+.error-message{
+	color: #e74c3c;
+	font-size: 1em;
+	font-weight: 200;
+}

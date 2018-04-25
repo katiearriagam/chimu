@@ -3,6 +3,7 @@ import * as firebase from 'firebase';
 
 import UserInfoSideBar from '../../presentational/User/UserInfoSideBar';
 import UserProjectCard from '../../presentational/User/UserProjectCard';
+import UserProfileEditForm from '../UserProfile/UserProfileEditForm';
 
 import '../../style/style.css';
 
@@ -167,6 +168,7 @@ class UserInfo extends Component {
 							/>
 						</div>
 						<div className="UserProjects">
+							<UserProfileEditForm/>
 							<div className="currentProjects">
 								<h4 className="user-projects-subheader">{headerCurrent}</h4>
 								{

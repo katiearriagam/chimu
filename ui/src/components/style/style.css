@@ -432,3 +432,8 @@ body{
 	align-content: center;
 	margin: 10px 70px;
 }
+
+.edit-user-profile{
+	float: right;
+	margin: 1% 2%;
+}

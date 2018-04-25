@@ -55,6 +55,7 @@ class ProjectInfoSideBar extends Component {
 					<RatingModal
 						members={this.props.members}
 						updateRatings={this.props.updateRatings}
+						changeProjectStatus={this.props.changeProjectStatus}
 						isProjectComplete={this.props.status}
 					/>
 				</div>

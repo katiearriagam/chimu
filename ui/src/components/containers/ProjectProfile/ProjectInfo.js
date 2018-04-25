@@ -34,6 +34,23 @@ class ProjectInfo extends Component {
 		  console.error("Error removing document: ", error);
 		});
 	}
+	
+	changeProjectStatus(handleClickOpen) {
+		var db = firebase.firestore();
+		db.collection("Projects").doc(this.state.owner).collection("projects").doc(this.state.name).update({
+			status: !this.state.status,
+		}).then(() => {
+			console.log("Document successfully updated!");
+			if (!this.state.status)
+				handleClickOpen();
+			this.setState({
+				status: !this.state.status,
+			});
+		}).catch(function(error) {
+			// The document probably doesn't exist.
+			console.error("Error updating document: ", error);
+		});
+	}
 
 	updateRatings(newRatings, closeFunc) {
 		var db = firebase.firestore();
@@ -364,6 +381,7 @@ class ProjectInfo extends Component {
 								members={this.state.members}
 								loggedUser={this.props.loggedUser}
 								updateRatings={this.updateRatings.bind(this)}
+								changeProjectStatus={this.changeProjectStatus.bind(this)}
 							/>
 						</div>
 						<div className="ProjectDetails">

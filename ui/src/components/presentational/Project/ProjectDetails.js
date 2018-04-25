@@ -35,7 +35,7 @@ function ProjectDetails(props){
 													<img className="avatar-image team-member-image" src={data.avatar} alt={data.username}/>
 												</div>
 											</Link>
-											{props.loggedUser === props.owner &&
+											{props.loggedUser === props.owner && props.owner !== data.username &&
 											<ProjectMemberDelete
 												member={data.username}
 												deleteMember={props.deleteMember}

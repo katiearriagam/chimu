@@ -362,6 +362,7 @@ class ProjectInfo extends Component {
 								roles={this.state.roles}
 								updateInfo={this.handlerUpdateProjectInfo.bind(this)}
 								members={this.state.members}
+								loggedUser={this.props.loggedUser}
 								updateRatings={this.updateRatings.bind(this)}
 							/>
 						</div>

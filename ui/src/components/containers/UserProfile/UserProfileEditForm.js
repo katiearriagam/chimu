@@ -14,6 +14,13 @@ class UserProfileEditForm extends Component{
 	state = {
 		open: false,
 	};
+	
+	handleChange = (e) => {
+		if (e.target.value === "")
+			this.setState({[e.target.name]: null});
+		else
+			this.setState({[e.target.name]: e.target.value});
+    }
 
 	handleClickOpen = () => {
 		this.setState({ open: true });
@@ -31,57 +38,103 @@ class UserProfileEditForm extends Component{
 		this.updateDetails();
 		this.setState({ open: false });
 	};
-
-	loadSkills() {
+	
+	loadSkillsRoles(props) {
 		this.setState({
       		skills: [],
+			roles: [],
 		});
+		
+		var newSkills = [];
+		var newRoles = [];
+		var activeSkills = props.skills.slice();
+		var activeRoles = props.roles.slice();
 
 		var db = firebase.firestore();
 		
 		db.collection("Skills").get().then((skills) => {
 			skills.forEach((skill) => {
-				this.setState(prevState => ({
-					skills: [...prevState.skills, { 
+				let isActive = activeSkills.some((elem) => {
+					if (elem.label == skill.id) {
+						activeSkills.splice(activeSkills.indexOf(elem), 1);
+						return true;
+					}
+					return false;
+				});
+				
+				if (isActive) {
+					newSkills.push({ 
+						label: skill.id,
+						isChecked: true
+					});
+				} else {
+					newSkills.push({ 
 						label: skill.id,
 						isChecked: false
-					}]
-				}));
+					});
+				}
+			});
+			this.setState({
+				skills: newSkills,
 			});
 		});
-	}
-
-	loadRoles() {
-		this.setState({
-      		roles: [],
-		});
-
-		var db = firebase.firestore();
 		
 		db.collection("Roles").get().then((roles) => {
 			roles.forEach((role) => {
-				this.setState(prevState => ({
-					roles: [...prevState.roles, { 
+				let isActive = activeRoles.some((elem) => {
+					if (elem.label == role.id) {
+						activeRoles.splice(activeRoles.indexOf(elem), 1);
+						return true;
+					}
+					return false;
+				});
+				
+				if (isActive) {
+					newRoles.push({ 
+						label: role.id,
+						isChecked: true
+					});
+				} else {
+					newRoles.push({ 
 						label: role.id,
 						isChecked: false
-					}]
-				}));
+					});
+				}
+			});
+			this.setState({
+				roles: newRoles,
 			});
 		});
 	}
-
+	
+	handleSkills(index) {
+		const skills = this.state.skills;
+	    skills[index].isChecked = !skills[index].isChecked;
+	    this.setState({
+			skills: skills,
+		})
+    }
+	
+	handleRoles(index) {
+		const roles = this.state.roles;
+	    roles[index].isChecked = !roles[index].isChecked;
+	    this.setState({
+			roles: roles,
+		})
+    }
 
 	componentWillMount(){
-		this.loadSkills();
-		this.loadRoles();
+		this.loadSkillsRoles(this.props);
+		this.setState({
+			name: this.props.name,
+			email: this.props.email,
+		});
 	}
-
-	handleDeleteKeyword = data => () => {
-	    const keywords = [...this.state.keywords];
-	    const chipToDelete = keywords.indexOf(data);
-	    keywords.splice(chipToDelete, 1);
-	    this.setState({ keywords: keywords });
-    };
+	
+	componentWillReceiveProps(nextProps){
+		if (this.props.skills !== nextProps.skills || this.props.roles !== nextProps.roles)
+			this.loadSkillsRoles(nextProps);
+	}
 
     renderButton(){
     	if(true){
@@ -116,21 +169,26 @@ class UserProfileEditForm extends Component{
 		            <DialogContent>
 		            	<TextField
 				          id="email"
+						  name="email"
 				          label="Email"
 				          placeholder="Email"
 				          margin="normal"
+						  defaultValue= { this.props.email ? this.props.email : '' }
+						  onChange={this.handleChange}
 				          fullWidth
 				        />
 				        <div className="edit-project">
 					        <CheckboxList 
 								listName="SKILLS"
 								items={this.state.skills}
+								action={this.handleSkills.bind(this)}
 							/>
 						</div>
 						<div className="edit-project">
 					        <CheckboxList 
 								listName="ROLES"
 								items={this.state.roles}
+								action={this.handleRoles.bind(this)}
 							/>
 						</div>		        	
 		            </DialogContent>

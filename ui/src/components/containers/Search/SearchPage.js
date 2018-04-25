@@ -18,7 +18,7 @@ class SearchPage extends Component {
 	getSearchTerm(){
 		console.log("this is what I would search:");
 		let searchBarValue = document.getElementById("search-bar").value;
-		if(searchBarValue != ""){
+		if(searchBarValue !== ""){
 			return searchBarValue;
 		}
 		else return "";
@@ -49,7 +49,7 @@ class SearchPage extends Component {
 			});
 		}
 		
-		if (this.getSearchTerm() != "") {
+		if (this.getSearchTerm() !== "") {
 			db.collection("Projects").get().then((userFolders) => {
 				userFolders.forEach((userFolder) => {
 					userFolder.ref.collection("projects").get().then((projects) => {
@@ -58,7 +58,7 @@ class SearchPage extends Component {
 							var projectRoles = project.data().roles;
 							var isValid = roleRefs.every((ref) => {
 								var hasRole = projectRoles.some((role) => {
-									return (role.path == ref.path);
+									return (role.path === ref.path);
 								});
 								if (!hasRole) {
 									console.log("Project without role");
@@ -72,7 +72,7 @@ class SearchPage extends Component {
 								var projectSkills = project.data().skills;
 								isValid = skillRefs.every((ref) => {
 									var hasSkill = projectSkills.some((skill) => {
-										return (skill.path == ref.path);
+										return (skill.path === ref.path);
 									});
 									if (!hasSkill) {
 										console.log("Project without skill");
@@ -82,7 +82,7 @@ class SearchPage extends Component {
 								});
 								
 								if (isValid) {
-									if (project.id == this.getSearchTerm()) {
+									if (project.id === this.getSearchTerm()) {
 										this.setState(prevState => ({
 											currentProjects: [...prevState.currentProjects, {
 													title: project.id,
@@ -95,7 +95,7 @@ class SearchPage extends Component {
 										// Check keywords
 										var keywords = project.data().keywords;
 										keywords.every((key) => {
-											if (key.toLowerCase() == this.getSearchTerm().toLowerCase()) {
+											if (key.toLowerCase() === this.getSearchTerm().toLowerCase()) {
 												this.setState(prevState => ({
 													currentProjects: [...prevState.currentProjects, {
 															title: project.id,
@@ -129,7 +129,7 @@ class SearchPage extends Component {
 							var projectRoles = project.data().roles;
 							var isValid = roleRefs.every((ref) => {
 								var hasRole = projectRoles.some((role) => {
-									return (role.path == ref.path);
+									return (role.path === ref.path);
 								});
 								if (!hasRole) {
 									console.log("Project without role");
@@ -143,7 +143,7 @@ class SearchPage extends Component {
 								var projectSkills = project.data().skills;
 								isValid = skillRefs.every((ref) => {
 									var hasSkill = projectSkills.some((skill) => {
-										return (skill.path == ref.path);
+										return (skill.path === ref.path);
 									});
 									if (!hasSkill) {
 										console.log("Project without skill");
@@ -201,14 +201,14 @@ class SearchPage extends Component {
 
 		console.log('searching for -> ' + this.getSearchTerm());
 
-		if(this.getSearchTerm() != ""){
+		if(this.getSearchTerm() !== ""){
 			var userCol = db.collection("Users").where(firebase.firestore.FieldPath.documentId(), "==", this.getSearchTerm()).get().then((users)=>{
 				users.forEach((user) => {
 					// Validate roles
 					var userRoles = user.data().roles;
 					var isValid = roleRefs.every((ref) => {
 						var hasRole = userRoles.some((role) => {
-							return (role.path == ref.path);
+							return (role.path === ref.path);
 						});
 						if (!hasRole) {
 							console.log("User without role");
@@ -222,7 +222,7 @@ class SearchPage extends Component {
 						var userSkills = user.data().skills;
 						isValid = skillRefs.every((ref) => {
 							var hasSkill = userSkills.some((skill) => {
-								return (skill.path == ref.path);
+								return (skill.path === ref.path);
 							});
 							if (!hasSkill) {
 								console.log("User without skill");
@@ -258,7 +258,7 @@ class SearchPage extends Component {
 													rating = ratingSum/ratingCant;	
 												}
 												projectCant = projectCant - 1;
-												if (projectCant == 0) {
+												if (projectCant === 0) {
 													this.setState(prevState => ({
 														currentUsers: [...prevState.currentUsers, { 
 															username: user.id,
@@ -295,7 +295,7 @@ class SearchPage extends Component {
 					var userRoles = user.data().roles;
 					var isValid = roleRefs.every((ref) => {
 						var hasRole = userRoles.some((role) => {
-							return (role.path == ref.path);
+							return (role.path === ref.path);
 						});
 						if (!hasRole) {
 							console.log("User without role");
@@ -309,7 +309,7 @@ class SearchPage extends Component {
 						var userSkills = user.data().skills;
 						isValid = skillRefs.every((ref) => {
 							var hasSkill = userSkills.some((skill) => {
-								return (skill.path == ref.path);
+								return (skill.path === ref.path);
 							});
 							if (!hasSkill) {
 								console.log("User without skill");
@@ -346,7 +346,7 @@ class SearchPage extends Component {
 												}
 												projectCant = projectCant - 1;
 
-												if (projectCant == 0) {
+												if (projectCant === 0) {
 													this.setState(prevState => ({
 														currentUsers: [...prevState.currentUsers, { 
 															username: user.id,
@@ -397,7 +397,7 @@ class SearchPage extends Component {
 
 	onKeyPressed(e){
 		const ENTER_KEY_CODE = 13;
-		if(e.keyCode == ENTER_KEY_CODE){
+		if(e.keyCode === ENTER_KEY_CODE){
 			console.log("pressed enter");
 			this.clickedSearch();
 		}

@@ -67,7 +67,7 @@ class ProjectForm extends Component{
 		var newRoles = [];
 		var activeSkills = [];
 		var activeRoles = [];
-		if (props.action == 'EDIT') {
+		if (props.action === 'EDIT') {
 				activeSkills = props.skills.slice();
 				activeRoles = props.roles.slice();
 			}
@@ -77,7 +77,7 @@ class ProjectForm extends Component{
 		db.collection("Skills").get().then((skills) => {
 			skills.forEach((skill) => {
 				let isActive = activeSkills.some((elem) => {
-					if (elem.label == skill.id) {
+					if (elem.label === skill.id) {
 						activeSkills.splice(activeSkills.indexOf(elem), 1);
 						return true;
 					}
@@ -104,7 +104,7 @@ class ProjectForm extends Component{
 		db.collection("Roles").get().then((roles) => {
 			roles.forEach((role) => {
 				let isActive = activeRoles.some((elem) => {
-					if (elem.label == role.id) {
+					if (elem.label === role.id) {
 						activeRoles.splice(activeRoles.indexOf(elem), 1);
 						return true;
 					}
@@ -135,9 +135,13 @@ class ProjectForm extends Component{
 		});
 	}
 
+	formValidation(){
+
+	}
+
 	componentWillMount(){
 		this.loadSkillsRoles(this.props);
-		if (this.props.action == 'EDIT'){
+		if (this.props.action === 'EDIT'){
 			this.setState({
 				name: this.props.name,
 				avatar: this.props.avatar,
@@ -184,7 +188,7 @@ class ProjectForm extends Component{
     }
 
     renderButton(){
-    	if(this.props.action == "ADD"){
+    	if(this.props.action === "ADD"){
 			return(
 				<span>
 					<IconButton color="primary" className="iconbutton" aria-label="add-project" onClick={this.handleClickOpen}>
@@ -193,7 +197,7 @@ class ProjectForm extends Component{
 				</span>
 			);
 		}
-		else if(this.props.action == "EDIT"){
+		else if(this.props.action === "EDIT"){
 			return(
 				<span>
 					<IconButton color="inherit" className="iconbutton" aria-label="edit-project" onClick={this.handleClickOpen}>
@@ -234,6 +238,7 @@ class ProjectForm extends Component{
 						  onChange={this.handleChange}
 				          fullWidth
 				        />
+   		            	<span>Make sure this is a correct .jpg or .png url</span>
 				        <TextField
 				          id="image-url"
 						  name="avatar"
@@ -244,6 +249,7 @@ class ProjectForm extends Component{
 				          margin="normal"
 				          fullWidth
 				        />
+    		            <span>In 140 characters, what is your project about?</span>
 				        <TextField
 				          id="short-desc"
 						  name="sdesc"
@@ -254,6 +260,7 @@ class ProjectForm extends Component{
 				          margin="normal"
 				          fullWidth
 				        />
+       		            <span>What is your project about?</span>
 				        <TextField
 				          id="long-desc"
 						  name="ldesc"
@@ -264,6 +271,7 @@ class ProjectForm extends Component{
 				          margin="normal"
 				          fullWidth
 				        />
+				        <span>The project's repo must be on GitHub</span>
 				        <TextField
 				          id="repo-url"
 						  name="repo"
@@ -314,7 +322,6 @@ class ProjectForm extends Component{
 								);
 							})}
 						</div>
-		        	
 		            </DialogContent>
 		          <DialogActions>
 		            <Button onClick={this.handleClose} color="primary">

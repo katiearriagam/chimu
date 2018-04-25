@@ -13,7 +13,8 @@ class NotificationCenter extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			alertStatus: false,
+			acceptStatus: false,
+			rejectStatus: false,
 			isRequest: null,
 			index: null,
 			openUser: null,
@@ -80,7 +81,7 @@ class NotificationCenter extends Component {
 		}
 	}
 	
-	onClickOpen = (index, isRequest) => {
+	onClickOpenAccept = (index, isRequest) => {
 		var user;
 		var project;
 		
@@ -95,7 +96,30 @@ class NotificationCenter extends Component {
 		}
 		
 		this.setState({
-			alertStatus: true,
+			acceptStatus: true,
+			isRequest: isRequest,
+			openProject: project,
+			openUser: user,
+			index: index,
+		});
+	}
+	
+	onClickOpenReject = (index, isRequest) => {
+		var user;
+		var project;
+		
+		if (isRequest) {
+			console.log(this.state.requests);
+			console.log(index);
+			user = this.state.requests[index].user;
+			project = this.state.requests[index].project;
+		} else {
+			user = this.state.invites[index].user;
+			project = this.state.invites[index].project;
+		}
+		
+		this.setState({
+			rejectStatus: true,
 			isRequest: isRequest,
 			openProject: project,
 			openUser: user,
@@ -106,54 +130,68 @@ class NotificationCenter extends Component {
 	onDialogAccept = () => {
 		var db = firebase.firestore();
 		if (this.state.isRequest) {
-			var userRef = db.collection("Users").doc(this.state.openUser);
-			var projectRef = db.collection("Projects").doc(this.state.username).collection("projects").doc(this.state.openProject);
-			db.collection("Users_Projects").where("project", "==", projectRef).where("user", "==", userRef).get().then((infos) => {
-				infos.forEach((info) => {
-					info.ref.update({
-						isApproved: true
-					})
-					.then(() => {
-						console.log("Document successfully updated!");
-						this.state.requests.splice(this.state.index,1);
-						this.onClose();
-					})
-					.catch(function(error) {
-						// The document probably doesn't exist.
-						console.error("Error updating document: ", error);
-					});
-				});
-			}).catch((error) => {
-				console.log("Error getting document:", error);
+			db.collection("Users_Projects").doc(this.state.openUser + '-' + this.state.openProject).update({
+				isApproved: true
+			}).then(() => {
+				console.log("Document successfully updated!");
+				this.state.requests.splice(this.state.index,1);
+				this.onCloseAccept();
+			}).catch(function(error) {
+				// The document probably doesn't exist.
+				console.error("Error updating document: ", error);
 			});
 		} else {
-			var userRef = db.collection("Users").doc(this.state.username);
-			var projectRef = db.collection("Projects").doc(this.state.openUser).collection("projects").doc(this.state.openProject);
-			db.collection("Users_Projects").where("project", "==", projectRef).where("user", "==", userRef).get().then((infos) => {
-				infos.forEach((info) => {
-					info.ref.update({
-						hasAccepted: true
-					})
-					.then(() => {
-						console.log(this.state);
-						console.log("Document successfully updated!");
-						this.state.invites.splice(this.state.index,1);
-						this.onClose();
-					})
-					.catch(function(error) {
-						// The document probably doesn't exist.
-						console.error("Error updating document: ", error);
-					});
-				});
-			}).catch((error) => {
-				console.log("Error getting document:", error);
+			db.collection("Users_Projects").doc(this.state.username + '-' + this.state.openProject).update({
+				hasAccepted: true
+			}).then(() => {
+				console.log(this.state);
+				console.log("Document successfully updated!");
+				this.state.invites.splice(this.state.index,1);
+				this.onCloseAccept();
+			}).catch(function(error) {
+				// The document probably doesn't exist.
+				console.error("Error updating document: ", error);
 			});
 		}
 	}
 	
-	onClose = () => {
+	onDialogReject = () => {
+		var db = firebase.firestore();
+		if (this.state.isRequest) {
+			db.collection("Users_Projects").doc(this.state.openUser + '-' + this.state.openProject).delete().then(() => {
+				console.log("Document successfully updated!");
+				this.state.requests.splice(this.state.index,1);
+				this.onCloseReject();
+			}).catch(function(error) {
+				// The document probably doesn't exist.
+				console.error("Error updating document: ", error);
+			});
+		} else {
+			db.collection("Users_Projects").doc(this.state.username + '-' + this.state.openProject).delete().then(() => {
+				console.log(this.state);
+				console.log("Document successfully updated!");
+				this.state.invites.splice(this.state.index,1);
+				this.onCloseReject();
+			}).catch(function(error) {
+				// The document probably doesn't exist.
+				console.error("Error updating document: ", error);
+			});
+		}
+	}
+	
+	onCloseAccept = () => {
 		this.setState({
-			alertStatus: false,
+			acceptStatus: false,
+			isRequest: null,
+			openProject: null,
+			openUser: null,
+			index: null,
+		})
+	}
+	
+	onCloseReject = () => {
+		this.setState({
+			rejectStatus: false,
 			isRequest: null,
 			openProject: null,
 			openUser: null,
@@ -162,12 +200,18 @@ class NotificationCenter extends Component {
 	}
 	
 	render() {
-		var title = null;
+		var acceptTitle = null;
+		var rejectTitle = null;
 		if (this.state.openUser) {
-			title = this.state.isRequest ? 
-				'Accept ' + this.state.openUser + ' in your project ' + this.state.openProject + '?'
+			acceptTitle = this.state.isRequest ? 
+				'Accept ' + this.state.openUser + '\'s request to join ' + this.state.openProject + '?'
 			 :
-				'Join ' + this.state.openUser + '\'s project ' + this.state.openProject + '?'
+				'Join ' + this.state.openUser + '\'s project ' + this.state.openProject + '?';
+				
+			rejectTitle = this.state.isRequest ? 
+				'Reject ' + this.state.openUser + '\'s request to join ' + this.state.openProject + '?'
+			 :
+				'Decline ' + this.state.openUser + '\'s invitation to join ' + this.state.openProject + '?';
 		}
 		return (
 			<div>
@@ -190,8 +234,8 @@ class NotificationCenter extends Component {
 									</Typography>
 								</span>
 								<span className="notification-buttons">
-									<Button onClick={() => this.onClickOpen(this.state.requests.indexOf(data), true)} className="notification-accept">ACCEPT</Button>
-									<Button onClick={() => this.onClickOpen(this.state.requests.indexOf(data), true)} className="notification-reject">REJECT</Button>
+									<Button onClick={() => this.onClickOpenAccept(this.state.requests.indexOf(data), true)} className="notification-accept">ACCEPT</Button>
+									<Button onClick={() => this.onClickOpenReject(this.state.requests.indexOf(data), true)} className="notification-reject">REJECT</Button>
 								</span>
 							</div>
 						);
@@ -215,26 +259,43 @@ class NotificationCenter extends Component {
 									</Typography>
 								</span>
 								<span className="notification-buttons">
-									<Button onClick={() => this.onClickOpen(this.state.invites.indexOf(data), false)} className="notification-accept">ACCEPT</Button>
-									<Button onClick={() => this.onClickOpen(this.state.invites.indexOf(data), false)} className="notification-reject">REJECT</Button>
+									<Button onClick={() => this.onClickOpenAccept(this.state.invites.indexOf(data), false)} className="notification-accept">ACCEPT</Button>
+									<Button onClick={() => this.onClickOpenReject(this.state.invites.indexOf(data), false)} className="notification-reject">REJECT</Button>
 								</span>
 							</div>
 						);
 					})
 				}
 				<Dialog
-					open={this.state.alertStatus}
-					onClose={this.onClose}
+					open={this.state.acceptStatus}
+					onClose={this.onCloseAccept}
 					aria-labelledby="alert-dialog-title"
 					aria-describedby="alert-dialog-description"
 				>
-					<DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+					<DialogTitle id="alert-dialog-title">{acceptTitle}</DialogTitle>
 					<DialogActions>
-						<Button onClick={this.onClose} color="primary">
-							Disagree
+						<Button onClick={this.onCloseAccept} color="primary">
+							Cancel
 						</Button>
 						<Button onClick={this.onDialogAccept} color="primary" autoFocus>
-							Agree
+							Yes
+						</Button>
+				  </DialogActions>
+				</Dialog>
+				
+				<Dialog
+					open={this.state.rejectStatus}
+					onClose={this.onCloseReject}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">{rejectTitle}</DialogTitle>
+					<DialogActions>
+						<Button onClick={this.onCloseReject} color="primary">
+							Cancel
+						</Button>
+						<Button onClick={this.onDialogReject} color="primary" autoFocus>
+							Yes
 						</Button>
 				  </DialogActions>
 				</Dialog>

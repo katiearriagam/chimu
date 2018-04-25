@@ -26,6 +26,117 @@ const styles = {
 };
 
 class Header extends Component {
+	createNewProject(newState) {
+		var db = firebase.firestore();
+		var userRef = db.collection("Users").doc(this.props.username);
+		var projectRef = db.collection("Projects").doc(this.props.username).collection("projects").doc(newState.name);
+		
+		var keywords = newState.keywords ? newState.keywords : [];
+		var repo = newState.repo ? newState.repo : null;
+		var sdesc = newState.sdesc ? newState.sdesc : null;
+		var ldesc = newState.ldesc ? newState.ldesc : null;
+		
+		db.collection("Projects").doc(this.props.username).collection("projects").doc(newState.name).set({
+			keywords: keywords,
+			repo: repo,
+			sdesc: sdesc,
+			ldesc: ldesc,
+			status: false,
+			owner: userRef,
+			skills: [],
+			roles: [],
+		}).then(() => {
+			console.log("Document successfully written!");
+			
+			db.collection("Users_Projects").doc(this.props.username + '-' + newState.name).set({
+				hasAccepted: true,
+				isApproved: true,
+				project: projectRef,
+				rating: null,
+				user: userRef,
+			}).catch((error) => {
+				console.error("Error writing document: ", error);
+			});
+			
+			var addSkills = newState.skills.slice().filter((e) => {
+				return e.isChecked === true
+			}).map((item) => {
+				return item["label"]
+			});
+			
+			var addRoles = newState.roles.slice().filter((e) => {
+				return e.isChecked === true
+			}).map((item) => {
+				return item["label"]
+			});
+			
+			addSkills.forEach((addSkill) => {
+				var skillRef = db.collection("Skills").doc(addSkill);
+				
+				db.runTransaction((transaction) => {
+					return transaction.get(skillRef).then((skill) => {
+						console.log("Two");
+						var projectsInSkill = skill.data().projects;
+						if (!projectsInSkill)
+							projectsInSkill = [projectRef];
+						else
+							projectsInSkill.push(projectRef);
+						transaction.update(skillRef, {projects: projectsInSkill});
+					});
+				}).catch(function(error) {
+					// The document probably doesn't exist.
+					console.error("Error running transaction: ", error);
+				});
+				
+				db.runTransaction((transaction) => {
+					return transaction.get(projectRef).then((project) => {
+						console.log("One");
+						var skillsInProject = project.data().skills;
+						if (!skillsInProject)
+							skillsInProject = [skillRef];
+						else
+							skillsInProject.push(skillRef);
+						transaction.update(projectRef, {skills: skillsInProject});
+					});
+				}).catch(function(error) {
+					// The document probably doesn't exist.
+					console.error("Error running transaction: ", error);
+				});
+			});
+			
+			addRoles.forEach((addRole) => {
+				var roleRef = db.collection("Roles").doc(addRole);
+				
+				db.runTransaction((transaction) => {
+					return transaction.get(roleRef).then((role) => {
+						console.log("Two");
+						var projectsInRole = role.data().projects;
+						projectsInRole.push(projectRef);
+						transaction.update(roleRef, {projects: projectsInRole});
+					});
+				}).catch(function(error) {
+					// The document probably doesn't exist.
+					console.error("Error running transaction: ", error);
+				});
+				
+				db.runTransaction((transaction) => {
+					return transaction.get(projectRef).then((project) => {
+						console.log("One");
+						var rolesInProject = project.data().roles;
+						rolesInProject.push(roleRef);
+						transaction.update(projectRef, {roles: rolesInProject});
+					});
+				}).catch(function(error) {
+					// The document probably doesn't exist.
+					console.error("Error running transaction: ", error);
+				});
+			});
+			
+		}).catch((error) => {
+			console.error("Error writing document: ", error);
+		});
+	}
+	
 	onFailure(response) {
 		console.error(response);
 	}
@@ -90,6 +201,7 @@ class Header extends Component {
 				</Link>
 				<ProjectForm
 					action="ADD"
+					updateInfo={this.createNewProject.bind(this)}
 				/>
 				<Link to={{ pathname: '/notifications'}} style={{ textDecoration: 'none', color: 'inherit' }}>
 					<IconButton color="inherit" aria-label="Notification Center">

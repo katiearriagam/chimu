@@ -20,11 +20,20 @@ class Main extends Component {
 			);
 		}
 		
+		const ProjectInfoWProps = (props) => {
+			return (
+				<ProjectInfo 
+					loggedUser={this.props.username}
+					{...props}
+				/>
+			);
+		}
+		
 		return(
 			<Switch>
 				<Route exact path='/' component= {Home} />
 				<Route path='/user/:username' render= {UserInfoWProps} />
-				<Route path='/project/:username/:project' component= {ProjectInfo} />
+				<Route path='/project/:username/:project' component= {ProjectInfoWProps} />
 				<Route path='/search/' component= {SearchPage} />
 				{ this.props.isLogged &&
 				<Route path='/notifications/' component= {NotificationCenter} />

@@ -1,14 +1,15 @@
 import React from 'react';
 import Typography from 'material-ui/Typography';
 import Chip from 'material-ui/Chip';
-import Button from 'material-ui/Button';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { Link } from 'react-router-dom';
 
 import '../../style/style.css';
 
+import ProjectMemberDelete from '../../presentational/Project/ProjectMemberDelete';
+
 function ProjectDetails(props){
-	const deleteMemberButton = <Button className="delete-member-from-project"><DeleteIcon /></Button>
+	//const deleteMemberButton = <Button className="delete-member-from-project"><DeleteIcon /></Button>
+	
 	return(
 		<div>
 			<div className="card">
@@ -34,7 +35,12 @@ function ProjectDetails(props){
 													<img className="avatar-image team-member-image" src={data.avatar} alt={data.username}/>
 												</div>
 											</Link>
-											{deleteMemberButton}
+											{props.loggedUser === props.owner &&
+											<ProjectMemberDelete
+												member={data.username}
+												deleteMember={props.deleteMember}
+											/>
+											}
 									</div>
 								);
 						})}

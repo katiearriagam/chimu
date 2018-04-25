@@ -39,7 +39,15 @@ class ProjectInfoSideBar extends Component {
 				<label className="project-name">{this.props.name}</label>
 				<label className="project-status">{textStatus}</label>
 				<div className="project-owner-controls">
-					<ProjectForm keywords={this.props.keys}
+					<ProjectForm
+						keywords={this.props.keys}
+						avatar={this.props.avatar}
+						name={this.props.name}
+						repo={this.props.repo}
+						sdesc={this.props.sdesc}
+						ldesc={this.props.ldesc}
+						skills={this.props.skills}
+						roles={this.props.roles}
 						updateInfo={this.props.updateInfo}
 						action="EDIT"
 					/>

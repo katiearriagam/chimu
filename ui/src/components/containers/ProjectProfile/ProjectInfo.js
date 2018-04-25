@@ -13,6 +13,27 @@ class ProjectInfo extends Component {
         super(props)
         this.handlerUpdateProjectInfo = this.handlerUpdateProjectInfo.bind(this);
     }
+	
+	deleteMember(username) {
+		var db = firebase.firestore();
+		var userProjectRef = db.collection("Users_Projects").doc(username + '-' + this.state.name);
+		userProjectRef.delete().then(() => {
+			console.log("Document successfully deleted!");
+			var updatedMembers = this.state.members.slice();
+			updatedMembers.some((member) => {
+				if (member.username === username) {
+					updatedMembers.splice(updatedMembers.indexOf(member), 1);
+					return true;
+				}
+				return false;
+			});
+			this.setState({
+				members: updatedMembers,
+			})
+		}).catch((error) => {
+		  console.error("Error removing document: ", error);
+		});
+	}
 
 	updateRatings(newRatings, closeFunc) {
 		var db = firebase.firestore();
@@ -55,7 +76,9 @@ class ProjectInfo extends Component {
 					longDescription: info.ldesc,
 					members: []
 				});
-				db.collection("Users_Projects").where("project", "==", docRef).where("isApproved", "==", true).get().then((projectInfos) => {
+				
+				db.collection("Users_Projects").where("project", "==", docRef).where("isApproved", "==", true).where("hasAccepted", "==", true).get().then((projectInfos) => {
+					console.log(projectInfos);
 					projectInfos.forEach((projectInfo) => {
 						projectInfo.data().user.get().then((user) => {
 							const response = fetch('https://api.github.com/users/' + user.id).then((response) => {
@@ -84,7 +107,6 @@ class ProjectInfo extends Component {
 						this.setState(prevState => ({
 							skills: [...prevState.skills, {
 										label: skill.id,
-										hex: skill.data().hex,
 									}]
 						}));
 					}).catch((error) => {
@@ -96,7 +118,6 @@ class ProjectInfo extends Component {
 						this.setState(prevState => ({
 							roles: [...prevState.roles, {
 										label: role.id,
-										hex: role.data().hex,
 									}]
 						}));
 					}).catch((error) => {
@@ -115,15 +136,211 @@ class ProjectInfo extends Component {
 	}
 
 	handlerUpdateProjectInfo(newState){
-		const newKeywords = newState.keywords;
-		let oldKeywords = this.state.keys;
-
-		console.log("old keywords");
-		console.log(oldKeywords);
-		oldKeywords = newKeywords;
-		console.log("new keywords");
-		console.log(newKeywords);
-	    this.forceUpdate();
+		var db = firebase.firestore();
+		
+		var projectRef = db.collection("Projects").doc(this.state.owner).collection("projects").doc(this.state.name);
+		
+		projectRef.update({
+			keywords: newState.keywords,
+			repo: newState.repo,
+			sdesc: newState.sdesc,
+			ldesc: newState.ldesc,
+		})
+		.then(() => {
+			console.log("Document successfully updated!");
+			this.setState({
+				keys: newState.keywords,
+				avatar_url: newState.avatar,
+				repo_url: newState.repo,
+				sdesc: newState.sdesc,
+				longDescription: newState.ldesc,
+			});
+		})
+		.catch(function(error) {
+			// The document probably doesn't exist.
+			console.error("Error updating document: ", error);
+		});
+		
+		// Need to create a delete list, a add list and a display list w/ both
+		var oldSkills = this.state.skills.slice().map((item) => {
+			return item["label"]
+		});
+		var oldRoles = this.state.roles.slice().map((item) => {
+			return item["label"]
+		});
+		
+		var newSkills = newState.skills.slice().filter((e) => {
+			return e.isChecked === true
+		}).map((item) => {
+			return item["label"]
+		});
+		
+		var updatedSkills = newState.skills.slice().filter((e) => {
+			return e.isChecked === true
+		}).map((item) => {
+			return {label : item["label"]}
+		});
+		
+		var deleteSkills = oldSkills.filter(x => !newSkills.includes(x));
+		var addSkills = newSkills.filter(x => !oldSkills.includes(x));
+		
+		deleteSkills.forEach((deleteSkill) => {
+			var skillRef = db.collection("Skills").doc(deleteSkill);
+			
+			db.runTransaction((transaction) => {
+				return transaction.get(skillRef).then((skill) => {
+					console.log("Two");
+					var projectsInSkill = skill.data().projects;
+					projectsInSkill.some((proj) => {
+						if (proj.id === projectRef.id) {
+							projectsInSkill.splice(projectsInSkill.indexOf(proj),1);
+							return true;
+						}
+					});
+					transaction.update(skillRef, {projects: projectsInSkill});
+				});
+			}).catch(function(error) {
+				// The document probably doesn't exist.
+				console.error("Error running transaction: ", error);
+			});
+			
+			db.runTransaction((transaction) => {
+				return transaction.get(projectRef).then((project) => {
+					console.log("One");
+					var skillsInProject = project.data().skills;
+					skillsInProject.some((skill) => {
+						if (skill.id === skillRef.id) {
+							skillsInProject.splice(skillsInProject.indexOf(skill),1);
+							return true;
+						}
+					});
+					transaction.update(projectRef, {skills: skillsInProject});
+				});
+			}).catch(function(error) {
+				// The document probably doesn't exist.
+				console.error("Error running transaction: ", error);
+			});
+		});
+		
+		addSkills.forEach((addSkill) => {
+			var skillRef = db.collection("Skills").doc(addSkill);
+			
+			db.runTransaction((transaction) => {
+				return transaction.get(skillRef).then((skill) => {
+					console.log("Two");
+					var projectsInSkill = skill.data().projects;
+					projectsInSkill.push(projectRef);
+					transaction.update(skillRef, {projects: projectsInSkill});
+				});
+			}).catch(function(error) {
+				// The document probably doesn't exist.
+				console.error("Error running transaction: ", error);
+			});
+			
+			db.runTransaction((transaction) => {
+				return transaction.get(projectRef).then((project) => {
+					console.log("One");
+					var skillsInProject = project.data().skills;
+					skillsInProject.push(skillRef);
+					transaction.update(projectRef, {skills: skillsInProject});
+				});
+			}).catch(function(error) {
+				// The document probably doesn't exist.
+				console.error("Error running transaction: ", error);
+			});
+		});
+		
+		this.setState({
+			skills: updatedSkills,
+		});
+		
+		var newRoles = newState.roles.slice().filter((e) => {
+			return e.isChecked === true
+		}).map((item) => {
+			return item["label"]
+		});
+		
+		var updatedRoles = newState.roles.slice().filter((e) => {
+			return e.isChecked === true
+		}).map((item) => {
+			return {label : item["label"]}
+		});
+		
+		var deleteRoles = oldRoles.filter(x => !newRoles.includes(x));
+		var addRoles = newRoles.filter(x => !oldRoles.includes(x));
+		
+		deleteRoles.forEach((deleteRole) => {
+			var roleRef = db.collection("Roles").doc(deleteRole);
+			
+			db.runTransaction((transaction) => {
+				return transaction.get(roleRef).then((role) => {
+					console.log("Two");
+					var projectsInRole = role.data().projects;
+					console.log(projectsInRole);
+					projectsInRole.some((proj) => {
+						if (proj.id === projectRef.id) {
+							projectsInRole.splice(projectsInRole.indexOf(proj),1);
+							return true;
+						}
+					});
+					console.log(projectsInRole);
+					transaction.update(roleRef, {projects: projectsInRole});
+				});
+			}).catch(function(error) {
+				// The document probably doesn't exist.
+				console.error("Error running transaction: ", error);
+			});
+			
+			db.runTransaction((transaction) => {
+				return transaction.get(projectRef).then((project) => {
+					console.log("One");
+					var rolesInProject = project.data().roles;
+					rolesInProject.some((role) => {
+						if (role.id === roleRef.id) {
+							rolesInProject.splice(rolesInProject.indexOf(role),1);
+							return true;
+						}
+					});
+					transaction.update(projectRef, {roles: rolesInProject});
+				});
+			}).catch(function(error) {
+				// The document probably doesn't exist.
+				console.error("Error running transaction: ", error);
+			});
+		});
+		
+		addRoles.forEach((addRole) => {
+			var roleRef = db.collection("Roles").doc(addRole);
+			
+			db.runTransaction((transaction) => {
+				return transaction.get(roleRef).then((role) => {
+					console.log("Two");
+					var projectsInRole = role.data().projects;
+					projectsInRole.push(projectRef);
+					transaction.update(roleRef, {projects: projectsInRole});
+				});
+			}).catch(function(error) {
+				// The document probably doesn't exist.
+				console.error("Error running transaction: ", error);
+			});
+			
+			db.runTransaction((transaction) => {
+				return transaction.get(projectRef).then((project) => {
+					console.log("One");
+					var rolesInProject = project.data().roles;
+					rolesInProject.push(roleRef);
+					transaction.update(projectRef, {roles: rolesInProject});
+				});
+			}).catch(function(error) {
+				// The document probably doesn't exist.
+				console.error("Error running transaction: ", error);
+			});
+		});
+		
+		this.setState({
+			roles: updatedRoles,
+		});
+		
 	}
 
 	render() {
@@ -140,7 +357,10 @@ class ProjectInfo extends Component {
 								owner={this.state.owner}
 								sdesc={this.state.sdesc}
 								keys={this.state.keys}
-								updateInfo={this.handlerUpdateProjectInfo}
+								ldesc={this.state.longDescription}
+								skills={this.state.skills}
+								roles={this.state.roles}
+								updateInfo={this.handlerUpdateProjectInfo.bind(this)}
 								members={this.state.members}
 								updateRatings={this.updateRatings.bind(this)}
 							/>
@@ -151,6 +371,9 @@ class ProjectInfo extends Component {
 								skills={this.state.skills}
 								roles={this.state.roles}
 								members={this.state.members}
+								owner={this.state.owner}
+								loggedUser={this.props.loggedUser}
+								deleteMember={this.deleteMember.bind(this)}
 							/>
 						</div>
 					</div>

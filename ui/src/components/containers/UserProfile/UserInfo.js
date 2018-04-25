@@ -82,7 +82,7 @@ class UserInfo extends Component {
 													previousProjects: [...prevState.previousProjects, {
 																		title: project.id,
 																		shortDescription: project.data().sdesc,
-																		image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+																		image: project.data().avatar,
 																		link: '/project/' + user.id + '/' + project.id,
 																	 }]
 												}));
@@ -96,7 +96,7 @@ class UserInfo extends Component {
 													currentProjects: [...prevState.currentProjects, {
 																		title: project.id,
 																		shortDescription: project.data().sdesc,
-																		image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+																		image: project.data().avatar,
 																		link: '/project/' + user.id + '/' + project.id,
 																	 }]
 												}));

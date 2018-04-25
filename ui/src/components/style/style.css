@@ -431,6 +431,7 @@ body{
 .project-owner-controls{
 	align-content: center;
 	margin: 10px 70px;
+	text-align: center;
 }
 
 .edit-user-profile, .invite-button, .join-project, .leave-project{

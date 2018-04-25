@@ -3,10 +3,10 @@ import Chip from 'material-ui/Chip';
 import IconButton from 'material-ui/IconButton';
 import Octicon from 'react-component-octicons';
 
-
 import ProjectAvatar from '../User/UserAvatar';
 import RatingModal from '../Shared/RatingModal';
 import ProjectForm from '../../containers/ProjectProfile/ProjectForm';
+import ProjectDelete from './ProjectDelete';
 
 import '../../style/style.css';
 
@@ -51,6 +51,9 @@ class ProjectInfoSideBar extends Component {
 						roles={this.props.roles}
 						updateInfo={this.props.updateInfo}
 						action="EDIT"
+					/>
+					<ProjectDelete
+						handler={this.props.deleteProject}
 					/>
 					<RatingModal
 						members={this.props.members}

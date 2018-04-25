@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
+import { withRouter } from 'react-router';
 
 import ProjectInfoSideBar from '../../presentational/Project/ProjectInfoSideBar';
 import ProjectDetails from '../../presentational/Project/ProjectDetails';
@@ -15,6 +16,74 @@ class ProjectInfo extends Component {
         super(props)
         this.handlerUpdateProjectInfo = this.handlerUpdateProjectInfo.bind(this);
     }
+	
+	deleteProject() {
+		var db = firebase.firestore();
+		
+		var skillRefs = [];
+		var roleRefs = [];
+		
+		this.state.skills.forEach((skill) => {
+			skillRefs.push(db.collection("Skills").doc(skill.label));
+		});
+		
+		this.state.roles.forEach((role) => {
+			roleRefs.push(db.collection("Roles").doc(role.label));
+		});
+		
+		var projectRef = db.collection("Projects").doc(this.state.owner).collection("projects").doc(this.state.name);
+		
+		// Eliminate docs in Users_Projects
+		db.collection("Users_Projects").where("project", "==", projectRef).get().then((projectUsers) => {
+			projectUsers.forEach((projectUser) => {
+				projectUser.ref.delete();
+			});
+		}).catch((error) => {
+			console.log("Error getting documents: ", error);
+		});
+		
+		// Eliminate references in Skill docs
+		skillRefs.forEach((skillRef) => {
+			skillRef.get().then((skill) => {
+				var projectsInSkill = skill.data().projects;
+				projectsInSkill.some((project) => {
+					if (project.id === projectRef.id) {
+						projectsInSkill.splice(projectsInSkill.indexOf(project), 1);
+						return true;
+					}
+					return false;
+				});
+				skillRef.update({
+					projects: projectsInSkill,
+				})
+			});
+		});
+		
+		// Eliminate references in Role docs
+		roleRefs.forEach((roleRef) => {
+			roleRef.get().then((role) => {
+				var projectsInRole = role.data().projects;
+				projectsInRole.some((project) => {
+					if (project.id === projectRef.id) {
+						projectsInRole.splice(projectsInRole.indexOf(project), 1);
+						return true;
+					}
+					return false;
+				});
+				roleRef.update({
+					projects: projectsInRole,
+				})
+			});
+		});
+		
+		// Eliminate project doc
+		projectRef.delete().then(() => {
+			this.props.history.push('/user/' + this.props.loggedUser);
+		}).catch((error) => {
+			console.log("Error deleting document: ", error);
+		});
+		
+	}
 	
 	deleteMember(username) {
 		var db = firebase.firestore();
@@ -447,6 +516,7 @@ class ProjectInfo extends Component {
 								loggedUser={this.props.loggedUser}
 								updateRatings={this.updateRatings.bind(this)}
 								changeProjectStatus={this.changeProjectStatus.bind(this)}
+								deleteProject={this.deleteProject.bind(this)}
 							/>
 						</div>
 						<div className="ProjectDetails">
@@ -483,5 +553,5 @@ class ProjectInfo extends Component {
 	
 }
 
-export default ProjectInfo;
+export default withRouter(ProjectInfo);
 

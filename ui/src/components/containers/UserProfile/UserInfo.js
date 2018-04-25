@@ -5,6 +5,7 @@ import Button from 'material-ui/Button';
 
 import UserInfoSideBar from '../../presentational/User/UserInfoSideBar';
 import UserProjectCard from '../../presentational/User/UserProjectCard';
+import UserProfileEditForm from '../UserProfile/UserProfileEditForm';
 import InviteUserDialog from '../../presentational/User/InviteUserDialog';
 
 import '../../style/style.css';
@@ -258,6 +259,7 @@ class UserInfo extends Component {
 							/>
 						</div>
 						<div className="UserProjects">
+							<UserProfileEditForm/>
 							{inviteButton}
 							<div className="currentProjects">
 								<h4 className="user-projects-subheader">{headerCurrent}</h4>

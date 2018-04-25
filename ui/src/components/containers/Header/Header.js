@@ -34,10 +34,12 @@ class Header extends Component {
 		var repo = newState.repo ? newState.repo : null;
 		var sdesc = newState.sdesc ? newState.sdesc : null;
 		var ldesc = newState.ldesc ? newState.ldesc : null;
+		var avatar = newState.avatar ? newState.avatar : null;
 		
 		db.collection("Projects").doc(this.props.username).collection("projects").doc(newState.name).set({
 			keywords: keywords,
 			repo: repo,
+			avatar: avatar,
 			sdesc: sdesc,
 			ldesc: ldesc,
 			status: false,

@@ -87,7 +87,7 @@ class ProjectInfo extends Component {
 					status: info.status,
 					repo_url: info.repo,
 					owner: this.props.match.params.username,
-					avatar_url: 'https://images.fineartamerica.com/images-medium-large/puppy-portrait-snake-jagger.jpg',
+					avatar_url: info.avatar,
 					sdesc: info.sdesc,
 					valid: true,
 					skills: [],
@@ -226,6 +226,7 @@ class ProjectInfo extends Component {
 			repo: newState.repo,
 			sdesc: newState.sdesc,
 			ldesc: newState.ldesc,
+			avatar: newState.avatar,
 		})
 		.then(() => {
 			console.log("Document successfully updated!");

@@ -87,7 +87,7 @@ class SearchPage extends Component {
 											currentProjects: [...prevState.currentProjects, {
 													title: project.id,
 													shortDescription: project.data().sdesc,
-													image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+													image: project.data().avatar,
 													link: '/project/' + userFolder.id + '/' + project.id,
 											}]
 										}));
@@ -100,7 +100,7 @@ class SearchPage extends Component {
 													currentProjects: [...prevState.currentProjects, {
 															title: project.id,
 															shortDescription: project.data().sdesc,
-															image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+															image: project.data().avatar,
 															link: '/project/' + userFolder.id + '/' + project.id,
 													}]
 												}));
@@ -157,7 +157,7 @@ class SearchPage extends Component {
 										currentProjects: [...prevState.currentProjects, {
 												title: project.id,
 												shortDescription: project.data().sdesc,
-												image: 'https://avatars1.githubusercontent.com/u/14101776?s=200&v=4',
+												image: project.data().avatar,
 												link: '/project/' + userFolder.id + '/' + project.id,
 										}]
 									}));

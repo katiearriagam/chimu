@@ -205,7 +205,7 @@ class UserInfo extends Component {
 					isApproved: true,
 					project: projectRef,
 					rating: null,
-					user: this.state.login,
+					user: userRef,
 				}).then(() => {
 					console.log("Document successfully written!");
 					this.setState({

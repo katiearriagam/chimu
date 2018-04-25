@@ -168,15 +168,12 @@ class ProjectInfo extends Component {
 				return transaction.get(skillRef).then((skill) => {
 					console.log("Two");
 					var projectsInSkill = skill.data().projects;
-					console.log(projectsInSkill);
 					projectsInSkill.some((proj) => {
 						if (proj.id === projectRef.id) {
-							console.log(proj.id);
 							projectsInSkill.splice(projectsInSkill.indexOf(proj),1);
 							return true;
 						}
 					});
-					console.log(projectsInSkill);
 					transaction.update(skillRef, {projects: projectsInSkill});
 				});
 			}).catch(function(error) {
@@ -259,7 +256,6 @@ class ProjectInfo extends Component {
 					console.log(projectsInRole);
 					projectsInRole.some((proj) => {
 						if (proj.id === projectRef.id) {
-							console.log(proj.id);
 							projectsInRole.splice(projectsInRole.indexOf(proj),1);
 							return true;
 						}
@@ -297,9 +293,7 @@ class ProjectInfo extends Component {
 				return transaction.get(roleRef).then((role) => {
 					console.log("Two");
 					var projectsInRole = role.data().projects;
-					console.log(projectsInRole);
 					projectsInRole.push(projectRef);
-					console.log(projectsInRole);
 					transaction.update(roleRef, {projects: projectsInRole});
 				});
 			}).catch(function(error) {

@@ -13,6 +13,27 @@ class ProjectInfo extends Component {
         super(props)
         this.handlerUpdateProjectInfo = this.handlerUpdateProjectInfo.bind(this);
     }
+	
+	deleteMember(username) {
+		var db = firebase.firestore();
+		var userProjectRef = db.collection("Users_Projects").doc(username + '-' + this.state.name);
+		userProjectRef.delete().then(() => {
+			console.log("Document successfully deleted!");
+			var updatedMembers = this.state.members.slice();
+			updatedMembers.some((member) => {
+				if (member.username === username) {
+					updatedMembers.splice(updatedMembers.indexOf(member), 1);
+					return true;
+				}
+				return false;
+			});
+			this.setState({
+				members: updatedMembers,
+			})
+		}).catch((error) => {
+		  console.error("Error removing document: ", error);
+		});
+	}
 
 	updateRatings(newRatings, closeFunc) {
 		var db = firebase.firestore();
@@ -55,7 +76,9 @@ class ProjectInfo extends Component {
 					longDescription: info.ldesc,
 					members: []
 				});
-				db.collection("Users_Projects").where("project", "==", docRef).where("isApproved", "==", true).get().then((projectInfos) => {
+				
+				db.collection("Users_Projects").where("project", "==", docRef).where("isApproved", "==", true).where("hasAccepted", "==", true).get().then((projectInfos) => {
+					console.log(projectInfos);
 					projectInfos.forEach((projectInfo) => {
 						projectInfo.data().user.get().then((user) => {
 							const response = fetch('https://api.github.com/users/' + user.id).then((response) => {
@@ -348,6 +371,9 @@ class ProjectInfo extends Component {
 								skills={this.state.skills}
 								roles={this.state.roles}
 								members={this.state.members}
+								owner={this.state.owner}
+								loggedUser={this.props.loggedUser}
+								deleteMember={this.deleteMember.bind(this)}
 							/>
 						</div>
 					</div>

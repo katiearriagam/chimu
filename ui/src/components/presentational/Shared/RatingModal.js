@@ -64,7 +64,7 @@ export default class RatingModal extends Component {
             {
               this.props.members.map(data => {
                 return(
-                  <div className="user-rating">
+                  <div className="user-rating" key={data.username}>
                     <label className="radio user-rating-name">{data.username}</label>
                     <label for="1" className="radio"><input className="radioDetail" type="radio" name={data.username} onChange={() => this.onChange(this.props.members.indexOf(data), 1)} id="1" value="1"/>1</label>
                     <label for="2" className="radio"><input className="radioDetail" type="radio" name={data.username} onChange={() => this.onChange(this.props.members.indexOf(data), 2)} id="2" value="2"/>2</label>

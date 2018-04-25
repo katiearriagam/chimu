@@ -27,7 +27,7 @@ function ProjectDetails(props){
 						{
 							props.members.map(data => {
 								return(
-									<div className="member-in-project-container">
+									<div className="member-in-project-container" key={data.username}>
 											<Link to={{ pathname: '/user/' + data.username }} style={{ textDecoration: 'none', color: 'inherit' }}
 												key={props.members.indexOf(data)}
 											>

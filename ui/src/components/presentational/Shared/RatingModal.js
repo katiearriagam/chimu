@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
 import Button from 'material-ui/Button';
+import IconButton from 'material-ui/IconButton';
+import LockOpen from '@material-ui/icons/LockOpen';
+import LockOutline from '@material-ui/icons/LockOutline';
+
 import Dialog, { DialogActions, DialogContent, DialogTitle } from 'material-ui/Dialog';
 
 export default class RatingModal extends Component {
@@ -49,10 +53,12 @@ export default class RatingModal extends Component {
   }
 
   render() {
-    const textStatus = this.props.isProjectComplete ? 'OPEN PROJECT' : 'CLOSE PROJECT';
+    const iconStatus = this.props.isProjectComplete ? (<LockOpen />) : (<LockOutline />);
     return (
       <span>
-        <Button variant="raised" onClick={() => this.props.changeProjectStatus(this.handleClickOpen)}>{textStatus}</Button>
+        <IconButton className="iconbutton" aria-label="toggle-status" onClick={() => this.props.changeProjectStatus(this.handleClickOpen)}>
+			{iconStatus}
+		</IconButton>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}

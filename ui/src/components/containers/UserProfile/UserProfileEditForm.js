@@ -35,8 +35,10 @@ class UserProfileEditForm extends Component{
 	}
 
 	handleCloseOK = () => {
-		this.updateDetails();
-		this.setState({ open: false });
+		if(this.isFormValid()){
+			this.updateDetails();
+			this.setState({ open: false });
+		}
 	};
 	
 	loadSkillsRoles(props) {
@@ -154,6 +156,27 @@ class UserProfileEditForm extends Component{
 		}
     }
 
+    isValidEmail(e){
+		var emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+		return (e.length == 0 || emailRegex.test(e));
+	}
+
+	isFormValid(){
+		let user_email = document.getElementById("user-email").value;
+
+		document.getElementById("error-user-email").classList.add("hide-error");
+		document.getElementById("error-user-email").classList.remove("display-error");
+
+		if(!this.isValidEmail(user_email)){
+			document.getElementById("error-user-email").classList.remove("hide-error");
+			document.getElementById("error-user-email").classList.add("display-error");
+			return false;
+		}
+
+		return true;
+	}
+
 	
 	render(){
 		return(
@@ -168,7 +191,7 @@ class UserProfileEditForm extends Component{
 		          <DialogTitle id="form-dialog-title">Project details</DialogTitle>
 		            <DialogContent>
 		            	<TextField
-				          id="email"
+				          id="user-email"
 						  name="email"
 				          label="Email"
 				          placeholder="Email"
@@ -177,6 +200,7 @@ class UserProfileEditForm extends Component{
 						  onChange={this.handleChange}
 				          fullWidth
 				        />
+				        <span id="error-user-email" className="error-message hide-error">Input a valid email.</span>
 				        <div className="edit-project">
 					        <CheckboxList 
 								listName="SKILLS"

@@ -17,8 +17,6 @@ class ProjectInfoSideBar extends Component {
 		this.goToRepo = this.goToRepo.bind(this);
 	} 
 
-	members = ['katiearriagam', 'osdagoso'];
-
 	goToRepo(){
 		window.location.href = this.props.repo;
 	}

@@ -10,7 +10,7 @@ class CheckboxList extends Component {
 
 	render() {		
 		return (
-			<div>
+			<div className="home">
 				<h3>{this.props.listName}</h3>
 				<ul className="grid list-items">
 		    	    {this.props.items.map((data, index) => (

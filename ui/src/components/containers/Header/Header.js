@@ -13,6 +13,9 @@ import MailIcon from '@material-ui/icons/Mail';
 
 import '../../style/style.css';
 
+
+import chimu from '../../images/tea-white.png';
+
 import GitHubLogin from '../../presentational/Header/GitHubLogin';
 import Logout from '../../presentational/Header/Logout';
 import UserButton from '../../presentational/Header/UserButton';
@@ -235,7 +238,8 @@ class Header extends Component {
 					<Toolbar>
 						<Typography variant="title" color="inherit" className={classes.flex}>
 							<Link to='/' style={{ textDecoration: 'none', color: 'inherit' }}>
-								chimu
+								<img className="small-logo" alt="logo" src={chimu}/>
+								CHIMU
 							</Link>
 						</Typography>
 						{ headerButtons }

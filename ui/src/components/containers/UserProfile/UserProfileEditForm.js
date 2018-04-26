@@ -188,7 +188,7 @@ class UserProfileEditForm extends Component{
 		          aria-labelledby="form-dialog-title"
 		          className="rating-dialog"
 		        >
-		          <DialogTitle id="form-dialog-title">Project details</DialogTitle>
+		          <DialogTitle id="form-dialog-title">Profile details</DialogTitle>
 		            <DialogContent>
 		            	<TextField
 				          id="user-email"

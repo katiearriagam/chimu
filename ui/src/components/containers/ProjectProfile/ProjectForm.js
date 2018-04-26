@@ -305,7 +305,16 @@ class ProjectForm extends Component{
 
 		if(!errorFlag){
 			this.updateDetails();
-			this.setState({ open: false });
+			this.setState({
+				open: false
+			});
+			if (this.props.action === 'ADD') {
+				this.state = null;
+				this.loadSkillsRoles(this.props);
+				this.setState({
+					keywords: [],
+				});
+			}
 		}
 		return !errorFlag;
 	}

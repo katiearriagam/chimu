@@ -203,6 +203,7 @@ class Header extends Component {
 				<ProjectForm
 					action="ADD"
 					updateInfo={this.createNewProject.bind(this)}
+					owner={this.props.username}
 				/>
 				<Link to={{ pathname: '/notifications'}} style={{ textDecoration: 'none', color: 'inherit' }}>
 					<IconButton color="inherit" aria-label="Notification Center">

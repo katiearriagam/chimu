@@ -25,26 +25,27 @@ class ProjectForm extends Component{
 			this.setState({[e.target.name]: null});
 		else
 			this.setState({[e.target.name]: e.target.value});
-    }
+    };
 
 	handleClickOpen = () => {
 		this.setState({ open: true });
-	};
+	}
 
 	handleClose = () => {
 		this.setState({ open: false });
-	};
+	}
 
-	updateDetails(){
+	updateDetails = () => {
 		this.props.updateInfo(this.state);
 	}
 
 	handleCloseOK = () => {
-		if(this.formValidation()){
-			this.updateDetails();
-			this.setState({ open: false });
-		}
-	};
+		this.validateName();
+		// if(this.validateName()){
+			// this.updateDetails();
+			// this.setState({ open: false });
+		// }
+	}
 
 	handleAddKeyword = () => {
 		console.log('adding new word');
@@ -131,7 +132,7 @@ class ProjectForm extends Component{
 		});
 	}
 
-	loadKeywords(props){
+	loadKeywords = (props) => {
 		this.setState({
       		keywords: props.keywords
 		});
@@ -147,34 +148,104 @@ class ProjectForm extends Component{
 		return githubUrlRegex.test(e);
 	}
 
-	formValidation(){
-		let errorFlag = false;
-		// revert to hide error message (for now)
+	validateName = () => {
+		console.log('validateName');
+		let project_name = document.getElementById("project-name").value;
+		
+		let projectNameErrorFlag = false;
+
 		document.getElementById("error-project-name").classList.add("hide-error");
 		document.getElementById("error-project-name").classList.remove("display-error");
+
+		if(project_name === null || project_name.length <= 0){
+			document.getElementById("error-project-name").classList.remove("hide-error");
+			document.getElementById("error-project-name").classList.add("display-error");
+			projectNameErrorFlag = true;
+		}
+		else{
+			document.getElementById("error-project-name").classList.add("hide-error");
+			document.getElementById("error-project-name").classList.remove("display-error");
+			projectNameErrorFlag = false; 
+		}
+
+		let exists = projectNameErrorFlag;
+
+		if(this.props.action === 'ADD' && !projectNameErrorFlag) {
+			let db = firebase.firestore();
+			db.collection("Projects").get().then((owners) => {
+				console.log(owners);
+				owners.forEach((owner) => {
+					db.collection("Projects").doc(owner.id).collection("projects").doc(project_name).get().then((project) => {
+						console.log(project);
+						if(project.exists) {
+							// this.continueValidation(project.exists, project_name);
+							exists = true;
+							document.getElementById("error-project-name").classList.remove("hide-error");
+							document.getElementById("error-project-name").classList.add("display-error");
+							projectNameErrorFlag = true;
+							console.log('Project name does exist');
+							return;
+						}
+					});
+					// if(exists)
+					// 	break;
+				});
+				this.continueValidation(exists);			
+			});
+		}
+		else {
+			this.continueValidation(exists);
+		}
+		// formValidation(false);
+	}
+
+	continueValidation = (projectNameExists) => {
+		this.formValidation(projectNameExists);
+	}
+	
+
+	formValidation(projectNameExists){
+
+		console.error("formValidation ----------------");
+		let errorFlag = false;
+
+		if(projectNameExists){errorFlag = true;}
+		// revert to hide error message (for now)
+		// document.getElementById("error-project-name").classList.add("hide-error");
+		// document.getElementById("error-project-name").classList.remove("display-error");
 		document.getElementById("error-image-url").classList.add("hide-error");
 		document.getElementById("error-image-url").classList.remove("display-error");
 		document.getElementById("error-short-desc").classList.add("hide-error");
-		document.getElementById("error-short-desc").classList.remove("display-error");		
+		document.getElementById("error-short-desc").classList.remove("display-error");
 		document.getElementById("error-long-desc").classList.add("hide-error");
-		document.getElementById("error-long-desc").classList.remove("display-error");	
+		document.getElementById("error-long-desc").classList.remove("display-error");
 		document.getElementById("error-repo-url").classList.add("hide-error");
 		document.getElementById("error-repo-url").classList.remove("display-error");
 
 
-		if(this.props.action === 'ADD'){
-			let project_name = document.getElementById("project-name").value;
-			// TODO: check for repeated project name
-		}
+		// if(this.props.action === 'ADD') {
+		// 	let project_name = document.getElementById("project-name").value;
+
+		// 	if(project_name !== null && project_name.length > 0) {
+		// 		this.doesProjectExist(project_name, (doesExist) => {
+		// 			if(doesExist){
+		// 				console.log('the project ' + project_name + ' DOES exist');
+		// 			}
+		// 			else{
+		// 				console.log('the project ' + project_name + ' DOES NOT exist');
+		// 			}
+		// 		});
+		// 	}
+		// 	else{
+		// 		document.getElementById("error-image-url").classList.remove("hide-error");
+		// 		document.getElementById("error-image-url").classList.add("display-error");
+		// 		errorFlag = true;
+		// 	}
+		// }
 		let project_image = document.getElementById("image-url").value;
 		let project_sDesc = document.getElementById("short-desc").value;
 		let project_lDesc = document.getElementById("long-desc").value;
 		let project_repo = document.getElementById("repo-url").value;
-
-		console.log(project_image);
-		console.log(project_sDesc);
-		console.log(project_lDesc);
-		console.log(project_repo);
 
 		// validate image url
 		if(project_image == null || !this.isValidImageUrl(project_image)){
@@ -202,7 +273,7 @@ class ProjectForm extends Component{
 		}
 
 		// validate long description
-		if(project_sDesc == null || project_sDesc.length <= 0){
+		if(project_lDesc == null || project_lDesc.length <= 0){
 			document.getElementById("error-long-desc").classList.remove("hide-error");
 			document.getElementById("error-long-desc").classList.add("display-error");
 			errorFlag = true;
@@ -232,10 +303,14 @@ class ProjectForm extends Component{
 			document.getElementById("error-repo-url").classList.remove("display-error");
 		}
 
+		if(!errorFlag){
+			this.updateDetails();
+			this.setState({ open: false });
+		}
 		return !errorFlag;
 	}
 
-	componentWillMount(){
+	componentWillMount() {
 		this.loadSkillsRoles(this.props);
 		if (this.props.action === 'EDIT'){
 			this.setState({
@@ -348,7 +423,7 @@ class ProjectForm extends Component{
 						  onChange={this.handleChange}
 				          fullWidth
 				        />
-				        <span id="error-project-name" className="error-message hide-error">What's the name of this project?</span>
+				        <span id="error-project-name" className="error-message hide-error">Please, add a unique project name.</span>
 				        <TextField
 				          id="image-url"
 						  name="avatar"

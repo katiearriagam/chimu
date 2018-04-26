@@ -174,8 +174,9 @@ class ProjectForm extends Component{
 			let db = firebase.firestore();
 			db.collection("Projects").get().then((owners) => {
 				console.log(owners);
+				var promises = [];
 				owners.forEach((owner) => {
-					db.collection("Projects").doc(owner.id).collection("projects").doc(project_name).get().then((project) => {
+					var promise = db.collection("Projects").doc(owner.id).collection("projects").doc(project_name).get().then((project) => {
 						console.log(project);
 						if(project.exists) {
 							// this.continueValidation(project.exists, project_name);
@@ -187,10 +188,13 @@ class ProjectForm extends Component{
 							return;
 						}
 					});
+					promises.push(promise);
 					// if(exists)
 					// 	break;
 				});
-				this.continueValidation(exists);			
+				Promise.all(promises).then(() => {
+					this.continueValidation(exists);
+				});			
 			});
 		}
 		else {
